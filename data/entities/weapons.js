@@ -1,0 +1,180 @@
+export const Weapons = [
+  // ── 1H Swords ──
+  {
+    Name: "Copper Sword",
+    Description: "Made of copper, very weak.",
+    Icon: "copper_sword",
+    Type: "WEAPON_1H",
+    Requirements: [{ Skill: "ATTACK", Value: 1 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 120 },
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "SLASH_ACCURACY", Value: 8 },
+      { Type: "QUICK_DAMAGE", Value: 10 },
+    ],
+  },
+  {
+    Name: "Bronze Sword",
+    Description: "Basic sword made from Bronze.",
+    Icon: "bronze_sword",
+    Type: "WEAPON_1H",
+    Requirements: [{ Skill: "ATTACK", Value: 1 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 120 },
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "SLASH_ACCURACY", Value: 15 },
+      { Type: "QUICK_DAMAGE", Value: 15 },
+    ],
+  },
+  {
+    Name: "Iron Sword",
+    Description: "Sturdy sword made from Iron.",
+    Icon: "iron_sword",
+    Type: "WEAPON_1H",
+    Requirements: [{ Skill: "ATTACK", Value: 10 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 120 },
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "SLASH_ACCURACY", Value: 30 },
+      { Type: "QUICK_DAMAGE", Value: 25 },
+    ],
+  },
+  {
+    Name: "Steel Sword",
+    Description: "Sturdy sword made from Steel.",
+    Icon: "steel_sword",
+    Type: "WEAPON_1H",
+    Requirements: [{ Skill: "ATTACK", Value: 20 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 120 },
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "SLASH_ACCURACY", Value: 50 },
+      { Type: "QUICK_DAMAGE", Value: 40 },
+    ],
+  },
+  {
+    Name: "Mithril Sword",
+    Description: "Mystical sword made from mythril.",
+    Icon: "mithril_sword",
+    Type: "WEAPON_1H",
+    Requirements: [{ Skill: "ATTACK", Value: 30 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 120 },
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "SLASH_ACCURACY", Value: 75 },
+      { Type: "QUICK_DAMAGE", Value: 60 },
+    ],
+  },
+  {
+    Name: "Skeleton Rapier",
+    Description: "A rapier used by once proud pioneer.",
+    Icon: "skeleton_rapier",
+    Type: "WEAPON_1H",
+    Requirements: [{ Skill: "ATTACK", Value: 30 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 120 },
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "PIECE_ACCURACY", Value: 75 },
+      { Type: "QUICK_DAMAGE", Value: 60 },
+    ],
+  },
+  // ── 2H Weapons ──
+  {
+    Name: "Goblin Axe",
+    Description: "A make shift goblin axe.",
+    Icon: "goblin_axe",
+    Type: "WEAPON_2H",
+    Requirements: [{ Skill: "ATTACK", Value: 5 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 150 },
+      { Type: "ATTACK_SPEED", Value: 3 },
+      { Type: "SLASH_ACCURACY", Value: 30 },
+      { Type: "HEAVY_DAMAGE", Value: 40 },
+    ],
+  },
+  {
+    Name: "Bandit Spear",
+    Description: "A powerful spear.",
+    Icon: "bandit_spear",
+    Type: "WEAPON_2H",
+    Requirements: [{ Skill: "ATTACK", Value: 15 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 150 },
+      { Type: "ATTACK_SPEED", Value: 3 },
+      { Type: "PIECE_ACCURACY", Value: 50 },
+      { Type: "HEAVY_DAMAGE", Value: 60 },
+    ],
+  },
+  {
+    Name: "Skeleton Greatsword",
+    Description: "A dark and powerful greatsword.",
+    Icon: "skeleton_greatsword",
+    Type: "WEAPON_2H",
+    Requirements: [{ Skill: "ATTACK", Value: 25 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 150 },
+      { Type: "ATTACK_SPEED", Value: 3 },
+      { Type: "SLASH_ACCURACY", Value: 70 },
+      { Type: "HEAVY_DAMAGE", Value: 100 },
+    ],
+  },
+  {
+    Name: "Elven Greatsword",
+    Description: "A powerful elven greatsword.",
+    Icon: "elven_greatsword",
+    Type: "WEAPON_2H",
+    Requirements: [{ Skill: "ATTACK", Value: 35 }],
+    Stats: [
+      { Type: "ATTACK_RANGE", Value: 150 },
+      { Type: "ATTACK_SPEED", Value: 3 },
+      { Type: "SLASH_ACCURACY", Value: 100 },
+      { Type: "HEAVY_DAMAGE", Value: 150 },
+    ],
+  },
+  // ── Bows ──
+  {
+    Name: "Crude Bow",
+    Type: "BOW",
+    Requirements: [{ Skill: "RANGED", Value: 1 }],
+    Stats: [
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "QUICK_DAMAGE", Value: 5 },
+    ],
+  },
+  {
+    Name: "Wood Bow",
+    Type: "BOW",
+    Requirements: [{ Skill: "RANGED", Value: 1 }],
+    Stats: [
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "HEAVY_DAMAGE", Value: 15 },
+    ],
+  },
+  {
+    Name: "Goblin Bow",
+    Type: "BOW",
+    Requirements: [{ Skill: "RANGED", Value: 5 }],
+    Stats: [
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "QUICK_DAMAGE", Value: 20 },
+    ],
+  },
+  {
+    Name: "Birch Bow",
+    Type: "BOW",
+    Requirements: [{ Skill: "RANGED", Value: 10 }],
+    Stats: [
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "HEAVY_DAMAGE", Value: 30 },
+    ],
+  },
+  {
+    Name: "Willow Bow",
+    Type: "BOW",
+    Requirements: [{ Skill: "RANGED", Value: 20 }],
+    Stats: [
+      { Type: "ATTACK_SPEED", Value: 2 },
+      { Type: "HEAVY_DAMAGE", Value: 45 },
+    ],
+  },
+];
