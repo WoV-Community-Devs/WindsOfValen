@@ -158,6 +158,10 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .top-right .panel-body{display:flex;flex-direction:column;justify-content:center;height:calc(100% - 2.2rem);}
 .top-right .summary-box{margin-bottom:0;}
 
+/* ── Skill Icon ── */
+.skill-icon-wrap{display:flex;align-items:center;justify-content:center;padding:0.5rem 0 0.25rem;}
+.skill-icon-wrap img{width:64px;height:64px;filter:drop-shadow(0 0 8px rgba(212,168,67,0.3));transition:opacity 0.3s;}
+
 /* ── Footer ── */
 .site-footer{text-align:center;padding:1.5rem 1rem;border-top:1px solid var(--border);font-family:'Cinzel',serif;font-size:0.68rem;color:var(--text-muted);letter-spacing:0.04em;}
 .site-footer a{color:var(--accent);text-decoration:none;}
@@ -251,6 +255,9 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
       <div class="panel">
         <div class="panel-header">XP Summary</div>
         <div class="panel-body">
+          <div class="skill-icon-wrap">
+            <img id="skill-icon" src="../../icons/skills/mining.png" alt="Skill Icon">
+          </div>
           <div class="summary-box">
             <div class="summary-row">
               <span class="summary-label">Current XP</span>
@@ -436,6 +443,14 @@ const $currentXp      = document.getElementById('current-xp');
 const $targetXp       = document.getElementById('target-xp');
 const $xpRemaining    = document.getElementById('xp-remaining');
 const $tbody          = document.getElementById('recipe-tbody');
+const $skillIcon      = document.getElementById('skill-icon');
+
+const SKILL_ICONS = {
+  mining:   '../../icons/skills/mining.png',
+  smithing: '../../icons/skills/smithing.png',
+  fishing:  '../../icons/skills/fishing.png',
+  alchemy:  '../../icons/skills/potion_making.png'
+};
 
 /* ── Format number with commas ── */
 function fmt(n) {
@@ -480,6 +495,9 @@ function renderSubTabs(skill) {
   const cats = SUB_CATEGORIES[skill];
   if (!cats) {
     $subTabsWrap.style.display = 'none';
+    $allStepsRow.style.display = 'none';
+    allStepsMode = false;
+    $allStepsCheck.checked = false;
     currentSubCategory = null;
     return;
   }
@@ -607,6 +625,7 @@ $skillTabs.addEventListener('click', async (e) => {
   $skillTabs.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
   currentSkill = tab.dataset.skill;
+  $skillIcon.src = SKILL_ICONS[currentSkill];
   renderSubTabs(currentSkill);
   await recalculate();
 });
