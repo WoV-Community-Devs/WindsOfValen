@@ -610,15 +610,14 @@ function switchPage(page){
     <details>
       <summary>Gems</summary>
       <div class="meth-body">
-        <p>Gems can be socketed in <strong>Ring</strong> and <strong>Amulet</strong> slots. They add a percentage bonus to Melee/Range Power.</p>
-        <p><code>power = floor(basePower × (1 + gemPct / 100))</code></p>
+        <p>Gems can be socketed in <strong>Ring</strong> and <strong>Amulet</strong> slots. Each gem adds a percentage bonus <strong>only to the Melee/Range Power of the item it is slotted into</strong>, not to total power across all gear.</p>
+        <p><code>itemPower = floor(baseItemPower × (1 + gemPct / 100))</code></p>
         <p>Available gems:</p>
         <ul>
-          <li><strong>Weak Power Gem</strong> — +20% power</li>
-          <li><strong>Power Gem</strong> — +30% power</li>
-          <li><strong>Strong Power Gem</strong> — +40% power</li>
+          <li><strong>Weak Power Gem</strong> — +20% power to slotted item</li>
+          <li><strong>Power Gem</strong> — +30% power to slotted item</li>
+          <li><strong>Strong Power Gem</strong> — +40% power to slotted item</li>
         </ul>
-        <p>Multiple gems stack additively (e.g., two Strong Power Gems give +80%).</p>
       </div>
     </details>
 
