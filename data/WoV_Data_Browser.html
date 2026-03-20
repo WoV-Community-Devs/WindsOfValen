@@ -103,7 +103,8 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
   padding:0.55rem 0.85rem;border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;gap:0.5rem;
 }
-.card-icon{width:28px;height:28px;object-fit:contain;border-radius:3px;flex-shrink:0;image-rendering:pixelated;}
+.card-icon-wrap{text-align:center;padding:0.6rem 0 0.3rem;}
+.card-icon{width:120px;height:120px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4));}
 .card-name{font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;color:var(--text);letter-spacing:0.04em;}
 .card-badge{
   font-family:'Cinzel',serif;font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
@@ -303,7 +304,7 @@ function renderCards() {
 function renderEquipment(item) {
   const badge = item.Type ? `<span class="card-badge badge-type">${typeLabel(item.Type)}</span>` : '';
   const desc = item.Description ? `<div class="card-desc">${item.Description}</div>` : '';
-  const icon = item.Icon ? `<img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.style.display='none'">` : '';
+  const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
 
   let reqs = '';
   if (item.Requirements && item.Requirements.length > 0) {
@@ -320,8 +321,9 @@ function renderEquipment(item) {
   }
 
   return `
-    <div class="card-head">${icon}<span class="card-name">${item.Name}</span>${badge}</div>
+    <div class="card-head"><span class="card-name">${item.Name}</span>${badge}</div>
     <div class="card-body">
+      ${iconHtml}
       ${desc}
       ${reqs || stats ? `<div class="card-stats">${reqs}${stats}</div>` : ''}
       ${item.Location ? `<div class="card-location">${item.Location}</div>` : ''}
@@ -333,7 +335,7 @@ function renderMonster(m) {
   const badge = m.IsBoss
     ? '<span class="card-badge badge-boss">Boss</span>'
     : '<span class="card-badge badge-mob">Mob</span>';
-  const icon = m.Image ? `<img class="card-icon" src="../icons/items/${m.Image.toLowerCase()}.png" alt="" onerror="this.style.display='none'">` : '';
+  const iconHtml = m.Image ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${m.Image.toLowerCase()}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
   const desc = m.Description ? `<div class="card-desc">${m.Description}</div>` : '';
 
   const combatStats = [
@@ -361,8 +363,9 @@ function renderMonster(m) {
   }
 
   return `
-    <div class="card-head">${icon}<span class="card-name">${m.Name}</span>${badge}</div>
+    <div class="card-head"><span class="card-name">${m.Name}</span>${badge}</div>
     <div class="card-body">
+      ${iconHtml}
       ${desc}
       <div class="card-stats">${statsHtml}</div>
       ${lootHtml}
@@ -395,9 +398,11 @@ function renderSmithing(r) {
 
 // ── Ore renderer ──
 function renderOre(item) {
+  const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
   return `
-    <div class="card-head">${item.Icon ? `<img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.style.display='none'">` : ''}<span class="card-name">${item.Name}</span></div>
+    <div class="card-head"><span class="card-name">${item.Name}</span></div>
     <div class="card-body">
+      ${iconHtml}
       <div class="card-stats">
         <div class="card-stat"><span class="stat-name">Mining Lvl</span><span class="stat-val">${item.Level}</span></div>
         <div class="card-stat"><span class="stat-name">Experience</span><span class="stat-val" style="color:var(--green)">${item.Experience} XP</span></div>
@@ -408,9 +413,11 @@ function renderOre(item) {
 
 // ── Gem renderer ──
 function renderGem(item) {
+  const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
   return `
-    <div class="card-head">${item.Icon ? `<img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.style.display='none'">` : ''}<span class="card-name">${item.Name}</span><span class="card-badge badge-type">Gem</span></div>
+    <div class="card-head"><span class="card-name">${item.Name}</span><span class="card-badge badge-type">Gem</span></div>
     <div class="card-body">
+      ${iconHtml}
       <div class="card-stats">
         <div class="card-stat"><span class="stat-name">Stat Boost</span><span class="stat-val" style="color:var(--green)">+${item.Value}%</span></div>
         <div class="card-stat"><span class="stat-name">Affects</span><span class="stat-val">${statLabel(item.StatType)}</span></div>
