@@ -5,68 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Winds of Valen DPS Calculator — Calculate hit chance, damage, and DPS against any monster with your gear loadout." />
   <title>WoV DPS Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <style>
 :root {
-  --bg-body: #1a1a18;
-  --bg-panel: #242421;
-  --bg-input: #1a1a18;
-  --bg-header: #1d1d1b;
-  --bg-hover: #2e2e2a;
-  --bg-slot: #2a2f2a;
-  --bg-slot-hover: #353a35;
-  --bg-slot-active: #3a4035;
-  --border: #3a3a35;
-  --border-light: #4a4a42;
-  --border-slot: #4a4a42;
-  --accent: #f6931d;
-  --accent-hover: #ffa940;
-  --accent-glow: rgba(246,147,29,0.15);
-  --accent-dim: rgba(246,147,29,0.08);
-  --text: #e8e6e0;
-  --text-dim: #9e9c96;
-  --text-muted: #6a6862;
-  --green: #5cb85c;
-  --red: #e74c3c;
-  --blue: #5dade2;
-  --radius: 6px;
+  --bg-body: #1e2830;
+  --bg-panel: rgba(30, 40, 48, 0.88);
+  --bg-input: rgba(24, 32, 40, 0.75);
+  --bg-header: rgba(28, 38, 46, 0.92);
+  --bg-hover: rgba(55, 72, 60, 0.5);
+  --bg-slot: rgba(38, 50, 44, 0.74);
+  --bg-slot-hover: rgba(48, 64, 54, 0.8);
+  --bg-slot-active: rgba(58, 82, 64, 0.84);
+  --border: rgba(100, 116, 90, 0.58);
+  --border-light: rgba(125, 142, 112, 0.58);
+  --border-slot: rgba(100, 116, 90, 0.52);
+  --accent: #d4a843;
+  --accent-hover: #e8c060;
+  --accent-glow: rgba(212,168,67,0.2);
+  --accent-dim: rgba(212,168,67,0.1);
+  --text: #e8e4d2;
+  --text-dim: #b8ae98;
+  --text-muted: #9a9280;
+  --green: #6abf69;
+  --red: #c9503a;
+  --blue: #5ba8c8;
+  --radius: 4px;
+  --panel-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  --glow-green: rgba(80, 200, 120, 0.15);
+}
+
+@keyframes fireflyDrift {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0.8; }
+  90%  { opacity: 1; }
+  100% { transform: translate(calc(var(--dx) * 1.5), calc(var(--dy) * 0.8)) scale(0.8); opacity: 0; }
+}
+@keyframes fireflyGlow {
+  0%, 100% { box-shadow: 0 0 3px 1px rgba(200, 220, 80, 0.15); }
+  50% { box-shadow: 0 0 6px 3px rgba(200, 220, 80, 0.3); }
+}
+@keyframes waterShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes waterRipple {
+  0%   { transform: scale(0.8); opacity: 0.5; }
+  50%  { transform: scale(1.3); opacity: 0.2; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+@keyframes floatParticle {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  20%  { opacity: 0.6; }
+  80%  { opacity: 0.4; }
+  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:14px;}
-body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg-body);color:var(--text);min-height:100vh;line-height:1.5;}
+body{
+  font-family:'Crimson Text', 'Segoe UI', Georgia, serif;
+  background:var(--bg-body);color:var(--text);min-height:100vh;line-height:1.5;
+  position:relative;overflow-x:hidden;
+}
+
+/* ── Living Background ── */
+#bg-scene {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  z-index:0; overflow:hidden;
+}
+#bg-scene .bg-gradient {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(75, 115, 75, 0.32) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 70%, rgba(95, 165, 120, 0.20) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(185, 125, 60, 0.15) 0%, transparent 50%),
+    linear-gradient(180deg, #1a2218 0%, #202e24 30%, #1c2820 60%, #192220 100%);
+}
+#bg-scene .bg-texture {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  opacity: 0.03;
+  background-image:
+    radial-gradient(ellipse 8px 6px at 10px 10px, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 8px at 30px 25px, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(ellipse 9px 7px at 55px 15px, rgba(255,255,255,0.25) 0%, transparent 100%);
+  background-size: 65px 40px;
+}
+#bg-scene .bg-vignette {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%);
+}
+#bg-scene .water-layer {
+  position:absolute; bottom:0; left:0; width:100%; height:120px;
+  background: linear-gradient(180deg, transparent 0%, rgba(40, 90, 80, 0.08) 30%, rgba(50, 120, 100, 0.12) 60%, rgba(30, 80, 70, 0.15) 100%);
+  animation: waterShimmer 8s ease-in-out infinite;
+  background-size: 200% 100%;
+}
+.water-ripple {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(80, 180, 140, 0.15);
+  animation: waterRipple 4s ease-out infinite;
+  pointer-events: none;
+}
+.firefly {
+  position: absolute; width: 4px; height: 4px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(210, 230, 100, 0.5) 0%, rgba(180, 200, 60, 0.2) 50%, transparent 100%);
+  animation: fireflyDrift var(--duration) ease-in-out infinite, fireflyGlow 2s ease-in-out infinite;
+  animation-delay: var(--delay);
+  pointer-events: none; z-index: 1;
+}
+.dust-mote {
+  position: absolute; width: 2px; height: 2px; border-radius: 50%;
+  background: rgba(200, 180, 120, 0.3);
+  animation: floatParticle var(--duration) linear infinite;
+  animation-delay: var(--delay);
+  pointer-events: none;
+}
+
+/* Content wrapper above bg */
+.site-header, .page-view, .methodology, #share-toast { position: relative; z-index: 2; }
 
 /* ── Header ── */
-.site-header{background:var(--bg-header);border-bottom:2px solid var(--accent);padding:0.6rem 1.5rem;display:flex;align-items:center;gap:0.75rem;}
-.site-header h1{font-size:1.1rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;}
-.site-header .subtitle{font-size:0.78rem;color:var(--text-dim);}
+.site-header{
+  background: linear-gradient(180deg, rgba(15,20,15,0.95) 0%, rgba(12,18,14,0.92) 100%);
+  border-bottom:2px solid var(--accent);padding:0.6rem 1.5rem;
+  display:flex;align-items:center;gap:0.75rem;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(212,168,67,0.15);
+  backdrop-filter: blur(12px);
+}
+.site-header h1{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:var(--accent);letter-spacing:0.06em;text-shadow:0 0 20px rgba(212,168,67,0.3);}
+.site-header .subtitle{font-family:'Cinzel',serif;font-size:0.78rem;color:var(--text-dim);letter-spacing:0.04em;}
 
 /* Page-level tabs */
 .page-tabs{display:flex;gap:0;margin-left:auto;}
 .page-tab{
-  padding:0.4rem 1rem;font-size:0.72rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:0.04em;color:var(--text-muted);cursor:pointer;border:none;
-  background:transparent;font-family:inherit;transition:color 0.15s;
+  padding:0.4rem 1rem;font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.06em;color:var(--text-muted);cursor:pointer;border:none;
+  background:transparent;transition:color 0.2s;
   border-bottom:2px solid transparent;margin-bottom:-2px;
 }
 .page-tab:hover{color:var(--text);}
-.page-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.page-tab.active{color:var(--accent);border-bottom-color:var(--accent);text-shadow:0 0 12px rgba(212,168,67,0.3);}
 
 /* ── Main Grid ── */
 .main-grid{max-width:1100px;margin:0 auto;padding:1rem;display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
 
 /* ── Panels ── */
-.panel{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);overflow:visible;}
-.panel-header{background:var(--bg-header);padding:0.5rem 0.85rem;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.5rem;border-radius:var(--radius) var(--radius) 0 0;}
+.panel{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);overflow:visible;
+  backdrop-filter: blur(10px);box-shadow: var(--panel-shadow);
+}
+.panel-header{
+  background: linear-gradient(180deg, rgba(20,28,22,0.9) 0%, rgba(15,22,18,0.85) 100%);
+  padding:0.5rem 0.85rem;font-family:'Cinzel',serif;
+  font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;
+  color:var(--accent);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:0.5rem;
+  border-radius:var(--radius) var(--radius) 0 0;
+  text-shadow: 0 0 12px rgba(212,168,67,0.2);
+}
 .panel-body{padding:0.75rem 0.85rem;overflow:visible;}
 
 /* ── Form Rows ── */
 .form-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;}
 .form-row:last-child{margin-bottom:0;}
-.form-row label{font-size:0.75rem;font-weight:600;color:var(--text-dim);min-width:80px;flex-shrink:0;}
+.form-row label{font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;color:var(--text-dim);min-width:80px;flex-shrink:0;letter-spacing:0.03em;}
 .form-row input,.form-row select{
   flex:1;padding:0.35rem 0.5rem;background:var(--bg-input);border:1px solid var(--border);
-  border-radius:4px;color:var(--text);font-family:inherit;font-size:0.8rem;outline:none;transition:border-color 0.15s;}
-.form-row input:focus,.form-row select:focus{border-color:var(--accent);}
+  border-radius:3px;color:var(--text);font-family:inherit;font-size:0.8rem;outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  backdrop-filter:blur(4px);
+}
+.form-row input:focus,.form-row select:focus{border-color:var(--accent);box-shadow:0 0 8px rgba(212,168,67,0.15);}
 input[type="number"]{-moz-appearance:textfield;appearance:textfield;}
 input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;appearance:none;}
 
@@ -82,16 +193,17 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 }
 .eslot{
   width:80px;height:80px;
-  background:var(--bg-slot);
+  background: linear-gradient(135deg, rgba(25,35,30,0.75) 0%, rgba(20,30,25,0.65) 100%);
   border:2px solid var(--border-slot);
   border-radius:4px;
   cursor:pointer;
   position:relative;
   display:flex;align-items:center;justify-content:center;
-  transition:border-color 0.15s,background 0.15s;
+  transition:border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  backdrop-filter: blur(6px);
 }
-.eslot:hover{border-color:var(--text-muted);background:var(--bg-slot-hover);}
-.eslot.active{border-color:var(--accent);background:var(--bg-slot-active);z-index:50;}
+.eslot:hover{border-color:var(--text-muted);background:var(--bg-slot-hover);box-shadow:0 0 12px rgba(80,120,90,0.15);}
+.eslot.active{border-color:var(--accent);background:var(--bg-slot-active);z-index:50;box-shadow:0 0 16px rgba(212,168,67,0.2);}
 .eslot.disabled{opacity:0.3;pointer-events:none;}
 .eslot .slot-icon{
   width:48px;height:48px;
@@ -103,8 +215,9 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 .eslot.has-item .slot-icon{opacity:1;}
 .eslot .slot-label{
   position:absolute;bottom:2px;left:0;right:0;
-  font-size:0.55rem;font-weight:700;text-align:center;
-  color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;
+  font-family:'Cinzel',serif;
+  font-size:0.52rem;font-weight:700;text-align:center;
+  color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;
   pointer-events:none;
 }
 .eslot.has-item .slot-label{color:var(--text-dim);}
@@ -120,15 +233,17 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 }
 .gem-indicator.has-gem{
   display:flex;
-  background:rgba(246,147,29,0.25);border-color:var(--accent);
-  box-shadow:0 0 6px rgba(246,147,29,0.4);
+  background:rgba(212,168,67,0.25);border-color:var(--accent);
+  box-shadow:0 0 8px rgba(212,168,67,0.45);
 }
 
 /* ── Slot Picker Popup ── */
 .slot-picker{
   display:none;position:absolute;top:0;left:calc(100% + 6px);
-  background:var(--bg-panel);border:1px solid var(--accent);border-radius:4px;
-  box-shadow:0 6px 24px rgba(0,0,0,0.6);z-index:200;width:220px;
+  background:rgba(15,20,16,0.95);border:1px solid var(--accent);border-radius:4px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.7), 0 0 20px rgba(212,168,67,0.08);
+  backdrop-filter:blur(12px);
+  z-index:200;width:220px;
   max-height:300px;overflow:hidden;flex-direction:column;
 }
 .slot-picker.picker-wide{
@@ -138,8 +253,8 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 .slot-picker.open-left{left:auto;right:calc(100% + 6px);}
 .slot-picker.open-up{top:auto;bottom:0;}
 .slot-picker-header{
-  padding:0.35rem 0.5rem;font-size:0.7rem;font-weight:700;color:var(--accent);
-  text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);
+  padding:0.35rem 0.5rem;font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;color:var(--accent);
+  text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);
   background:var(--bg-header);
 }
 .slot-picker input{
@@ -162,34 +277,34 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 
 /* Gem picker inside the slot picker */
 .gem-section{border-top:2px solid var(--accent);margin-top:0.3rem;padding:0.5rem 0 0.3rem;}
-.gem-section-title{padding:0.25rem 0.5rem 0.35rem;font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.04em;}
+.gem-section-title{padding:0.25rem 0.5rem 0.35rem;font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;}
 .gem-section .pick-opt{padding:0.4rem 0.5rem;font-size:0.8rem;}
 
 /* ── Stat Grid ── */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;margin-top:0.5rem;}
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:0.25rem 0.5rem;background:var(--bg-input);border-radius:4px;font-size:0.75rem;}
-.stat-row .s-label{color:var(--text-dim);}
-.stat-row .s-val{font-weight:700;font-variant-numeric:tabular-nums;}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:0.25rem 0.5rem;background:var(--bg-input);border-radius:3px;font-size:0.75rem;backdrop-filter:blur(4px);border:1px solid rgba(78,92,70,0.2);}
+.stat-row .s-label{color:var(--text-dim);font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:0.02em;}
+.stat-row .s-val{font-weight:700;font-variant-numeric:tabular-nums;color:var(--text);}
 .stat-full{grid-column:1/-1;}
 
 /* ── Badge ── */
-.badge{display:inline-block;padding:0.1rem 0.45rem;border-radius:3px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;}
-.badge-slash{background:rgba(231,76,60,0.15);color:var(--red);}
-.badge-pierce{background:rgba(93,173,226,0.15);color:var(--blue);}
-.badge-none{background:rgba(158,156,150,0.1);color:var(--text-muted);}
-.badge-boss{background:var(--accent-dim);color:var(--accent);}
-.badge-mob{background:rgba(158,156,150,0.08);color:var(--text-muted);}
+.badge{display:inline-block;padding:0.1rem 0.45rem;border-radius:3px;font-family:'Cinzel',serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;}
+.badge-slash{background:rgba(201,80,58,0.18);color:var(--red);border:1px solid rgba(201,80,58,0.2);}
+.badge-pierce{background:rgba(91,168,200,0.15);color:var(--blue);border:1px solid rgba(91,168,200,0.2);}
+.badge-none{background:rgba(158,156,150,0.08);color:var(--text-muted);border:1px solid rgba(158,156,150,0.1);}
+.badge-boss{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(212,168,67,0.2);text-shadow:0 0 8px rgba(212,168,67,0.3);}
+.badge-mob{background:rgba(158,156,150,0.06);color:var(--text-muted);border:1px solid rgba(158,156,150,0.1);}
 
-.section-divider{border:none;border-top:1px solid var(--border);margin:0.6rem 0;}
+.section-divider{border:none;border-top:1px solid rgba(78,92,70,0.35);margin:0.6rem 0;}
 
 /* ── Monster Select (searchable) ── */
 .ss-wrap{position:relative;}
-.ss-trigger{width:100%;padding:0.35rem 0.5rem;background:var(--bg-input);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:inherit;font-size:0.8rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:border-color 0.15s;user-select:none;min-height:28px;}
+.ss-trigger{width:100%;padding:0.35rem 0.5rem;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:inherit;font-size:0.8rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:border-color 0.2s,box-shadow 0.2s;user-select:none;min-height:28px;backdrop-filter:blur(4px);}
 .ss-trigger:hover{border-color:var(--border-light);}
-.ss-trigger.open{border-color:var(--accent);}
+.ss-trigger.open{border-color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.12);}
 .ss-trigger .ss-arrow{font-size:0.5rem;color:var(--text-muted);transition:transform 0.15s;}
 .ss-trigger.open .ss-arrow{transform:rotate(180deg);}
-.ss-dropdown{display:none;position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--bg-panel);border:1px solid var(--accent);border-radius:4px;box-shadow:0 6px 24px rgba(0,0,0,0.5);z-index:100;max-height:260px;overflow:hidden;flex-direction:column;}
+.ss-dropdown{display:none;position:absolute;top:calc(100% + 2px);left:0;right:0;background:rgba(15,20,16,0.95);border:1px solid var(--accent);border-radius:4px;box-shadow:0 6px 24px rgba(0,0,0,0.6), 0 0 16px rgba(212,168,67,0.06);backdrop-filter:blur(12px);z-index:100;max-height:260px;overflow:hidden;flex-direction:column;}
 .ss-dropdown.open{display:flex;}
 .ss-search{padding:0.35rem 0.5rem;background:var(--bg-input);border:none;border-bottom:1px solid var(--border);color:var(--text);font-family:inherit;font-size:0.78rem;outline:none;flex-shrink:0;}
 .ss-search::placeholder{color:var(--text-muted);}
@@ -201,17 +316,25 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 .ss-empty{padding:0.5rem;color:var(--text-muted);font-size:0.75rem;text-align:center;}
 
 /* ── Results Panel ── */
-.results-panel{grid-column:1/-1;background:var(--bg-header);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.results-panel .panel-header{background:var(--accent);color:#1a1a18;border-bottom:none;font-size:0.85rem;font-weight:800;}
+.results-panel{
+  grid-column:1/-1;background:var(--bg-header);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;backdrop-filter:blur(10px);box-shadow: var(--panel-shadow);
+}
+.results-panel .panel-header{
+  background: linear-gradient(135deg, rgba(180,140,40,0.9) 0%, rgba(160,120,30,0.85) 50%, rgba(140,100,25,0.9) 100%);
+  color:#0d1117;border-bottom:none;
+  font-family:'Cinzel',serif;font-size:0.85rem;font-weight:900;letter-spacing:0.08em;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.1);
+}
 .results-table{width:100%;border-collapse:collapse;}
-.results-table th,.results-table td{padding:0.55rem 0.5rem;text-align:center;font-size:0.8rem;border-right:1px solid var(--border);}
+.results-table th,.results-table td{padding:0.55rem 0.5rem;text-align:center;font-size:0.8rem;border-right:1px solid rgba(78,92,70,0.3);}
 .results-table th:last-child,.results-table td:last-child{border-right:none;}
-.results-table thead th{background:var(--bg-panel);color:var(--text-dim);font-weight:600;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
-.results-table tbody td{font-weight:800;font-size:1.1rem;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:var(--text);background:var(--bg-header);}
-.r-accuracy{color:var(--blue)!important;}
-.r-maxhit{color:var(--red)!important;}
-.r-dps{color:var(--green)!important;}
-.r-ttk{color:var(--accent)!important;}
+.results-table thead th{background:rgba(18,24,20,0.85);color:var(--text-dim);font-family:'Cinzel',serif;font-weight:700;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);}
+.results-table tbody td{font-weight:800;font-size:1.1rem;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:var(--text);background:rgba(15,20,16,0.7);}
+.r-accuracy{color:var(--blue)!important;text-shadow:0 0 8px rgba(91,168,200,0.2);}
+.r-maxhit{color:var(--red)!important;text-shadow:0 0 8px rgba(201,80,58,0.2);}
+.r-dps{color:var(--green)!important;text-shadow:0 0 8px rgba(106,191,105,0.2);}
+.r-ttk{color:var(--accent)!important;text-shadow:0 0 8px rgba(212,168,67,0.2);}
 
 /* ── Chart ── */
 .chart-panel{grid-column:1/-1;}
@@ -219,10 +342,11 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
   display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;
   margin-bottom:0.5rem;
 }
-.chart-controls label{font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;}
+.chart-controls label{font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;}
 .chart-controls select{
   background:var(--bg-input);border:1px solid var(--border);color:var(--text);
-  padding:0.25rem 0.4rem;border-radius:3px;font-size:0.75rem;font-family:inherit;
+  padding:0.25rem 0.4rem;border-radius:3px;font-size:0.75rem;font-family:'Crimson Text',serif;
+  backdrop-filter:blur(4px);
 }
 .chart-legend{
   display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:0.4rem;
@@ -235,10 +359,11 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 }
 .chart-tooltip{
   position:absolute;pointer-events:none;
-  background:rgba(30,30,28,0.95);border:1px solid var(--border-light);
+  background:rgba(12,18,14,0.95);border:1px solid var(--border-light);
   border-radius:4px;padding:0.4rem 0.55rem;font-size:0.7rem;
   color:var(--text);white-space:nowrap;z-index:10;
-  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+  box-shadow:0 2px 12px rgba(0,0,0,0.5);
+  backdrop-filter:blur(8px);
 }
 .chart-tooltip .tt-header{color:var(--text-muted);font-weight:700;margin-bottom:0.2rem;}
 .chart-tooltip .tt-row{display:flex;align-items:center;gap:0.3rem;}
@@ -256,28 +381,29 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 }
 .loadout-tab{
   padding:0.3rem 0.6rem;border-radius:3px;cursor:pointer;
-  font-size:0.72rem;font-weight:700;font-family:inherit;
+  font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;
   background:var(--bg-slot);border:1px solid var(--border);
-  color:var(--text-muted);transition:all 0.15s;
+  color:var(--text-muted);transition:all 0.2s;
   display:flex;align-items:center;gap:0.3rem;
+  letter-spacing:0.03em;
 }
 .loadout-tab:hover{border-color:var(--text-muted);color:var(--text);}
-.loadout-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.loadout-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.12);}
 .loadout-tab .tab-close{
   font-size:0.65rem;opacity:0.5;cursor:pointer;margin-left:0.15rem;
 }
 .loadout-tab .tab-close:hover{opacity:1;color:#ff6b6b;}
 .loadout-add{
   padding:0.3rem 0.5rem;border-radius:3px;cursor:pointer;
-  font-size:0.72rem;font-weight:700;font-family:inherit;
+  font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;
   background:transparent;border:1px dashed var(--border);
-  color:var(--text-muted);transition:all 0.15s;
+  color:var(--text-muted);transition:all 0.2s;
 }
-.loadout-add:hover{border-color:var(--accent);color:var(--accent);}
+.loadout-add:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.1);}
 
 /* Results row highlighting */
-.results-table tr.active-row{background:rgba(246,147,29,0.08);}
-.results-table .loadout-label{color:var(--accent);font-weight:700;font-size:0.72rem;white-space:nowrap;}
+.results-table tr.active-row{background:rgba(212,168,67,0.08);}
+.results-table .loadout-label{font-family:'Cinzel',serif;color:var(--accent);font-weight:700;font-size:0.7rem;white-space:nowrap;letter-spacing:0.03em;}
 
 @media(max-width:700px){
   .main-grid{grid-template-columns:1fr;}
@@ -292,15 +418,17 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 }
 .methodology details{
   background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  backdrop-filter:blur(10px);box-shadow:var(--panel-shadow);
 }
 .methodology summary{
-  padding:0.6rem 0.85rem;font-size:0.82rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:0.04em;color:var(--accent);cursor:pointer;user-select:none;
+  padding:0.6rem 0.85rem;font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.06em;color:var(--accent);cursor:pointer;user-select:none;
   background:var(--bg-header);border-bottom:1px solid transparent;
   list-style:none;
+  text-shadow:0 0 12px rgba(212,168,67,0.15);
 }
 .methodology summary::-webkit-details-marker{display:none;}
-.methodology summary::before{content:'\25B6  ';font-size:0.6rem;transition:transform 0.2s;display:inline-block;}
+.methodology summary::before{content:'\25B6';font-size:0.55rem;transition:transform 0.2s;display:inline-block;margin-right:0.5rem;}
 .methodology details[open] summary::before{transform:rotate(90deg);}
 .methodology details[open] summary{border-bottom-color:var(--border);}
 .methodology .meth-body{
@@ -324,11 +452,76 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 </head>
 <body>
 
+<!-- Living Background Scene -->
+<div id="bg-scene">
+  <div class="bg-gradient"></div>
+  <div class="bg-texture"></div>
+  <div class="bg-vignette"></div>
+  <div class="water-layer"></div>
+</div>
+
+<script>
+// ── Firefly Generator ──
+(function createFireflies(){
+  const scene = document.getElementById('bg-scene');
+  const count = 35;
+  for(let i = 0; i < count; i++){
+    const fly = document.createElement('div');
+    fly.className = 'firefly';
+    const size = 2 + Math.random() * 4;
+    fly.style.width = size + 'px';
+    fly.style.height = size + 'px';
+    fly.style.left = Math.random() * 100 + '%';
+    fly.style.top = (10 + Math.random() * 70) + '%';
+    fly.style.setProperty('--dx', (Math.random() * 200 - 100) + 'px');
+    fly.style.setProperty('--dy', (Math.random() * 150 - 75) + 'px');
+    fly.style.setProperty('--duration', (8 + Math.random() * 12) + 's');
+    fly.style.setProperty('--delay', (Math.random() * 10) + 's');
+    scene.appendChild(fly);
+  }
+})();
+
+// ── Dust Motes ──
+(function createDustMotes(){
+  const scene = document.getElementById('bg-scene');
+  const count = 15;
+  for(let i = 0; i < count; i++){
+    const mote = document.createElement('div');
+    mote.className = 'dust-mote';
+    mote.style.left = Math.random() * 100 + '%';
+    mote.style.bottom = '-10px';
+    mote.style.setProperty('--duration', (15 + Math.random() * 25) + 's');
+    mote.style.setProperty('--delay', (Math.random() * 20) + 's');
+    scene.appendChild(mote);
+  }
+})();
+
+// ── Water Ripples ──
+(function createWaterRipples(){
+  const scene = document.getElementById('bg-scene');
+  function addRipple(){
+    const ripple = document.createElement('div');
+    ripple.className = 'water-ripple';
+    const size = 20 + Math.random() * 60;
+    ripple.style.width = size + 'px';
+    ripple.style.height = (size * 0.4) + 'px';
+    ripple.style.left = (10 + Math.random() * 80) + '%';
+    ripple.style.bottom = (Math.random() * 80) + 'px';
+    scene.appendChild(ripple);
+    setTimeout(()=> ripple.remove(), 4000);
+  }
+  setInterval(addRipple, 2500);
+  addRipple();
+  setTimeout(addRipple, 800);
+  setTimeout(addRipple, 1600);
+})();
+</script>
+
 <header class="site-header">
   <h1>WoV DPS Calculator</h1>
   <span class="subtitle">Winds of Valen</span>
   <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v2.5</span>
-  <a href="../../index.html" style="margin-left:1rem;font-size:0.72rem;color:var(--text-dim);text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">← Home</a>
+  <a href="../../index.html" style="margin:0 auto;font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s,text-shadow 0.2s;" onmouseover="this.style.color='var(--accent-hover)';this.style.textShadow='0 0 12px rgba(212,168,67,0.4)'" onmouseout="this.style.color='var(--accent)';this.style.textShadow='none'">← Back to Home Page</a>
   <div class="page-tabs">
     <button class="page-tab active" data-page="calculator" onclick="switchPage('calculator')">Calculator</button>
     <button class="page-tab" data-page="methodology" onclick="switchPage('methodology')">Methodology</button>
@@ -362,11 +555,11 @@ function switchPage(page){
           <button class="loadout-add" id="add-loadout" title="Copy current loadout">+ New</button>
         </div>
         <div style="flex-shrink:0;display:flex;align-items:center;gap:0.4rem;">
-          <select id="preset-select" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text-muted);padding:0.25rem 0.4rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">
-            <option value="">— Preset —</option>
-            <option value="max-ranged">Max Ranged</option>
-            <option value="max-melee-pierce">Max Melee (Pierce)</option>
-            <option value="max-melee-slash">Max Melee (Slash)</option>
+          <select id="preset-select" style="background:#1e2a26;border:1px solid var(--border);color:var(--text);padding:0.25rem 0.4rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">
+            <option value="" style="background:#1e2a26;color:var(--text);">— Preset —</option>
+            <option value="max-ranged" style="background:#1e2a26;color:var(--text);">Max Ranged</option>
+            <option value="max-melee-pierce" style="background:#1e2a26;color:var(--text);">Max Melee (Pierce)</option>
+            <option value="max-melee-slash" style="background:#1e2a26;color:var(--text);">Max Melee (Slash)</option>
           </select>
           <button id="share-btn" title="Copy shareable URL" style="background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">🔗 Share</button>
         </div>
@@ -486,7 +679,7 @@ function switchPage(page){
         <label>Y Axis</label>
         <select id="chart-y">
           <option value="dps" selected>DPS</option>
-          <option value="hc">Hit Chance %</option>
+          <option value="hc">Accuracy</option>
           <option value="mx">Max Hit</option>
           <option value="avg">Avg Hit</option>
           <option value="stk">Time to Kill (s)</option>
@@ -500,7 +693,7 @@ function switchPage(page){
           <option value="mp">Melee / Range Power</option>
         </select>
       </div>
-      <canvas id="chart-canvas" width="800" height="400" style="width:100%;height:400px;border-radius:4px;background:#1a1a18;"></canvas>
+      <canvas id="chart-canvas" width="800" height="420" style="width:100%;height:420px;border-radius:4px;background:rgba(10,14,12,0.7);"></canvas>
       <div class="chart-legend" id="chart-legend"></div>
     </div>
   </div>
@@ -521,7 +714,7 @@ function switchPage(page){
     </details>
 
     <!-- Player Inputs -->
-    <details>
+    <details open>
       <summary>Player Inputs</summary>
       <div class="meth-body">
         <p>These are the values the calculator uses from your loadout:</p>
@@ -537,7 +730,7 @@ function switchPage(page){
     </details>
 
     <!-- Enemy Inputs -->
-    <details>
+    <details open>
       <summary>Enemy Inputs</summary>
       <div class="meth-body">
         <p>These values are loaded automatically when a monster is selected:</p>
@@ -552,7 +745,7 @@ function switchPage(page){
     </details>
 
     <!-- Accuracy Calculation -->
-    <details>
+    <details open>
       <summary>Accuracy Calculation</summary>
       <div class="meth-body">
         <h3>Roll Values</h3>
@@ -576,7 +769,7 @@ function switchPage(page){
     </details>
 
     <!-- Damage Calculation -->
-    <details>
+    <details open>
       <summary>Damage Calculation</summary>
       <div class="meth-body">
         <h3>Constants</h3>
@@ -607,7 +800,7 @@ function switchPage(page){
     </details>
 
     <!-- Kills Per Hour -->
-    <details>
+    <details open>
       <summary>Kills Per Hour</summary>
       <div class="meth-body">
         <p><code>KPH = 3600 / (secondsToKill + 15)</code></p>
@@ -617,7 +810,7 @@ function switchPage(page){
 
 
     <!-- Gems -->
-    <details>
+    <details open>
       <summary>Gems</summary>
       <div class="meth-body">
         <p>Gems can be socketed in <strong>Ring</strong> and <strong>Amulet</strong> slots. Each gem adds a percentage bonus <strong>only to the Melee/Range Power of the item it is slotted into</strong>, not to total power across all gear.</p>
@@ -632,7 +825,7 @@ function switchPage(page){
     </details>
 
     <!-- Two-Handed / Bows -->
-    <details>
+    <details open>
       <summary>Two-Handed Weapons &amp; Bows</summary>
       <div class="meth-body">
         <p><strong>Two-handed weapons</strong> (greatswords, axes, bows) disable the shield slot.</p>
@@ -641,7 +834,7 @@ function switchPage(page){
     </details>
 
     <!-- Summary -->
-    <details>
+    <details open>
       <summary>What Affects What</summary>
       <div class="meth-body">
         <ul>
@@ -1046,13 +1239,15 @@ function recalcAll(){
   const tbody=$("results-tbody");
   const rows=tbody.querySelectorAll("tr");
   let anyReduced=false;
+  const dpsValues=[];
   loadouts.forEach((state,i)=>{
     const row=rows[i];if(!row)return;
     row.className=i===activeLoadout?"active-row":"";
     const cells=row.querySelectorAll("td");
     const r=calcLoadoutResults(state);
-    if(!r){for(let c=1;c<cells.length;c++)cells[c].textContent="\u2014";return;}
+    if(!r){dpsValues.push(-1);for(let c=1;c<cells.length;c++)cells[c].textContent="\u2014";return;}
     if(r.reduced)anyReduced=true;
+    dpsValues.push(r.dps);
     cells[1].textContent=(r.hc*100).toFixed(1)+"%";
     cells[2].textContent=r.mx;cells[3].textContent=r.avg;cells[4].textContent=r.min;
     cells[5].textContent=r.dps.toFixed(2);
@@ -1060,6 +1255,17 @@ function recalcAll(){
     cells[7].textContent=isFinite(r.stk)?r.stk.toFixed(1)+"s":"\u221e";
     cells[8].textContent=isFinite(r.kph)?r.kph.toFixed(1):"0";
   });
+  // Reset all result labels to match current loadout names
+  rows.forEach((row,i)=>{const cell=row.querySelector(".loadout-label");if(cell)cell.textContent=getLoadoutName(i);});
+  // Add star to best DPS loadout (only when comparing multiple)
+  if(loadouts.length>1){
+    let bestIdx=-1,bestDps=-1;
+    dpsValues.forEach((d,i)=>{if(d>bestDps){bestDps=d;bestIdx=i;}});
+    if(bestIdx>=0&&bestDps>0){
+      const bestRow=rows[bestIdx];
+      if(bestRow){const cell=bestRow.querySelector(".loadout-label");if(cell)cell.textContent="\u2B50 "+cell.textContent;}
+    }
+  }
   $("dmg-reduction-disclaimer").style.display=anyReduced?"block":"none";
   const anyGems=loadouts.some(s=>(s.gems.ring||s.gems.amulet));
   $("gem-disclaimer").style.display=anyGems?"block":"none";
@@ -1102,11 +1308,11 @@ function renderChart(){
   else if(xKey==='wDmg'){xMin=0;xMax=200;xLabel='Weapon Damage';}
   else{xMin=0;xMax=200;xLabel='Melee / Range Power';}
 
-  const yLabels={dps:'DPS',hc:'Hit Chance %',mx:'Max Hit',avg:'Avg Hit',stk:'Time to Kill (s)',kph:'Kills / Hr'};
+  const yLabels={dps:'DPS',hc:'Accuracy',mx:'Max Hit',avg:'Avg Hit',stk:'Time to Kill (s)',kph:'Kills / Hr'};
   const yLabel=yLabels[yKey]||yKey;
 
   // Margins
-  const ml=55,mr=15,mt=15,mb=58;
+  const ml=55,mr=15,mt=15,mb=52;
   const pw=w-ml-mr, ph=h-mt-mb;
   const steps=Math.min(99,xMax-xMin);
 
@@ -1164,7 +1370,7 @@ function renderChart(){
 
   // Axis labels
   ctx.fillStyle='#8a8a7e';ctx.font='11px sans-serif';
-  ctx.textAlign='center';ctx.fillText(xLabel,ml+pw/2,h-4);
+  ctx.textAlign='center';ctx.fillText(xLabel,ml+pw/2,h-16);
   ctx.save();ctx.translate(12,mt+ph/2);ctx.rotate(-Math.PI/2);ctx.fillText(yLabel,0,0);ctx.restore();
 
   // Lines

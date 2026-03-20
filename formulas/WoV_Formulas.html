@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Winds of Valen — Game formulas for damage, accuracy, and experience calculations." />
+  <title>WoV Formulas — Winds of Valen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-body: #1e2830;
+  --bg-panel: rgba(30, 40, 48, 0.88);
+  --bg-input: rgba(24, 32, 40, 0.75);
+  --bg-header: rgba(28, 38, 46, 0.92);
+  --border: rgba(100, 116, 90, 0.58);
+  --border-light: rgba(125, 142, 112, 0.58);
+  --accent: #d4a843;
+  --accent-hover: #e8c060;
+  --accent-glow: rgba(212,168,67,0.2);
+  --accent-dim: rgba(212,168,67,0.1);
+  --text: #e8e4d2;
+  --text-dim: #b8ae98;
+  --text-muted: #9a9280;
+  --green: #6abf69;
+  --red: #c9503a;
+  --blue: #5ba8c8;
+  --radius: 4px;
+  --panel-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;}
+body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-body);color:var(--text);min-height:100vh;line-height:1.6;}
+
+/* ── Living Background ── */
+#bg-scene{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden;}
+#bg-scene .bg-gradient{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at 50% 40%,rgba(75,115,75,0.32) 0%,transparent 60%),
+    radial-gradient(ellipse at 30% 70%,rgba(95,165,120,0.20) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 30%,rgba(185,125,60,0.15) 0%,transparent 50%),
+    linear-gradient(180deg,#1a2218 0%,#202e24 30%,#1c2820 60%,#192220 100%);}
+#bg-scene .bg-vignette{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.6) 100%);}
+@keyframes fireflyDrift{0%{transform:translate(0,0) scale(1);opacity:0;}15%{opacity:0.6;}50%{transform:translate(var(--dx),var(--dy)) scale(1.2);opacity:0.8;}85%{opacity:0.4;}100%{transform:translate(calc(var(--dx)*1.5),calc(var(--dy)*0.8)) scale(0.8);opacity:0;}}
+@keyframes fireflyGlow{0%,100%{box-shadow:0 0 3px 1px rgba(200,220,80,0.15);}50%{box-shadow:0 0 6px 3px rgba(200,220,80,0.3);}}
+.firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,rgba(210,230,100,0.5) 0%,rgba(180,200,60,0.2) 50%,transparent 100%);animation:fireflyDrift var(--duration) ease-in-out infinite,fireflyGlow 2s ease-in-out infinite;animation-delay:var(--delay);pointer-events:none;z-index:1;}
+
+/* ── Content z-index ── */
+.site-header,.page-content,.site-footer{position:relative;z-index:2;}
+
+/* ── Header ── */
+.site-header{
+  position:relative;
+  background:linear-gradient(180deg,rgba(15,20,15,0.95),rgba(12,18,14,0.92));
+  border-bottom:2px solid var(--accent);padding:0.6rem 1.5rem;
+  display:flex;align-items:center;gap:0.75rem;
+  backdrop-filter:blur(10px);box-shadow:0 2px 20px rgba(0,0,0,0.5),inset 0 -1px 0 rgba(212,168,67,0.15);
+}
+.site-header h1{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:var(--accent);letter-spacing:0.06em;text-shadow:0 0 20px rgba(212,168,67,0.3);}
+.site-header .subtitle{font-family:'Cinzel',serif;font-size:0.78rem;color:var(--text-dim);letter-spacing:0.04em;}
+.home-link{position:absolute;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s,text-shadow 0.2s;}
+.home-link:hover{color:var(--accent-hover);text-shadow:0 0 12px rgba(212,168,67,0.4);}
+
+/* ── Page Content ── */
+.page-content{max-width:900px;margin:0 auto;padding:1.5rem 1rem 2rem;}
+
+/* ── Section ── */
+.formula-section{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  backdrop-filter:blur(10px);box-shadow:var(--panel-shadow);margin-bottom:1rem;overflow:hidden;
+}
+.formula-section summary{
+  padding:0.6rem 0.85rem;font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);cursor:pointer;user-select:none;
+  background:linear-gradient(180deg,rgba(20,28,22,0.9),rgba(15,22,18,0.85));
+  border-bottom:1px solid transparent;list-style:none;
+  text-shadow:0 0 12px rgba(212,168,67,0.15);
+}
+.formula-section summary::-webkit-details-marker{display:none;}
+.formula-section summary::before{content:'\25B6';font-size:0.55rem;transition:transform 0.2s;display:inline-block;margin-right:0.5rem;}
+.formula-section[open] summary::before{transform:rotate(90deg);}
+.formula-section[open] summary{border-bottom-color:var(--border);}
+.formula-body{padding:0.85rem;}
+.formula-body h3{font-family:'Cinzel',serif;font-size:0.78rem;font-weight:700;color:var(--accent);margin:1rem 0 0.4rem;letter-spacing:0.04em;}
+.formula-body h3:first-child{margin-top:0;}
+.formula-body p{margin-bottom:0.5rem;font-size:0.88rem;color:var(--text-dim);}
+.formula-body strong{color:var(--text);}
+.formula-body ul{margin:0.3rem 0 0.6rem 1.2rem;font-size:0.85rem;color:var(--text-dim);}
+.formula-body li{margin-bottom:0.2rem;}
+.formula-body li strong{color:var(--text);}
+
+/* ── Code blocks ── */
+.formula-code{
+  background:rgba(15,20,16,0.85);border:1px solid var(--border);border-radius:3px;
+  padding:0.6rem 0.85rem;font-family:'Courier New',Consolas,monospace;
+  font-size:0.82rem;color:var(--green);line-height:1.7;overflow-x:auto;
+  margin:0.4rem 0 0.6rem;
+}
+
+/* ── Tables ── */
+.formula-table{width:100%;border-collapse:collapse;margin:0.4rem 0 0.6rem;font-size:0.82rem;}
+.formula-table th{
+  text-align:left;padding:0.35rem 0.6rem;background:rgba(18,24,20,0.85);
+  font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;color:var(--text-dim);
+  text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);
+}
+.formula-table td{padding:0.35rem 0.6rem;border-bottom:1px solid rgba(100,116,90,0.2);color:var(--text);}
+.formula-table td code{color:var(--green);font-family:'Courier New',monospace;font-size:0.8rem;}
+.formula-table tr:last-child td{border-bottom:none;}
+
+/* ── Caution box ── */
+.caution-box{
+  background:rgba(58,42,16,0.6);border:1px solid #6b4f1d;border-radius:var(--radius);
+  padding:0.6rem 0.85rem;margin-bottom:0.75rem;font-size:0.82rem;color:#e8c56d;
+}
+.caution-box strong{color:#f0d080;}
+
+/* ── Footer ── */
+.site-footer{text-align:center;padding:1.5rem 1rem;border-top:1px solid var(--border);font-family:'Cinzel',serif;font-size:0.68rem;color:var(--text-muted);letter-spacing:0.04em;}
+.site-footer a{color:var(--accent);text-decoration:none;}
+.site-footer a:hover{color:var(--accent-hover);}
+
+@media(max-width:600px){
+  .page-content{padding:1rem 0.5rem;}
+}
+  </style>
+</head>
+<body>
+
+<div id="bg-scene">
+  <div class="bg-gradient"></div>
+  <div class="bg-vignette"></div>
+</div>
+
+<script>
+(function(){
+  const scene=document.getElementById('bg-scene');
+  for(let i=0;i<30;i++){
+    const f=document.createElement('div');f.className='firefly';
+    const s=2+Math.random()*4;f.style.width=s+'px';f.style.height=s+'px';
+    f.style.left=Math.random()*100+'%';f.style.top=(10+Math.random()*70)+'%';
+    f.style.setProperty('--dx',(Math.random()*200-100)+'px');
+    f.style.setProperty('--dy',(Math.random()*150-75)+'px');
+    f.style.setProperty('--duration',(8+Math.random()*12)+'s');
+    f.style.setProperty('--delay',(Math.random()*10)+'s');
+    scene.appendChild(f);
+  }
+})();
+</script>
+
+<header class="site-header">
+  <h1>WoV Formulas</h1>
+  <span class="subtitle">Winds of Valen</span>
+  <a class="home-link" href="../index.html">← Back to Home Page</a>
+</header>
+
+<div class="page-content">
+
+  <!-- ═══════ DAMAGE ═══════ -->
+  <details class="formula-section" open>
+    <summary>Damage Calculation</summary>
+    <div class="formula-body">
+
+      <div class="caution-box">
+        <strong>⚠ Unknown mechanic:</strong> We do not currently know how damage reduction works. The exact mechanics of how enemy <strong>BLOCK_POWER</strong> and <strong>DEFLECT_POWER</strong> reduce incoming damage have not been validated against the game's source code. The 75% reduction value used in the DPS calculator is an assumption.
+      </div>
+
+      <h3>Constants</h3>
+      <table class="formula-table">
+        <thead><tr><th>Constant</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td><code>BASE_DAMAGE</code></td><td>5</td></tr>
+          <tr><td><code>BASE_EFFECTIVE_LEVEL</code></td><td>8</td></tr>
+          <tr><td><code>EFFECTIVE_LEVEL_DAMAGE_MULTIPLIER</code></td><td>1.1</td></tr>
+          <tr><td><code>BASE_EQUIPMENT_DAMAGE</code></td><td>30</td></tr>
+          <tr><td><code>EQUIPMENT_POWER_STRENGTH</code></td><td>0.333333</td></tr>
+          <tr><td><code>DAMAGE_DIVIDER</code></td><td>50</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Max Hit Formula</h3>
+      <div class="formula-code">effectiveAttackLevel = attackLevel + 8<br>
+weaponDamageBonus = weaponDamage + 30<br>
+flatDamageBonus = power × 0.333333 × attackSpeed<br><br>
+maxHit = floor(5 + (effectiveAttackLevel × 1.1 × (weaponDamageBonus + flatDamageBonus)) / 50)</div>
+
+      <ul>
+        <li><strong>attackLevel</strong> — ATTACK level (melee) or RANGED level (bows), 1–99</li>
+        <li><strong>weaponDamage</strong> — Sum of QUICK_DAMAGE + HEAVY_DAMAGE from the weapon</li>
+        <li><strong>attackSpeed</strong> — Speed stat on the weapon (1.0–5.0)</li>
+        <li><strong>power</strong> — Total MELEE_POWER or RANGE_POWER from all gear (boosted by gems)</li>
+      </ul>
+
+      <h3>Damage Range</h3>
+      <div class="formula-code">minHit = floor(maxHit × 0.5)<br>
+avgHit = floor(maxHit × 0.75)<br>
+maxHit = maxHit</div>
+      <p>Every hit rolls uniformly between <strong>minHit</strong> and <strong>maxHit</strong>.</p>
+
+      <h3>Gem Power Bonus</h3>
+      <p>Gems in RING and AMULET slots boost only the matching stat on the item they're slotted into:</p>
+      <div class="formula-code">itemPower = floor(baseItemPower × (1 + gemValue / 100))</div>
+      <table class="formula-table">
+        <thead><tr><th>Gem</th><th>Boost</th></tr></thead>
+        <tbody>
+          <tr><td>Weak Power Gem</td><td>+20%</td></tr>
+          <tr><td>Power Gem</td><td>+30%</td></tr>
+          <tr><td>Strong Power Gem</td><td>+40%</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Weapon Types</h3>
+      <ul>
+        <li><strong>Slash weapons</strong> — Use SLASH_ACCURACY vs enemy SLASH_DEFENSE</li>
+        <li><strong>Pierce weapons</strong> (including bows) — Use PIECE_ACCURACY vs enemy PIECE_DEFENSE</li>
+        <li><strong>Bows</strong> — Use RANGED level instead of ATTACK level</li>
+        <li><strong>Two-handed</strong> (WEAPON_2H, BOW) — Disable the SHIELD slot</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ═══════ ACCURACY ═══════ -->
+  <details class="formula-section" open>
+    <summary>Accuracy Calculation</summary>
+    <div class="formula-body">
+
+      <h3>Roll Values</h3>
+      <div class="formula-code">MaxAccuracyRoll = (attackLevel + 8) × (equippedAccuracy + 32)<br>
+MaxDefenceRoll  = (defenceLevel + 8) × (equippedDefence + 16)</div>
+      <p>Constants: <strong>8</strong> = base level offset, <strong>32</strong> = base accuracy bonus, <strong>16</strong> = base defence bonus.</p>
+
+      <h3>How Combat Rolls Work</h3>
+      <p>Each attack, the game rolls a random number from 0 to MaxAccuracyRoll and another from 0 to MaxDefenceRoll. If the accuracy roll is <strong>strictly greater</strong> than the defence roll, the attack hits.</p>
+
+      <h3>Hit Chance Formula</h3>
+      <p>If <strong>MaxAccuracyRoll &gt; MaxDefenceRoll</strong>:</p>
+      <div class="formula-code">hitChance = 1 − (MaxDefenceRoll + 2) / (2 × (MaxAccuracyRoll + 1))</div>
+      <p>Otherwise:</p>
+      <div class="formula-code">hitChance = MaxAccuracyRoll / (2 × MaxDefenceRoll + 1)</div>
+      <p>Hit chance is always between 0 and 1 (exclusive) — never exactly 0% or 100%.</p>
+    </div>
+  </details>
+
+  <!-- ═══════ EXPERIENCE ═══════ -->
+  <details class="formula-section" open>
+    <summary>Experience Calculation</summary>
+    <div class="formula-body">
+
+      <h3>XP Required for a Level</h3>
+      <div class="formula-code">RequiredXP = 500 × (2^((Level - 1) / 5) - 1)</div>
+      <ul>
+        <li><strong>Level</strong> — The target level (1–99)</li>
+        <li>At Level 1, RequiredXP = 0</li>
+        <li>XP requirement doubles every 5 levels</li>
+        <li>Base scaling factor is <strong>500</strong></li>
+      </ul>
+
+      <h3>Example Values</h3>
+      <table class="formula-table">
+        <thead><tr><th>Level</th><th>Required XP</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>0</td></tr>
+          <tr><td>5</td><td>~319</td></tr>
+          <tr><td>10</td><td>~1,828</td></tr>
+          <tr><td>20</td><td>~7,653</td></tr>
+          <tr><td>50</td><td>~255,489</td></tr>
+          <tr><td>99</td><td>~52,428,300</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <!-- ═══════ DPS ═══════ -->
+  <details class="formula-section" open>
+    <summary>DPS & Kills Per Hour</summary>
+    <div class="formula-body">
+
+      <h3>DPS</h3>
+      <div class="formula-code">DPS = (avgHit × hitChance) / attackInterval</div>
+      <p>Where <strong>attackInterval</strong> = attackSpeed × 0.6 seconds.</p>
+
+      <h3>Time to Kill</h3>
+      <div class="formula-code">secondsToKill = monsterHP / DPS</div>
+
+      <h3>Kills Per Hour</h3>
+      <div class="formula-code">KPH = 3600 / (secondsToKill + 15)</div>
+      <p>All monsters use a <strong>15s</strong> respawn timer.</p>
+    </div>
+  </details>
+
+</div>
+
+<footer class="site-footer">
+  Winds of Valen Community Tools · <a href="https://github.com/Maurittius/WindsOfValen" target="_blank">GitHub</a>
+</footer>
+
+</body>
+</html>

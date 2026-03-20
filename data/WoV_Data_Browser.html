@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Winds of Valen — Browse all game data: weapons, armor, monsters, and more." />
+  <title>WoV Data Browser — Winds of Valen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-body: #1e2830;
+  --bg-panel: rgba(30, 40, 48, 0.88);
+  --bg-input: rgba(24, 32, 40, 0.75);
+  --bg-header: rgba(28, 38, 46, 0.92);
+  --bg-hover: rgba(55, 72, 60, 0.5);
+  --border: rgba(100, 116, 90, 0.58);
+  --border-light: rgba(125, 142, 112, 0.58);
+  --accent: #d4a843;
+  --accent-hover: #e8c060;
+  --accent-glow: rgba(212,168,67,0.2);
+  --accent-dim: rgba(212,168,67,0.1);
+  --text: #e8e4d2;
+  --text-dim: #b8ae98;
+  --text-muted: #9a9280;
+  --green: #6abf69;
+  --red: #c9503a;
+  --blue: #5ba8c8;
+  --radius: 4px;
+  --panel-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;}
+body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-body);color:var(--text);min-height:100vh;line-height:1.5;}
+
+/* ── Living Background ── */
+#bg-scene{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden;}
+#bg-scene .bg-gradient{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at 50% 40%,rgba(75,115,75,0.32) 0%,transparent 60%),
+    radial-gradient(ellipse at 30% 70%,rgba(95,165,120,0.20) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 30%,rgba(185,125,60,0.15) 0%,transparent 50%),
+    linear-gradient(180deg,#1a2218 0%,#202e24 30%,#1c2820 60%,#192220 100%);}
+#bg-scene .bg-vignette{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.6) 100%);}
+
+@keyframes fireflyDrift{0%{transform:translate(0,0) scale(1);opacity:0;}15%{opacity:0.6;}50%{transform:translate(var(--dx),var(--dy)) scale(1.2);opacity:0.8;}85%{opacity:0.4;}100%{transform:translate(calc(var(--dx)*1.5),calc(var(--dy)*0.8)) scale(0.8);opacity:0;}}
+@keyframes fireflyGlow{0%,100%{box-shadow:0 0 3px 1px rgba(200,220,80,0.15);}50%{box-shadow:0 0 6px 3px rgba(200,220,80,0.3);}}
+.firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,rgba(210,230,100,0.5) 0%,rgba(180,200,60,0.2) 50%,transparent 100%);animation:fireflyDrift var(--duration) ease-in-out infinite,fireflyGlow 2s ease-in-out infinite;animation-delay:var(--delay);pointer-events:none;z-index:1;}
+
+/* ── Content z-index ── */
+.site-header,.page-content,.site-footer{position:relative;z-index:2;}
+
+/* ── Header ── */
+.site-header{
+  position:relative;
+  background:linear-gradient(180deg,rgba(15,20,15,0.95),rgba(12,18,14,0.92));
+  border-bottom:2px solid var(--accent);padding:0.6rem 1.5rem;
+  display:flex;align-items:center;gap:0.75rem;
+  backdrop-filter:blur(10px);box-shadow:0 2px 20px rgba(0,0,0,0.5),inset 0 -1px 0 rgba(212,168,67,0.15);
+}
+.site-header h1{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:var(--accent);letter-spacing:0.06em;text-shadow:0 0 20px rgba(212,168,67,0.3);}
+.site-header .subtitle{font-family:'Cinzel',serif;font-size:0.78rem;color:var(--text-dim);letter-spacing:0.04em;}
+.home-link{position:absolute;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s,text-shadow 0.2s;}
+.home-link:hover{color:var(--accent-hover);text-shadow:0 0 12px rgba(212,168,67,0.4);}
+
+/* ── Category Tabs ── */
+.cat-tabs{
+  display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;
+  max-width:1100px;margin:1.5rem auto 0.75rem;padding:0 1rem;
+}
+.cat-tab{
+  font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
+  padding:0.35rem 0.8rem;border-radius:3px;cursor:pointer;
+  background:rgba(38,50,44,0.74);border:1px solid var(--border);color:var(--text-muted);
+  transition:all 0.2s;
+}
+.cat-tab:hover{border-color:var(--text-muted);color:var(--text);}
+.cat-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.12);}
+
+/* ── Search ── */
+.search-bar{max-width:1100px;margin:0 auto 1rem;padding:0 1rem;}
+.search-bar input{
+  width:100%;padding:0.5rem 0.85rem;font-family:'Crimson Text',serif;font-size:0.9rem;
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  color:var(--text);outline:none;backdrop-filter:blur(10px);
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.search-bar input::placeholder{color:var(--text-muted);}
+.search-bar input:focus{border-color:var(--accent);box-shadow:0 0 12px rgba(212,168,67,0.12);}
+
+/* ── Card Grid ── */
+.card-grid{
+  max-width:1100px;margin:0 auto;padding:0 1rem 2rem;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0.75rem;
+}
+.item-card{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;backdrop-filter:blur(10px);box-shadow:var(--panel-shadow);
+  transition:border-color 0.2s,transform 0.2s;
+}
+.item-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.card-head{
+  background:linear-gradient(180deg,rgba(20,28,22,0.9),rgba(15,22,18,0.85));
+  padding:0.55rem 0.85rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:0.5rem;
+}
+.card-icon{width:28px;height:28px;object-fit:contain;border-radius:3px;flex-shrink:0;image-rendering:pixelated;}
+.card-name{font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;color:var(--text);letter-spacing:0.04em;}
+.card-badge{
+  font-family:'Cinzel',serif;font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
+  padding:0.1rem 0.45rem;border-radius:3px;flex-shrink:0;
+}
+.badge-type{background:rgba(91,168,200,0.15);color:var(--blue);border:1px solid rgba(91,168,200,0.2);}
+.badge-boss{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(212,168,67,0.2);text-shadow:0 0 8px rgba(212,168,67,0.3);}
+.badge-mob{background:rgba(154,146,128,0.1);color:var(--text-muted);border:1px solid rgba(154,146,128,0.15);}
+.badge-cat{background:rgba(106,191,105,0.15);color:var(--green);border:1px solid rgba(106,191,105,0.2);}
+.card-body{padding:0.65rem 0.85rem;}
+.card-desc{font-size:0.82rem;color:var(--text-dim);margin-bottom:0.5rem;font-style:italic;line-height:1.5;}
+.card-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.25rem;}
+.card-stat{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0.2rem 0.45rem;background:var(--bg-input);border-radius:3px;font-size:0.75rem;
+}
+.card-stat.full{grid-column:1/-1;}
+.stat-name{font-family:'Cinzel',serif;font-size:0.65rem;font-weight:700;color:var(--text-dim);letter-spacing:0.02em;}
+.stat-val{font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;}
+.card-section{margin-top:0.4rem;padding-top:0.4rem;border-top:1px solid rgba(100,116,90,0.3);}
+.card-section-title{font-family:'Cinzel',serif;font-size:0.6rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.25rem;}
+.loot-row{display:flex;justify-content:space-between;font-size:0.78rem;padding:0.1rem 0;}
+.loot-row .loot-item{color:var(--accent);}
+.loot-row .loot-chance{color:var(--text-dim);}
+.mat-row{display:flex;justify-content:space-between;font-size:0.78rem;padding:0.1rem 0;}
+.mat-row .mat-name{color:var(--text);}
+.mat-row .mat-amt{color:var(--accent);font-weight:700;}
+.card-location{font-size:0.75rem;color:var(--text-dim);margin-top:0.3rem;}
+.card-location::before{content:'📍 ';}
+
+/* ── No Results ── */
+.no-results{text-align:center;padding:3rem 1rem;font-family:'Cinzel',serif;font-size:1rem;color:var(--text-muted);}
+
+/* ── Footer ── */
+.site-footer{text-align:center;padding:1.5rem 1rem;border-top:1px solid var(--border);font-family:'Cinzel',serif;font-size:0.68rem;color:var(--text-muted);letter-spacing:0.04em;}
+.site-footer a{color:var(--accent);text-decoration:none;}
+.site-footer a:hover{color:var(--accent-hover);}
+
+/* ── Item Count ── */
+.item-count{max-width:1100px;margin:0 auto;padding:0 1rem 0.5rem;font-family:'Cinzel',serif;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.03em;}
+
+@media(max-width:600px){
+  .card-grid{grid-template-columns:1fr;}
+  .cat-tabs{gap:0.25rem;}
+  .cat-tab{font-size:0.6rem;padding:0.25rem 0.5rem;}
+}
+  </style>
+</head>
+<body>
+
+<div id="bg-scene">
+  <div class="bg-gradient"></div>
+  <div class="bg-vignette"></div>
+</div>
+
+<script>
+(function(){
+  const scene=document.getElementById('bg-scene');
+  for(let i=0;i<30;i++){
+    const f=document.createElement('div');f.className='firefly';
+    const s=2+Math.random()*4;f.style.width=s+'px';f.style.height=s+'px';
+    f.style.left=Math.random()*100+'%';f.style.top=(10+Math.random()*70)+'%';
+    f.style.setProperty('--dx',(Math.random()*200-100)+'px');
+    f.style.setProperty('--dy',(Math.random()*150-75)+'px');
+    f.style.setProperty('--duration',(8+Math.random()*12)+'s');
+    f.style.setProperty('--delay',(Math.random()*10)+'s');
+    scene.appendChild(f);
+  }
+})();
+</script>
+
+<header class="site-header">
+  <h1>WoV Data Browser</h1>
+  <span class="subtitle">Winds of Valen</span>
+  <a class="home-link" href="../index.html">← Back to Home Page</a>
+</header>
+
+<div class="page-content">
+  <nav class="cat-tabs" id="cat-tabs"></nav>
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Search items by name..." />
+  </div>
+  <div class="item-count" id="item-count"></div>
+  <div class="card-grid" id="card-grid"></div>
+  <div class="no-results" id="no-results" style="display:none;">No items match your search.</div>
+</div>
+
+<footer class="site-footer">
+  Winds of Valen Community Tools · <a href="https://github.com/Maurittius/WindsOfValen" target="_blank">GitHub</a>
+</footer>
+
+<script>
+const CATEGORIES = [
+  { key:'weapons',  label:'Weapons',  path:'entities/weapons.json',  icon:'⚔️' },
+  { key:'armor',    label:'Armor',    path:'entities/armor.json',    icon:'🛡️' },
+  { key:'shields',  label:'Shields',  path:'entities/shields.json',  icon:'🔰' },
+  { key:'jewelry',  label:'Jewelry',  path:'entities/jewelry.json',  icon:'💍' },
+  { key:'gems',     label:'Gems',     path:'entities/gems.json',     icon:'💎' },
+  { key:'ammo',     label:'Ammo',     path:'entities/ammo.json',     icon:'🏹' },
+  { key:'tools',    label:'Tools',    path:'entities/tools.json',    icon:'⛏️' },
+  { key:'ores',     label:'Ores',     path:'entities/ores.json',     icon:'🪨' },
+  { key:'monsters', label:'Monsters', path:'npcs/monsters.json',    icon:'👹' },
+  { key:'smithing', label:'Smithing', path:'recipes/smithing.json', icon:'🔨' }
+];
+
+const cache = {};
+let activeCat = null;
+
+// ── Pretty stat names ──
+const STAT_LABELS = {
+  ATTACK_RANGE:'Atk Range', ATTACK_SPEED:'Atk Speed',
+  SLASH_ACCURACY:'Slash Acc', PIECE_ACCURACY:'Pierce Acc',
+  QUICK_DAMAGE:'Quick Dmg', HEAVY_DAMAGE:'Heavy Dmg',
+  PIECE_DEFENSE:'Pierce Def', SLASH_DEFENSE:'Slash Def',
+  MELEE_POWER:'Melee Power', RANGE_POWER:'Range Power',
+  DEFLECT_POWER:'Deflect', BLOCK_POWER:'Block'
+};
+function statLabel(s){ return STAT_LABELS[s] || s.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()); }
+
+// ── Type labels ──
+const TYPE_LABELS = {
+  WEAPON_1H:'1H Sword', WEAPON_2H:'2H Weapon', BOW:'Bow',
+  HELMET:'Helmet', CHEST:'Chest', LEGS:'Legs', GLOVES:'Gloves', BOOTS:'Boots',
+  SHIELD:'Shield', RING:'Ring', AMULET:'Amulet', ARROW:'Arrow'
+};
+function typeLabel(t){ return TYPE_LABELS[t] || t.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()); }
+
+// ── Build tabs ──
+const tabsEl = document.getElementById('cat-tabs');
+CATEGORIES.forEach(cat => {
+  const btn = document.createElement('button');
+  btn.className = 'cat-tab';
+  btn.textContent = cat.icon + ' ' + cat.label;
+  btn.dataset.key = cat.key;
+  btn.addEventListener('click', () => selectCategory(cat.key));
+  tabsEl.appendChild(btn);
+});
+
+// ── Select category ──
+async function selectCategory(key) {
+  activeCat = key;
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.toggle('active', b.dataset.key === key));
+  // Update URL
+  history.replaceState(null, '', '?cat=' + key);
+
+  if (!cache[key]) {
+    const cat = CATEGORIES.find(c => c.key === key);
+    try {
+      const res = await fetch(cat.path);
+      cache[key] = await res.json();
+    } catch (e) {
+      cache[key] = [];
+      console.error('Failed to load', key, e);
+    }
+  }
+  renderCards();
+}
+
+// ── Search ──
+document.getElementById('search-input').addEventListener('input', renderCards);
+
+// ── Render cards ──
+function renderCards() {
+  const grid = document.getElementById('card-grid');
+  const noRes = document.getElementById('no-results');
+  const countEl = document.getElementById('item-count');
+  const query = document.getElementById('search-input').value.trim().toLowerCase();
+  grid.innerHTML = '';
+
+  let data = cache[activeCat] || [];
+  if (query) data = data.filter(item => (item.Name || '').toLowerCase().includes(query));
+
+  if (data.length === 0) {
+    noRes.style.display = 'block';
+    countEl.textContent = '';
+    return;
+  }
+  noRes.style.display = 'none';
+  const total = (cache[activeCat] || []).length;
+  countEl.textContent = query ? `Showing ${data.length} of ${total} items` : `${total} items`;
+
+  data.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+
+    if (activeCat === 'monsters') card.innerHTML = renderMonster(item);
+    else if (activeCat === 'smithing') card.innerHTML = renderSmithing(item);
+    else if (activeCat === 'ores') card.innerHTML = renderOre(item);
+    else if (activeCat === 'gems') card.innerHTML = renderGem(item);
+    else card.innerHTML = renderEquipment(item);
+
+    grid.appendChild(card);
+  });
+}
+
+// ── Equipment renderer (weapons, armor, shields, jewelry, ammo, tools) ──
+function renderEquipment(item) {
+  const badge = item.Type ? `<span class="card-badge badge-type">${typeLabel(item.Type)}</span>` : '';
+  const desc = item.Description ? `<div class="card-desc">${item.Description}</div>` : '';
+  const icon = item.Icon ? `<img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.style.display='none'">` : '';
+
+  let reqs = '';
+  if (item.Requirements && item.Requirements.length > 0) {
+    reqs = item.Requirements.map(r =>
+      `<div class="card-stat full"><span class="stat-name">Requires ${statLabel(r.Skill)}</span><span class="stat-val">${r.Value}</span></div>`
+    ).join('');
+  }
+
+  let stats = '';
+  if (item.Stats && item.Stats.length > 0) {
+    stats = item.Stats.map(s =>
+      `<div class="card-stat"><span class="stat-name">${statLabel(s.Type)}</span><span class="stat-val">${s.Value}</span></div>`
+    ).join('');
+  }
+
+  return `
+    <div class="card-head">${icon}<span class="card-name">${item.Name}</span>${badge}</div>
+    <div class="card-body">
+      ${desc}
+      ${reqs || stats ? `<div class="card-stats">${reqs}${stats}</div>` : ''}
+      ${item.Location ? `<div class="card-location">${item.Location}</div>` : ''}
+    </div>`;
+}
+
+// ── Monster renderer ──
+function renderMonster(m) {
+  const badge = m.IsBoss
+    ? '<span class="card-badge badge-boss">Boss</span>'
+    : '<span class="card-badge badge-mob">Mob</span>';
+  const icon = m.Image ? `<img class="card-icon" src="../icons/items/${m.Image.toLowerCase()}.png" alt="" onerror="this.style.display='none'">` : '';
+  const desc = m.Description ? `<div class="card-desc">${m.Description}</div>` : '';
+
+  const combatStats = [
+    ['Level', m.Level], ['Health', m.Health.toLocaleString()],
+    ['Attack', m.Attack], ['Defense', m.Defense],
+    ['Pierce Def', m.PierceDefense], ['Slash Def', m.SlashDefense],
+    ['Quick Dmg', m.QuickDamage], ['Heavy Dmg', m.HeavyDamage],
+    ['Atk Speed', m.AttackSpeed], ['Atk Range', m.AttackRange]
+  ];
+  if (m.MysticalDamage) combatStats.push(['Mystical Dmg', m.MysticalDamage]);
+  if (m.BlockPower) combatStats.push(['Block Power', m.BlockPower]);
+  if (m.DeflectPower) combatStats.push(['Deflect Power', m.DeflectPower]);
+  if (m.Evasion > 1) combatStats.push(['Evasion', m.Evasion]);
+  if (m.Warding > 1) combatStats.push(['Warding', m.Warding]);
+
+  const statsHtml = combatStats.map(([n,v]) =>
+    `<div class="card-stat"><span class="stat-name">${n}</span><span class="stat-val">${v}</span></div>`
+  ).join('');
+
+  let lootHtml = '';
+  if (m.Loot && m.Loot.length > 0) {
+    lootHtml = `<div class="card-section"><div class="card-section-title">Loot Drops</div>${
+      m.Loot.map(l => `<div class="loot-row"><span class="loot-item">${l.Item}</span><span class="loot-chance">${l.Chance}%</span></div>`).join('')
+    }</div>`;
+  }
+
+  return `
+    <div class="card-head">${icon}<span class="card-name">${m.Name}</span>${badge}</div>
+    <div class="card-body">
+      ${desc}
+      <div class="card-stats">${statsHtml}</div>
+      ${lootHtml}
+      ${m.Location ? `<div class="card-location">${m.Location}</div>` : ''}
+    </div>`;
+}
+
+// ── Smithing renderer ──
+function renderSmithing(r) {
+  const badge = r.Category ? `<span class="card-badge badge-cat">${r.Category}</span>` : '';
+
+  const matsHtml = r.Materials.map(m =>
+    `<div class="mat-row"><span class="mat-name">${m.Material}</span><span class="mat-amt">×${m.Amount}</span></div>`
+  ).join('');
+
+  return `
+    <div class="card-head"><span class="card-name">${r.Name}</span>${badge}</div>
+    <div class="card-body">
+      <div class="card-stats">
+        <div class="card-stat"><span class="stat-name">Smithing Lvl</span><span class="stat-val">${r.Level}</span></div>
+        <div class="card-stat"><span class="stat-name">Duration</span><span class="stat-val">${r.Duration}</span></div>
+        <div class="card-stat full"><span class="stat-name">Sell Price</span><span class="stat-val" style="color:var(--accent)">${r.SellCost}</span></div>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Materials</div>
+        ${matsHtml}
+      </div>
+    </div>`;
+}
+
+// ── Ore renderer ──
+function renderOre(item) {
+  return `
+    <div class="card-head">${item.Icon ? `<img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.style.display='none'">` : ''}<span class="card-name">${item.Name}</span></div>
+    <div class="card-body">
+      <div class="card-stats">
+        <div class="card-stat"><span class="stat-name">Mining Lvl</span><span class="stat-val">${item.Level}</span></div>
+        <div class="card-stat"><span class="stat-name">Experience</span><span class="stat-val" style="color:var(--green)">${item.Experience} XP</span></div>
+      </div>
+      ${item.Location ? `<div class="card-location">${item.Location}</div>` : ''}
+    </div>`;
+}
+
+// ── Gem renderer ──
+function renderGem(item) {
+  return `
+    <div class="card-head">${item.Icon ? `<img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.style.display='none'">` : ''}<span class="card-name">${item.Name}</span><span class="card-badge badge-type">Gem</span></div>
+    <div class="card-body">
+      <div class="card-stats">
+        <div class="card-stat"><span class="stat-name">Stat Boost</span><span class="stat-val" style="color:var(--green)">+${item.Value}%</span></div>
+        <div class="card-stat"><span class="stat-name">Affects</span><span class="stat-val">${statLabel(item.StatType)}</span></div>
+        <div class="card-stat full"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price}g</span></div>
+      </div>
+    </div>`;
+}
+
+// ── Init: select from URL or default ──
+const params = new URLSearchParams(location.search);
+selectCategory(params.get('cat') || 'weapons');
+</script>
+
+</body>
+</html>

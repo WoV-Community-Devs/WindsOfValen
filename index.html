@@ -6,116 +6,205 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Winds of Valen — Community tools, calculators, and game data for WoV." />
   <title>Winds of Valen — Tools &amp; Data</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-body: #1a1a18;
-      --bg-panel: #242421;
-      --bg-input: #1a1a18;
-      --bg-header: #1d1d1b;
-      --bg-hover: #2e2e2a;
-      --bg-slot: #2a2f2a;
-      --bg-slot-hover: #353a35;
-      --border: #3a3a35;
-      --border-light: #4a4a42;
-      --accent: #f6931d;
-      --accent-hover: #ffa940;
-      --accent-glow: rgba(246, 147, 29, 0.15);
-      --accent-dim: rgba(246, 147, 29, 0.08);
-      --text: #e8e6e0;
-      --text-dim: #9e9c96;
-      --text-muted: #6a6862;
-      --green: #5cb85c;
-      --red: #e74c3c;
-      --blue: #5dade2;
-      --radius: 6px;
+      --bg-body: #1e2830;
+      --bg-panel: rgba(30, 40, 48, 0.88);
+      --bg-input: rgba(24, 32, 40, 0.75);
+      --bg-header: rgba(28, 38, 46, 0.92);
+      --bg-hover: rgba(55, 72, 60, 0.5);
+      --bg-slot: rgba(38, 50, 44, 0.74);
+      --bg-slot-hover: rgba(48, 64, 54, 0.8);
+      --border: rgba(100, 116, 90, 0.58);
+      --border-light: rgba(125, 142, 112, 0.58);
+      --accent: #d4a843;
+      --accent-hover: #e8c060;
+      --accent-glow: rgba(212,168,67,0.2);
+      --accent-dim: rgba(212,168,67,0.1);
+      --text: #e8e4d2;
+      --text-dim: #b8ae98;
+      --text-muted: #9a9280;
+      --green: #6abf69;
+      --red: #c9503a;
+      --blue: #5ba8c8;
+      --radius: 4px;
+      --panel-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
     }
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      font-size: 14px;
-    }
+    html { font-size: 14px; }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: 'Crimson Text', 'Segoe UI', Georgia, serif;
       background: var(--bg-body);
       color: var(--text);
       min-height: 100vh;
       line-height: 1.5;
     }
 
+    /* ── Living Background ── */
+    #bg-scene {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    #bg-scene .bg-gradient {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse at 50% 40%, rgba(75, 115, 75, 0.32) 0%, transparent 60%),
+        radial-gradient(ellipse at 30% 70%, rgba(95, 165, 120, 0.20) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(185, 125, 60, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, #1a2218 0%, #202e24 30%, #1c2820 60%, #192220 100%);
+    }
+    #bg-scene .bg-texture {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+    #bg-scene .bg-vignette {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%);
+    }
+    #bg-scene .water-layer {
+      position: absolute; bottom: 0; left: 0; width: 100%; height: 120px;
+      background: linear-gradient(180deg, transparent 0%,
+        rgba(30,60,50,0.15) 40%, rgba(20,50,40,0.25) 70%, rgba(15,40,35,0.3) 100%);
+      background-size: 200% 100%;
+      animation: waterShimmer 8s ease-in-out infinite;
+    }
+
+    @keyframes fireflyDrift {
+      0% { transform: translate(0,0) scale(1); opacity: 0; }
+      15% { opacity: 0.6; }
+      50% { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0.8; }
+      85% { opacity: 0.4; }
+      100% { transform: translate(calc(var(--dx) * 1.5), calc(var(--dy) * 0.8)) scale(0.8); opacity: 0; }
+    }
+    @keyframes fireflyGlow {
+      0%, 100% { box-shadow: 0 0 3px 1px rgba(200, 220, 80, 0.15); }
+      50% { box-shadow: 0 0 6px 3px rgba(200, 220, 80, 0.3); }
+    }
+    @keyframes waterShimmer {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    @keyframes waterRipple {
+      0% { transform: scale(0.3); opacity: 0.5; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+    @keyframes floatParticle {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      15% { opacity: 0.3; }
+      85% { opacity: 0.15; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .firefly {
+      position: absolute; width: 4px; height: 4px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(210, 230, 100, 0.5) 0%, rgba(180, 200, 60, 0.2) 50%, transparent 100%);
+      animation: fireflyDrift var(--duration) ease-in-out infinite, fireflyGlow 2s ease-in-out infinite;
+      animation-delay: var(--delay);
+      pointer-events: none; z-index: 1;
+    }
+    .dust-mote {
+      position: absolute; width: 2px; height: 2px; border-radius: 50%;
+      background: rgba(200, 190, 150, 0.3);
+      animation: floatParticle var(--duration) linear infinite;
+      animation-delay: var(--delay);
+      pointer-events: none; z-index: 1;
+    }
+    .water-ripple {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(100, 160, 130, 0.15);
+      animation: waterRipple 4s ease-out forwards;
+      pointer-events: none; z-index: 1;
+    }
+
+    /* ── Content z-index ── */
+    .site-header, .hero, .tools-section, .site-footer {
+      position: relative;
+      z-index: 2;
+    }
+
     /* ── Header ── */
     .site-header {
-      background: var(--bg-header);
+      background: linear-gradient(180deg, rgba(15,20,15,0.95), rgba(12,18,14,0.92));
       border-bottom: 2px solid var(--accent);
       padding: 0.6rem 1.5rem;
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(212,168,67,0.15);
     }
 
     .site-header h1 {
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 900;
       color: var(--accent);
-      letter-spacing: -0.02em;
+      letter-spacing: 0.06em;
+      text-shadow: 0 0 20px rgba(212,168,67,0.3);
     }
 
     .site-header .subtitle {
+      font-family: 'Cinzel', serif;
       font-size: 0.78rem;
       color: var(--text-dim);
+      letter-spacing: 0.04em;
     }
 
     /* ── Hero ── */
     .hero {
       text-align: center;
-      padding: 3.5rem 1.5rem 2.5rem;
-      background: linear-gradient(180deg, var(--bg-header) 0%, var(--bg-body) 100%);
+      padding: 2rem 1.5rem 1.5rem;
+      background: linear-gradient(180deg, rgba(15,20,15,0.85) 0%, transparent 100%);
       border-bottom: 1px solid var(--border);
     }
 
     .hero h2 {
-      font-size: 2rem;
-      font-weight: 800;
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
       color: var(--text);
-      letter-spacing: -0.03em;
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
     }
 
     .hero h2 span {
       color: var(--accent);
+      text-shadow: 0 0 30px rgba(212,168,67,0.3);
     }
 
     .hero p {
-      font-size: 0.95rem;
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05rem;
       color: var(--text-dim);
       max-width: 520px;
       margin: 0 auto;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     /* ── Tools Grid ── */
     .tools-section {
       max-width: 900px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+      padding: 1rem 1rem 0.5rem;
     }
 
     .section-title {
+      font-family: 'Cinzel', serif;
       font-size: 0.82rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       color: var(--accent);
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.35rem;
       border-bottom: 1px solid var(--border);
+      text-shadow: 0 0 12px rgba(212,168,67,0.15);
     }
 
     .tools-grid {
@@ -130,22 +219,24 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      transition: border-color 0.15s, transform 0.15s;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
       display: flex;
       flex-direction: column;
       text-decoration: none;
       color: inherit;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--panel-shadow);
     }
 
     .tool-card:hover {
       border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(212,168,67,0.08);
     }
 
     .tool-card-header {
-      background: var(--bg-header);
-      padding: 0.6rem 0.85rem;
+      background: linear-gradient(180deg, rgba(20,28,22,0.9), rgba(15,22,18,0.85));
+      padding: 0.65rem 0.85rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -153,23 +244,25 @@
     }
 
     .tool-card-icon {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: var(--accent-dim);
+      border: 1px solid rgba(212,168,67,0.15);
       border-radius: 4px;
       font-size: 1rem;
       flex-shrink: 0;
     }
 
     .tool-card-header h3 {
+      font-family: 'Cinzel', serif;
       font-size: 0.82rem;
       font-weight: 700;
       color: var(--text);
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
     }
 
     .tool-card-body {
@@ -178,9 +271,10 @@
     }
 
     .tool-card-body p {
-      font-size: 0.78rem;
+      font-family: 'Crimson Text', serif;
+      font-size: 0.85rem;
       color: var(--text-dim);
-      line-height: 1.6;
+      line-height: 1.7;
       margin: 0;
     }
 
@@ -193,34 +287,38 @@
     }
 
     .tool-badge {
+      font-family: 'Cinzel', serif;
       display: inline-block;
-      padding: 0.1rem 0.45rem;
+      padding: 0.1rem 0.5rem;
       border-radius: 3px;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
     }
 
     .badge-live {
-      background: rgba(92, 184, 92, 0.15);
+      background: rgba(106, 191, 105, 0.18);
       color: var(--green);
+      border: 1px solid rgba(106, 191, 105, 0.2);
     }
 
     .badge-soon {
-      background: rgba(158, 156, 150, 0.1);
+      background: rgba(154, 146, 128, 0.1);
       color: var(--text-muted);
+      border: 1px solid rgba(154, 146, 128, 0.15);
     }
 
     .tool-arrow {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--accent);
       font-weight: 700;
-      transition: transform 0.15s;
+      transition: transform 0.2s;
+      text-shadow: 0 0 8px rgba(212,168,67,0.2);
     }
 
     .tool-card:hover .tool-arrow {
-      transform: translateX(3px);
+      transform: translateX(4px);
     }
 
     /* ── Data Section ── */
@@ -234,68 +332,128 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.4rem 0.6rem;
+      padding: 0.45rem 0.65rem;
       background: var(--bg-panel);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 0.75rem;
+      border-radius: var(--radius);
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      font-weight: 700;
       color: var(--text-dim);
-      font-weight: 600;
       text-transform: capitalize;
-      transition: border-color 0.15s;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
       text-decoration: none;
+      backdrop-filter: blur(6px);
     }
 
     .data-chip:hover {
       border-color: var(--accent);
       color: var(--text);
+      box-shadow: 0 0 12px rgba(212,168,67,0.08);
     }
 
     .data-chip-icon {
       font-size: 0.85rem;
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
     /* ── Footer ── */
     .site-footer {
       text-align: center;
-      padding: 1.5rem 1rem;
+      padding: 0.75rem 1rem;
       border-top: 1px solid var(--border);
-      font-size: 0.7rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
       color: var(--text-muted);
+      letter-spacing: 0.04em;
     }
 
     .site-footer a {
       color: var(--accent);
       text-decoration: none;
+      transition: color 0.2s;
     }
 
     .site-footer a:hover {
-      text-decoration: underline;
+      color: var(--accent-hover);
+      text-shadow: 0 0 8px rgba(212,168,67,0.2);
     }
 
     /* ── Responsive ── */
     @media(max-width:600px) {
-      .hero h2 {
-        font-size: 1.5rem;
-      }
-
-      .hero {
-        padding: 2rem 1rem 1.5rem;
-      }
-
-      .tools-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .data-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      }
+      .hero h2 { font-size: 1.5rem; }
+      .hero { padding: 2.5rem 1rem 1.5rem; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .data-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
     }
   </style>
 </head>
 
 <body>
+
+<!-- Living Background Scene -->
+<div id="bg-scene">
+  <div class="bg-gradient"></div>
+  <div class="bg-texture"></div>
+  <div class="bg-vignette"></div>
+  <div class="water-layer"></div>
+</div>
+
+<script>
+// ── Firefly Generator ──
+(function(){
+  const scene = document.getElementById('bg-scene');
+  for(let i = 0; i < 35; i++){
+    const fly = document.createElement('div');
+    fly.className = 'firefly';
+    const size = 2 + Math.random() * 4;
+    fly.style.width = size + 'px';
+    fly.style.height = size + 'px';
+    fly.style.left = Math.random() * 100 + '%';
+    fly.style.top = (10 + Math.random() * 70) + '%';
+    fly.style.setProperty('--dx', (Math.random() * 200 - 100) + 'px');
+    fly.style.setProperty('--dy', (Math.random() * 150 - 75) + 'px');
+    fly.style.setProperty('--duration', (8 + Math.random() * 12) + 's');
+    fly.style.setProperty('--delay', (Math.random() * 10) + 's');
+    scene.appendChild(fly);
+  }
+})();
+
+// ── Dust Motes ──
+(function(){
+  const scene = document.getElementById('bg-scene');
+  for(let i = 0; i < 15; i++){
+    const mote = document.createElement('div');
+    mote.className = 'dust-mote';
+    mote.style.left = Math.random() * 100 + '%';
+    mote.style.bottom = '-10px';
+    mote.style.setProperty('--duration', (15 + Math.random() * 25) + 's');
+    mote.style.setProperty('--delay', (Math.random() * 20) + 's');
+    scene.appendChild(mote);
+  }
+})();
+
+// ── Water Ripples ──
+(function(){
+  const scene = document.getElementById('bg-scene');
+  function addRipple(){
+    const ripple = document.createElement('div');
+    ripple.className = 'water-ripple';
+    const size = 20 + Math.random() * 60;
+    ripple.style.width = size + 'px';
+    ripple.style.height = (size * 0.4) + 'px';
+    ripple.style.left = (10 + Math.random() * 80) + '%';
+    ripple.style.bottom = (Math.random() * 80) + 'px';
+    scene.appendChild(ripple);
+    setTimeout(()=> ripple.remove(), 4000);
+  }
+  setInterval(addRipple, 2500);
+  addRipple();
+  setTimeout(addRipple, 800);
+  setTimeout(addRipple, 1600);
+})();
+</script>
 
   <header class="site-header">
     <h1>Winds of Valen</h1>
@@ -360,26 +518,25 @@
     </div>
 
     <!-- Data Reference -->
-    <div class="section-title" style="margin-top:2rem;">Game Data</div>
+    <div class="section-title" style="margin-top:1rem;">Game Data</div>
     <div class="data-grid">
-      <a class="data-chip" href="data/entities/weapons.json"><span class="data-chip-icon">⚔️</span> Weapons</a>
-      <a class="data-chip" href="data/entities/armor.json"><span class="data-chip-icon">🛡️</span> Armor</a>
-      <a class="data-chip" href="data/entities/shields.json"><span class="data-chip-icon">🔰</span> Shields</a>
-      <a class="data-chip" href="data/entities/jewelry.json"><span class="data-chip-icon">💍</span> Jewelry</a>
-      <a class="data-chip" href="data/entities/gems.json"><span class="data-chip-icon">💎</span> Gems</a>
-      <a class="data-chip" href="data/entities/ammo.json"><span class="data-chip-icon">🏹</span> Ammo</a>
-      <a class="data-chip" href="data/entities/tools.json"><span class="data-chip-icon">⛏️</span> Tools</a>
-      <a class="data-chip" href="data/entities/ores.json"><span class="data-chip-icon">🪨</span> Ores</a>
-      <a class="data-chip" href="data/npcs/monsters.json"><span class="data-chip-icon">👹</span> Monsters</a>
-      <a class="data-chip" href="data/recipes/smithing.json"><span class="data-chip-icon">🔨</span> Smithing</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=weapons"><span class="data-chip-icon">⚔️</span> Weapons</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=armor"><span class="data-chip-icon">🛡️</span> Armor</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=shields"><span class="data-chip-icon">🔰</span> Shields</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=jewelry"><span class="data-chip-icon">💍</span> Jewelry</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=gems"><span class="data-chip-icon">💎</span> Gems</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=ammo"><span class="data-chip-icon">🏹</span> Ammo</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=tools"><span class="data-chip-icon">⛏️</span> Tools</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=ores"><span class="data-chip-icon">🪨</span> Ores</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=monsters"><span class="data-chip-icon">👹</span> Monsters</a>
+      <a class="data-chip" href="data/WoV_Data_Browser.html?cat=smithing"><span class="data-chip-icon">🔨</span> Smithing</a>
     </div>
 
     <!-- Documentation -->
-    <div class="section-title" style="margin-top:2rem;">Documentation</div>
+    <div class="section-title" style="margin-top:1rem;">Documentation</div>
     <div class="data-grid">
-      <a class="data-chip" href="formulas/damage.md"><span class="data-chip-icon">📐</span> Damage Formulas</a>
-      <a class="data-chip" href="formulas/experience.md"><span class="data-chip-icon">📈</span> XP Formulas</a>
-      <a class="data-chip" href="docs/formulas.md"><span class="data-chip-icon">📖</span> Guides</a>
+      <a class="data-chip" href="formulas/WoV_Formulas.html"><span class="data-chip-icon">📐</span> Damage & Accuracy</a>
+      <a class="data-chip" href="formulas/WoV_Formulas.html"><span class="data-chip-icon">📈</span> XP Formulas</a>
     </div>
   </main>
 
