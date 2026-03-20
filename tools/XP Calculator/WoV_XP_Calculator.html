@@ -45,7 +45,7 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,rgba(210,230,100,0.5) 0%,rgba(180,200,60,0.2) 50%,transparent 100%);animation:fireflyDrift var(--duration) ease-in-out infinite,fireflyGlow 2s ease-in-out infinite;animation-delay:var(--delay);pointer-events:none;z-index:1;}
 
 /* ── Content z-index ── */
-.site-header,.page-content,.site-footer{position:relative;z-index:2;}
+.site-header,.page-content,.site-footer,#share-toast{position:relative;z-index:2;}
 
 /* ── Header ── */
 .site-header{
@@ -59,6 +59,10 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .site-header .subtitle{font-family:'Cinzel',serif;font-size:0.78rem;color:var(--text-dim);letter-spacing:0.04em;}
 .home-link{position:absolute;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s,text-shadow 0.2s;}
 .home-link:hover{color:var(--accent-hover);text-shadow:0 0 12px rgba(212,168,67,0.4);}
+
+/* ── Share Button ── */
+.share-btn{background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;margin-left:auto;transition:border-color 0.2s,color 0.2s;}
+.share-btn:hover{border-color:var(--accent);color:var(--accent-hover);}
 
 /* ── Page Content ── */
 .page-content{max-width:900px;margin:0 auto;padding:1.5rem 1rem 2rem;}
@@ -201,8 +205,9 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 <header class="site-header">
   <h1>WoV XP Calculator</h1>
   <span class="subtitle">Winds of Valen</span>
-  <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v1.0</span>
+  <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v1.1</span>
   <a class="home-link" href="../../index.html">← Back to Home Page</a>
+  <button class="share-btn" id="share-btn" title="Copy shareable URL">Share</button>
 </header>
 
 <div class="page-content">
@@ -628,6 +633,7 @@ $skillTabs.addEventListener('click', async (e) => {
   $skillIcon.src = SKILL_ICONS[currentSkill];
   renderSubTabs(currentSkill);
   await recalculate();
+  updateURL();
 });
 
 /* ── Event: Sub-category tabs ── */
@@ -638,6 +644,7 @@ $subTabs.addEventListener('click', async (e) => {
   tab.classList.add('active');
   currentSubCategory = tab.dataset.cat;
   await recalculate();
+  updateURL();
 });
 
 /* ── Event: All Steps checkbox ── */
@@ -645,6 +652,7 @@ $allStepsCheck.addEventListener('change', async () => {
   allStepsMode = $allStepsCheck.checked;
   updateSubTabStates();
   await recalculate();
+  updateURL();
 });
 
 function updateSubTabStates() {
@@ -701,15 +709,77 @@ function updateSubTabStates() {
 }
 
 /* ── Event: Level inputs ── */
-$currentLevel.addEventListener('input', () => recalculate(false));
-$targetLevel.addEventListener('input', () => recalculate(false));
-$currentLevel.addEventListener('change', () => recalculate(true));
-$targetLevel.addEventListener('change', () => recalculate(true));
+$currentLevel.addEventListener('input', () => { recalculate(false); updateURL(); });
+$targetLevel.addEventListener('input', () => { recalculate(false); updateURL(); });
+$currentLevel.addEventListener('change', () => { recalculate(true); updateURL(); });
+$targetLevel.addEventListener('change', () => { recalculate(true); updateURL(); });
 $currentLevel.addEventListener('focus', () => $currentLevel.select());
 $targetLevel.addEventListener('focus', () => $targetLevel.select());
 
+/* ── URL State Management ── */
+function updateURL() {
+  const params = new URLSearchParams();
+  params.set('skill', currentSkill);
+  if (currentSubCategory && currentSubCategory !== 'all') params.set('cat', currentSubCategory);
+  params.set('cur', $currentLevel.value);
+  params.set('tgt', $targetLevel.value);
+  if (allStepsMode) params.set('allSteps', '1');
+  const url = window.location.pathname + '?' + params.toString();
+  history.replaceState(null, '', url);
+}
+
+function shareConfig() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('share-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Share'; }, 2000);
+  }).catch(() => {
+    prompt('Copy this URL:', url);
+  });
+}
+document.getElementById('share-btn').addEventListener('click', shareConfig);
+
+async function initFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const skill = params.get('skill');
+  const cat = params.get('cat');
+  const cur = params.get('cur');
+  const tgt = params.get('tgt');
+  const allSteps = params.get('allSteps');
+
+  if (skill && DATA_PATHS[skill]) {
+    currentSkill = skill;
+    $skillTabs.querySelectorAll('.skill-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.skill === skill);
+    });
+    $skillIcon.src = SKILL_ICONS[currentSkill];
+    renderSubTabs(currentSkill);
+  }
+
+  if (cur) $currentLevel.value = cur;
+  if (tgt) $targetLevel.value = tgt;
+
+  if (allSteps === '1' && (currentSkill === 'alchemy' || currentSkill === 'smithing')) {
+    allStepsMode = true;
+    $allStepsCheck.checked = true;
+    updateSubTabStates();
+  }
+
+  if (cat && !allStepsMode) {
+    const catTab = $subTabs.querySelector(`[data-cat="${cat}"]`);
+    if (catTab) {
+      $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+      catTab.classList.add('active');
+      currentSubCategory = cat;
+    }
+  }
+
+  await recalculate();
+}
+
 /* ── Init ── */
-recalculate();
+initFromURL();
 </script>
 
 </body>
