@@ -109,6 +109,11 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .sub-tab:hover{border-color:var(--border-light);color:var(--text-dim);}
 .sub-tab.active{background:rgba(212,168,67,0.08);border-color:var(--accent);color:var(--accent);}
 
+/* ── Checkbox ── */
+.all-steps-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;}
+.all-steps-row input[type="checkbox"]{accent-color:var(--accent);width:14px;height:14px;cursor:pointer;}
+.all-steps-label{font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;cursor:pointer;}
+
 /* ── Summary Box ── */
 .summary-box{
   background:rgba(18,24,20,0.7);border:1px solid var(--border);border-radius:var(--radius);
@@ -143,13 +148,22 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 
 .no-recipes{text-align:center;padding:2rem;color:var(--text-muted);font-style:italic;font-size:0.88rem;}
 
+/* ── Top Grid Layout ── */
+.top-grid{display:grid;grid-template-columns:1fr 280px;gap:1rem;margin-bottom:1rem;}
+.top-left{display:flex;flex-direction:column;gap:1rem;}
+.top-left .panel,.top-right .panel{margin-bottom:0;}
+.top-right .panel{height:100%;}
+.top-right .panel-body{display:flex;flex-direction:column;justify-content:center;height:calc(100% - 2.2rem);}
+.top-right .summary-box{margin-bottom:0;}
+
 /* ── Footer ── */
 .site-footer{text-align:center;padding:1.5rem 1rem;border-top:1px solid var(--border);font-family:'Cinzel',serif;font-size:0.68rem;color:var(--text-muted);letter-spacing:0.04em;}
 .site-footer a{color:var(--accent);text-decoration:none;}
 .site-footer a:hover{color:var(--accent-hover);}
 
-@media(max-width:600px){
+@media(max-width:700px){
   .page-content{padding:1rem 0.5rem;}
+  .top-grid{grid-template-columns:1fr;}
   .form-row{flex-direction:column;}
   .form-group{min-width:100%;}
 }
@@ -186,53 +200,65 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 
 <div class="page-content">
 
-  <!-- Skill Selection -->
-  <div class="panel">
-    <div class="panel-header">Choose a Skill</div>
-    <div class="panel-body">
-      <div class="skill-tabs" id="skill-tabs">
-        <button class="skill-tab active" data-skill="mining">Mining</button>
-        <button class="skill-tab" data-skill="smithing">Smithing</button>
-        <button class="skill-tab" data-skill="fishing">Fishing</button>
-        <button class="skill-tab" data-skill="alchemy">Alchemy</button>
-      </div>
-      <div class="sub-tabs" id="sub-tabs" style="display:none;"></div>
-    </div>
-  </div>
+  <div class="top-grid">
+    <div class="top-left">
 
-  <!-- Level Inputs -->
-  <div class="panel">
-    <div class="panel-header">Levels</div>
-    <div class="panel-body">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label" for="current-level">Current Level</label>
-          <input type="number" class="form-input" id="current-level" min="1" max="99" value="1">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="target-level">Target Level</label>
-          <input type="number" class="form-input" id="target-level" min="2" max="99" value="10">
+      <!-- Skill Selection -->
+      <div class="panel">
+        <div class="panel-header">Choose a Skill</div>
+        <div class="panel-body">
+          <div class="skill-tabs" id="skill-tabs">
+            <button class="skill-tab active" data-skill="mining">Mining</button>
+            <button class="skill-tab" data-skill="smithing">Smithing</button>
+            <button class="skill-tab" data-skill="fishing">Fishing</button>
+            <button class="skill-tab" data-skill="alchemy">Potion Making</button>
+          </div>
+          <div class="sub-tabs" id="sub-tabs" style="display:none;"></div>
+          <div class="all-steps-row" id="all-steps-row" style="display:none;">
+            <input type="checkbox" id="all-steps-check">
+            <label class="all-steps-label" for="all-steps-check">Include all steps</label>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- XP Summary -->
-  <div class="panel">
-    <div class="panel-header">XP Summary</div>
-    <div class="panel-body">
-      <div class="summary-box">
-        <div class="summary-row">
-          <span class="summary-label">Current XP</span>
-          <span class="summary-value" id="current-xp">0</span>
+      <!-- Level Inputs -->
+      <div class="panel">
+        <div class="panel-header">Levels</div>
+        <div class="panel-body">
+          <div class="form-row" style="margin-bottom:0;">
+            <div class="form-group">
+              <label class="form-label" for="current-level">Current Level</label>
+              <input type="number" class="form-input" id="current-level" min="1" max="99" value="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="target-level">Target Level</label>
+              <input type="number" class="form-input" id="target-level" min="2" max="99" value="10">
+            </div>
+          </div>
         </div>
-        <div class="summary-row">
-          <span class="summary-label">Target XP</span>
-          <span class="summary-value" id="target-xp">0</span>
-        </div>
-        <div class="summary-row" style="border-top:1px solid var(--border);margin-top:0.3rem;padding-top:0.4rem;">
-          <span class="summary-label">XP Remaining</span>
-          <span class="summary-value big" id="xp-remaining">0</span>
+      </div>
+
+    </div>
+
+    <!-- XP Summary (right side) -->
+    <div class="top-right">
+      <div class="panel">
+        <div class="panel-header">XP Summary</div>
+        <div class="panel-body">
+          <div class="summary-box">
+            <div class="summary-row">
+              <span class="summary-label">Current XP</span>
+              <span class="summary-value" id="current-xp">0</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Target XP</span>
+              <span class="summary-value" id="target-xp">0</span>
+            </div>
+            <div class="summary-row" style="border-top:1px solid var(--border);margin-top:0.3rem;padding-top:0.4rem;">
+              <span class="summary-label">XP Remaining</span>
+              <span class="summary-value big" id="xp-remaining">0</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -283,27 +309,135 @@ const DATA_PATHS = {
 /* ── Sub-categories for skills that have them ── */
 const SUB_CATEGORIES = {
   smithing: ['Bars','Armor','Weapons','Tools'],
-  alchemy:  ['Reduction','Brew','Cutting','Bottle','Crushing']
+  alchemy:  ['Brew','Bottle','Crushing','Reduction','Cutting']
 };
+
+/* ── Supply chain for brew ingredients (non-Essence) ── */
+const INGREDIENT_SOURCE = {
+  'Scrap Fish Flesh': { xpPerAction: 10, yieldsPerAction: 1, glandType: 'small', glandsPerAction: 1, rawSource: 'Common Trout' },
+  'Fish Oil':          { xpPerAction: 50, yieldsPerAction: 5, glandType: null,    glandsPerAction: 0, rawSource: 'Rare Minnow' },
+  'Crushed Fish Scales':{ xpPerAction: 60, yieldsPerAction: 1, glandType: 'small', glandsPerAction: 1, rawSource: 'Perch' },
+  'Root Paste':        { xpPerAction: 35, yieldsPerAction: 1, glandType: null,    glandsPerAction: 0, rawSource: 'Mud Root' },
+  'Fish Mash':         { xpPerAction: 60, yieldsPerAction: 1, glandType: 'small', glandsPerAction: 1, rawSource: 'Bass' },
+  'Fang Dust':         { xpPerAction: 45, yieldsPerAction: 2, glandType: null,    glandsPerAction: 0, rawSource: 'Small Fang' },
+  'Hearty Extract':    { xpPerAction: 240,yieldsPerAction: 1, glandType: 'essence',glandsPerAction: 1, rawSource: 'Elder Trout' },
+};
+const GLAND_INFO = {
+  'small':   { reduceXP: 4,  essencePerGland: 2 },
+  'essence': { reduceXP: 10, essencePerGland: 10 }
+};
+// Blue Gill: Cut (40 XP) → 2 Essence Glands, Reduce each (10 XP) → 10 Essence
+const BG_CUT_XP = 40, BG_GLANDS = 2, BG_REDUCE_XP = 10, BG_ESSENCE_PER_GLAND = 10;
+
+/* ── Smithing bar supply chain ── */
+const BAR_DATA = {};
+
+function buildBarLookup(smithingRecipes) {
+  smithingRecipes.filter(r => r.Category === 'Bars').forEach(r => {
+    if (!BAR_DATA[r.Name]) BAR_DATA[r.Name] = r;
+  });
+}
+
+function computeSmithingCycle(itemRecipe, allSmithingRecipes) {
+  buildBarLookup(allSmithingRecipes);
+
+  let totalXP = itemRecipe.Experience; // Smithing the item
+  const rawMats = [];
+
+  for (const mat of itemRecipe.Materials) {
+    const bar = BAR_DATA[mat.Material];
+    if (!bar) {
+      rawMats.push(`${mat.Amount}× ${mat.Material}`);
+      continue;
+    }
+    // Smelting bars XP (smithing skill)
+    totalXP += mat.Amount * bar.Experience;
+    // List ores as raw materials (no mining XP counted)
+    for (const oreMat of bar.Materials) {
+      const oreCount = oreMat.Amount * mat.Amount;
+      rawMats.push(`${oreCount}× ${oreMat.Material}`);
+    }
+  }
+
+  return { totalXP, rawMats: rawMats.join(', ') };
+}
+
+function computeFullCycle(bottleRecipe, allRecipes) {
+  // Find brew name from bottle materials
+  const brewMat = bottleRecipe.Materials.find(m => m.Material.includes('Brew'));
+  if (!brewMat) return null;
+  const brewName = brewMat.Material.replace(' Brew', '');
+  const brew = allRecipes.find(r => r.Name === brewName && r.Category === 'Brew');
+  if (!brew || !brew.Materials || brew.Experience === null) return null;
+
+  const nonEssence = brew.Materials.find(m => m.Material !== 'Essence');
+  const essenceNeeded = (brew.Materials.find(m => m.Material === 'Essence') || {}).Amount || 0;
+  if (!nonEssence) return null;
+
+  const source = INGREDIENT_SOURCE[nonEssence.Material];
+  if (!source) return null;
+
+  let totalXP = bottleRecipe.Experience + brew.Experience;
+  const actions = Math.ceil(nonEssence.Amount / source.yieldsPerAction);
+  totalXP += actions * source.xpPerAction;
+
+  // Essence from byproduct glands
+  let essenceFromByproduct = 0;
+  let glandCount = 0;
+  if (source.glandType) {
+    glandCount = actions * source.glandsPerAction;
+    const gi = GLAND_INFO[source.glandType];
+    totalXP += glandCount * gi.reduceXP;
+    essenceFromByproduct = glandCount * gi.essencePerGland;
+  }
+
+  // Extra Essence from Blue Gill
+  const essenceDeficit = Math.max(0, essenceNeeded - essenceFromByproduct);
+  let blueGills = 0;
+  if (essenceDeficit > 0) {
+    const reductionsNeeded = Math.ceil(essenceDeficit / BG_ESSENCE_PER_GLAND);
+    blueGills = Math.ceil(reductionsNeeded / BG_GLANDS);
+    totalXP += blueGills * BG_CUT_XP;
+    totalXP += reductionsNeeded * BG_REDUCE_XP;
+  }
+
+  // Build raw materials list
+  const rawMats = [];
+  rawMats.push(`${actions}× ${source.rawSource}`);
+  if (blueGills > 0) rawMats.push(`${blueGills}× Blue Gill`);
+  // Vials
+  const vialMat = bottleRecipe.Materials.find(m => m.Material.includes('Vial'));
+  if (vialMat) rawMats.push(`${vialMat.Amount}× ${vialMat.Material}`);
+
+  return { totalXP, rawMats: rawMats.join(', ') };
+}
 
 /* ── State ── */
 let currentSkill = 'mining';
 let currentSubCategory = null;
+let allStepsMode = false;
 let recipeData = {};
 
 /* ── DOM refs ── */
-const $skillTabs    = document.getElementById('skill-tabs');
-const $subTabs      = document.getElementById('sub-tabs');
-const $currentLevel = document.getElementById('current-level');
-const $targetLevel  = document.getElementById('target-level');
-const $currentXp    = document.getElementById('current-xp');
-const $targetXp     = document.getElementById('target-xp');
-const $xpRemaining  = document.getElementById('xp-remaining');
-const $tbody        = document.getElementById('recipe-tbody');
+const $skillTabs      = document.getElementById('skill-tabs');
+const $subTabs        = document.getElementById('sub-tabs');
+const $allStepsRow    = document.getElementById('all-steps-row');
+const $allStepsCheck  = document.getElementById('all-steps-check');
+const $currentLevel   = document.getElementById('current-level');
+const $targetLevel    = document.getElementById('target-level');
+const $currentXp      = document.getElementById('current-xp');
+const $targetXp       = document.getElementById('target-xp');
+const $xpRemaining    = document.getElementById('xp-remaining');
+const $tbody          = document.getElementById('recipe-tbody');
 
 /* ── Format number with commas ── */
 function fmt(n) {
   return n.toLocaleString();
+}
+
+/* ── Multiply a raw materials string by N cycles ── */
+function multiplyMats(matStr, n) {
+  return matStr.replace(/(\d+)×/g, (_, qty) => fmt(parseInt(qty) * n) + '×');
 }
 
 /* ── Load recipe data ── */
@@ -332,17 +466,27 @@ function renderSubTabs(skill) {
   $subTabs.innerHTML = '<button class="sub-tab active" data-cat="all">All</button>' +
     cats.map(c => `<button class="sub-tab" data-cat="${c}">${c}</button>`).join('');
   currentSubCategory = 'all';
+
+  // Show/hide All Steps checkbox
+  $allStepsRow.style.display = (skill === 'alchemy' || skill === 'smithing') ? 'flex' : 'none';
+  if (skill !== 'alchemy' && skill !== 'smithing') {
+    allStepsMode = false;
+    $allStepsCheck.checked = false;
+  }
 }
 
 /* ── Recalculate and render ── */
-async function recalculate() {
+async function recalculate(validate) {
   const curLvl = Math.max(1, Math.min(99, parseInt($currentLevel.value) || 1));
-  const tgtLvl = Math.max(curLvl + 1, Math.min(99, parseInt($targetLevel.value) || 10));
+  let tgtLvl = parseInt($targetLevel.value) || curLvl + 1;
 
-  // Enforce UI constraints without losing focus
-  if (parseInt($targetLevel.value) < curLvl + 1) {
-    $targetLevel.value = curLvl + 1;
+  if (validate) {
+    if (tgtLvl <= curLvl) tgtLvl = curLvl + 1;
+    if (tgtLvl > 99) tgtLvl = 99;
+    $targetLevel.value = tgtLvl;
   }
+
+  tgtLvl = Math.max(curLvl + 1, Math.min(99, tgtLvl));
 
   const curXp = xpForLevel(curLvl);
   const tgtXp = xpForLevel(tgtLvl);
@@ -350,32 +494,67 @@ async function recalculate() {
 
   $currentXp.textContent = fmt(curXp);
   $targetXp.textContent = fmt(tgtXp);
-  $xpRemaining.textContent = fmt(remaining);
+  $xpRemaining.textContent = fmt(Math.max(0, remaining));
 
-  // Load recipes
   const recipes = await loadSkillData(currentSkill);
 
   // Filter by current level and sub-category
   let filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null);
 
-  if (currentSubCategory && currentSubCategory !== 'all') {
+  if (allStepsMode && currentSkill === 'alchemy') {
+    // All Steps: show only Bottle recipes
+    filtered = recipes.filter(r => r.Level <= curLvl && r.Category === 'Bottle');
+  } else if (allStepsMode && currentSkill === 'smithing') {
+    // All Steps: show only non-Bar recipes
+    filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null && r.Category !== 'Bars');
+  } else if (currentSubCategory && currentSubCategory !== 'all') {
     filtered = filtered.filter(r => r.Category === currentSubCategory);
   }
 
-  // Sort by XP descending (best first)
-  filtered.sort((a, b) => b.Experience - a.Experience);
+  // Sort by XP descending
+  filtered.sort((a, b) => (b.Experience || 0) - (a.Experience || 0));
 
-  // Render table
-  if (filtered.length === 0) {
+  if (filtered.length === 0 || remaining <= 0) {
     $tbody.innerHTML = '<tr><td colspan="5" class="no-recipes">No recipes available at your current level.</td></tr>';
     return;
   }
 
   $tbody.innerHTML = filtered.map(r => {
+    if (allStepsMode && currentSkill === 'alchemy') {
+      // Compute full cycle
+      const cycle = computeFullCycle(r, recipes);
+      if (!cycle) {
+        return `<tr>
+          <td class="col-name">${r.Name}</td>
+          <td class="col-lvl">${r.Level}</td>
+          <td class="col-xp">—</td>
+          <td class="col-actions">—</td>
+          <td class="col-materials">Recipe chain unknown</td>
+        </tr>`;
+      }
+      const cycles = Math.ceil(remaining / cycle.totalXP);
+      return `<tr>
+        <td class="col-name">${r.Name}</td>
+        <td class="col-lvl">${r.Level}</td>
+        <td class="col-xp">${fmt(cycle.totalXP)} XP/cycle</td>
+        <td class="col-actions">${fmt(cycles)}</td>
+        <td class="col-materials">${multiplyMats(cycle.rawMats, cycles)}</td>
+      </tr>`;
+    }
+
+    if (allStepsMode && currentSkill === 'smithing') {
+      const cycle = computeSmithingCycle(r, recipes);
+      const cycles = Math.ceil(remaining / cycle.totalXP);
+      return `<tr>
+        <td class="col-name">${r.Name}</td>
+        <td class="col-lvl">${r.Level}</td>
+        <td class="col-xp">${fmt(cycle.totalXP)} XP/cycle</td>
+        <td class="col-actions">${fmt(cycles)}</td>
+        <td class="col-materials">${multiplyMats(cycle.rawMats, cycles)}</td>
+      </tr>`;
+    }
+
     const actions = Math.ceil(remaining / r.Experience);
-    const matStr = r.Materials
-      ? r.Materials.map(m => `${m.Amount}× ${m.Material}`).join(', ')
-      : (r.Input ? `1× ${r.Input}` : '—');
     const totalMats = r.Materials
       ? r.Materials.map(m => `${fmt(m.Amount * actions)}× ${m.Material}`).join(', ')
       : (r.Input ? `${fmt(actions)}× ${r.Input}` : '—');
@@ -385,7 +564,7 @@ async function recalculate() {
       <td class="col-lvl">${r.Level}</td>
       <td class="col-xp">${fmt(r.Experience)} XP</td>
       <td class="col-actions">${fmt(actions)}</td>
-      <td class="col-materials" title="Total: ${totalMats}">${matStr}</td>
+      <td class="col-materials">${totalMats}</td>
     </tr>`;
   }).join('');
 }
@@ -411,9 +590,29 @@ $subTabs.addEventListener('click', async (e) => {
   await recalculate();
 });
 
+/* ── Event: All Steps checkbox ── */
+$allStepsCheck.addEventListener('change', async () => {
+  allStepsMode = $allStepsCheck.checked;
+  if (allStepsMode) {
+    // Force sub-tab deselection
+    $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+    currentSubCategory = null;
+  } else {
+    // Reset to All
+    $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+    $subTabs.querySelector('[data-cat="all"]')?.classList.add('active');
+    currentSubCategory = 'all';
+  }
+  await recalculate();
+});
+
 /* ── Event: Level inputs ── */
-$currentLevel.addEventListener('input', recalculate);
-$targetLevel.addEventListener('input', recalculate);
+$currentLevel.addEventListener('input', () => recalculate(false));
+$targetLevel.addEventListener('input', () => recalculate(false));
+$currentLevel.addEventListener('change', () => recalculate(true));
+$targetLevel.addEventListener('change', () => recalculate(true));
+$currentLevel.addEventListener('focus', () => $currentLevel.select());
+$targetLevel.addEventListener('focus', () => $targetLevel.select());
 
 /* ── Init ── */
 recalculate();
