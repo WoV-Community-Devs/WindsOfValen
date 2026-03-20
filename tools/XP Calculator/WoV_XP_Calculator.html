@@ -440,6 +440,20 @@ function multiplyMats(matStr, n) {
   return matStr.replace(/(\d+)×/g, (_, qty) => fmt(parseInt(qty) * n) + '×');
 }
 
+/* ── Deduplicate Small/Large Bottle recipes into one per potion type ── */
+function deduplicateBottles(bottles) {
+  const seen = {};
+  const result = [];
+  for (const r of bottles) {
+    const baseName = r.Name.replace(/^Small /, '').replace(/^Large /, '');
+    if (!seen[baseName]) {
+      seen[baseName] = true;
+      result.push({ ...r, Name: baseName });
+    }
+  }
+  return result;
+}
+
 /* ── Load recipe data ── */
 async function loadSkillData(skill) {
   if (recipeData[skill]) return recipeData[skill];
@@ -502,11 +516,15 @@ async function recalculate(validate) {
   let filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null);
 
   if (allStepsMode && currentSkill === 'alchemy') {
-    // All Steps: show only Bottle recipes
+    // All Steps: show only Bottle recipes, deduplicated
     filtered = recipes.filter(r => r.Level <= curLvl && r.Category === 'Bottle');
+    filtered = deduplicateBottles(filtered);
   } else if (allStepsMode && currentSkill === 'smithing') {
     // All Steps: show only non-Bar recipes
     filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null && r.Category !== 'Bars');
+  } else if (currentSubCategory === 'Bottle') {
+    filtered = filtered.filter(r => r.Category === 'Bottle');
+    filtered = deduplicateBottles(filtered);
   } else if (currentSubCategory && currentSubCategory !== 'all') {
     filtered = filtered.filter(r => r.Category === currentSubCategory);
   }
