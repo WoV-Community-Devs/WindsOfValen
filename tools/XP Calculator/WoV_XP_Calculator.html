@@ -100,7 +100,9 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .skill-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);text-shadow:0 0 8px rgba(212,168,67,0.2);}
 
 /* ── Sub-category tabs ── */
-.sub-tabs{display:flex;gap:0.25rem;margin-bottom:0.75rem;flex-wrap:wrap;}
+.sub-tabs-wrap{padding-left:0.5rem;}
+.sub-tabs-label{font-family:'Cinzel',serif;font-size:0.58rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.25rem;}
+.sub-tabs{display:flex;gap:0.25rem;margin-bottom:0.5rem;flex-wrap:wrap;}
 .sub-tab{
   font-family:'Cinzel',serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
   padding:0.3rem 0.65rem;border:1px solid rgba(100,116,90,0.3);border-radius:3px;
@@ -195,6 +197,7 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 <header class="site-header">
   <h1>WoV XP Calculator</h1>
   <span class="subtitle">Winds of Valen</span>
+  <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v1.0</span>
   <a class="home-link" href="../../index.html">← Back to Home Page</a>
 </header>
 
@@ -213,7 +216,10 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
             <button class="skill-tab" data-skill="fishing">Fishing</button>
             <button class="skill-tab" data-skill="alchemy">Potion Making</button>
           </div>
-          <div class="sub-tabs" id="sub-tabs" style="display:none;"></div>
+          <div class="sub-tabs-wrap" id="sub-tabs-wrap" style="display:none;">
+            <div class="sub-tabs-label">Category</div>
+            <div class="sub-tabs" id="sub-tabs"></div>
+          </div>
           <div class="all-steps-row" id="all-steps-row" style="display:none;">
             <input type="checkbox" id="all-steps-check">
             <label class="all-steps-label" for="all-steps-check">Include all steps</label>
@@ -309,7 +315,7 @@ const DATA_PATHS = {
 /* ── Sub-categories for skills that have them ── */
 const SUB_CATEGORIES = {
   smithing: ['Bars','Armor','Weapons','Tools'],
-  alchemy:  ['Brew','Bottle','Crushing','Reduction','Cutting']
+  alchemy:  ['Bottle','Brew','Crushing','Reduction','Cutting']
 };
 
 /* ── Supply chain for brew ingredients (non-Essence) ── */
@@ -420,6 +426,7 @@ let recipeData = {};
 
 /* ── DOM refs ── */
 const $skillTabs      = document.getElementById('skill-tabs');
+const $subTabsWrap    = document.getElementById('sub-tabs-wrap');
 const $subTabs        = document.getElementById('sub-tabs');
 const $allStepsRow    = document.getElementById('all-steps-row');
 const $allStepsCheck  = document.getElementById('all-steps-check');
@@ -472,11 +479,11 @@ async function loadSkillData(skill) {
 function renderSubTabs(skill) {
   const cats = SUB_CATEGORIES[skill];
   if (!cats) {
-    $subTabs.style.display = 'none';
+    $subTabsWrap.style.display = 'none';
     currentSubCategory = null;
     return;
   }
-  $subTabs.style.display = 'flex';
+  $subTabsWrap.style.display = 'block';
   $subTabs.innerHTML = '<button class="sub-tab active" data-cat="all">All</button>' +
     cats.map(c => `<button class="sub-tab" data-cat="${c}">${c}</button>`).join('');
   currentSubCategory = 'all';
@@ -520,17 +527,23 @@ async function recalculate(validate) {
     filtered = recipes.filter(r => r.Level <= curLvl && r.Category === 'Bottle');
     filtered = deduplicateBottles(filtered);
   } else if (allStepsMode && currentSkill === 'smithing') {
-    // All Steps: show only non-Bar recipes
+    // All Steps: show non-Bar recipes, filtered by selected sub-category
     filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null && r.Category !== 'Bars');
-  } else if (currentSubCategory === 'Bottle') {
-    filtered = filtered.filter(r => r.Category === 'Bottle');
-    filtered = deduplicateBottles(filtered);
+    if (currentSubCategory && currentSubCategory !== 'all') {
+      filtered = filtered.filter(r => r.Category === currentSubCategory);
+    }
   } else if (currentSubCategory && currentSubCategory !== 'all') {
     filtered = filtered.filter(r => r.Category === currentSubCategory);
+    if (currentSubCategory === 'Bottle') filtered = deduplicateBottles(filtered);
   }
 
-  // Sort by XP descending
-  filtered.sort((a, b) => (b.Experience || 0) - (a.Experience || 0));
+  // Always deduplicate bottles when viewing all alchemy recipes
+  if (currentSkill === 'alchemy' && !allStepsMode) {
+    filtered = deduplicateBottles(filtered);
+  }
+
+  // Sort by level descending (highest level first)
+  filtered.sort((a, b) => (b.Level || 0) - (a.Level || 0));
 
   if (filtered.length === 0 || remaining <= 0) {
     $tbody.innerHTML = '<tr><td colspan="5" class="no-recipes">No recipes available at your current level.</td></tr>';
@@ -601,7 +614,7 @@ $skillTabs.addEventListener('click', async (e) => {
 /* ── Event: Sub-category tabs ── */
 $subTabs.addEventListener('click', async (e) => {
   const tab = e.target.closest('.sub-tab');
-  if (!tab) return;
+  if (!tab || tab.disabled) return;
   $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
   currentSubCategory = tab.dataset.cat;
@@ -611,18 +624,62 @@ $subTabs.addEventListener('click', async (e) => {
 /* ── Event: All Steps checkbox ── */
 $allStepsCheck.addEventListener('change', async () => {
   allStepsMode = $allStepsCheck.checked;
-  if (allStepsMode) {
-    // Force sub-tab deselection
-    $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
-    currentSubCategory = null;
+  updateSubTabStates();
+  await recalculate();
+});
+
+function updateSubTabStates() {
+  const tabs = $subTabs.querySelectorAll('.sub-tab');
+  if (allStepsMode && currentSkill === 'alchemy') {
+    // Lock to Bottle
+    tabs.forEach(t => {
+      const cat = t.dataset.cat;
+      if (cat === 'Bottle') {
+        t.classList.add('active');
+        t.disabled = false;
+        t.style.opacity = '1';
+      } else {
+        t.classList.remove('active');
+        t.disabled = true;
+        t.style.opacity = '0.35';
+        t.style.cursor = 'default';
+      }
+    });
+    currentSubCategory = 'Bottle';
+  } else if (allStepsMode && currentSkill === 'smithing') {
+    // Hide All and Bars, allow Armor/Weapons/Tools
+    tabs.forEach(t => {
+      const cat = t.dataset.cat;
+      if (cat === 'all' || cat === 'Bars') {
+        t.classList.remove('active');
+        t.disabled = true;
+        t.style.opacity = '0.35';
+        t.style.cursor = 'default';
+      } else {
+        t.disabled = false;
+        t.style.opacity = '1';
+        t.style.cursor = 'pointer';
+      }
+    });
+    // If currently on All or Bars, switch to first allowed
+    if (!currentSubCategory || currentSubCategory === 'all' || currentSubCategory === 'Bars') {
+      tabs.forEach(t => t.classList.remove('active'));
+      const first = $subTabs.querySelector('[data-cat="Armor"]');
+      if (first) { first.classList.add('active'); currentSubCategory = 'Armor'; }
+    }
   } else {
-    // Reset to All
-    $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+    // Reset all tabs
+    tabs.forEach(t => {
+      t.disabled = false;
+      t.style.opacity = '1';
+      t.style.cursor = 'pointer';
+    });
+    // Re-select All
+    tabs.forEach(t => t.classList.remove('active'));
     $subTabs.querySelector('[data-cat="all"]')?.classList.add('active');
     currentSubCategory = 'all';
   }
-  await recalculate();
-});
+}
 
 /* ── Event: Level inputs ── */
 $currentLevel.addEventListener('input', () => recalculate(false));
