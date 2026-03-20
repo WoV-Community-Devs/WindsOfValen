@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Winds of Valen — Community tools, calculators, and game data for WoV." />
+  <title>Winds of Valen — Tools &amp; Data</title>
+  <style>
+    :root {
+      --bg-body: #1a1a18;
+      --bg-panel: #242421;
+      --bg-input: #1a1a18;
+      --bg-header: #1d1d1b;
+      --bg-hover: #2e2e2a;
+      --bg-slot: #2a2f2a;
+      --bg-slot-hover: #353a35;
+      --border: #3a3a35;
+      --border-light: #4a4a42;
+      --accent: #f6931d;
+      --accent-hover: #ffa940;
+      --accent-glow: rgba(246, 147, 29, 0.15);
+      --accent-dim: rgba(246, 147, 29, 0.08);
+      --text: #e8e6e0;
+      --text-dim: #9e9c96;
+      --text-muted: #6a6862;
+      --green: #5cb85c;
+      --red: #e74c3c;
+      --blue: #5dade2;
+      --radius: 6px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 14px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-body);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--bg-header);
+      border-bottom: 2px solid var(--accent);
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .site-header h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .site-header .subtitle {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 1.5rem 2.5rem;
+      background: linear-gradient(180deg, var(--bg-header) 0%, var(--bg-body) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h2 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── Tools Grid ── */
+    .tools-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .section-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.75rem;
+    }
+
+    /* ── Tool Card ── */
+    .tool-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.15s, transform 0.15s;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .tool-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .tool-card-header {
+      background: var(--bg-header);
+      padding: 0.6rem 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tool-card-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-dim);
+      border-radius: 4px;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .tool-card-header h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tool-card-body {
+      padding: 0.75rem 0.85rem;
+      flex: 1;
+    }
+
+    .tool-card-body p {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .tool-card-footer {
+      padding: 0.5rem 0.85rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tool-badge {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      border-radius: 3px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-live {
+      background: rgba(92, 184, 92, 0.15);
+      color: var(--green);
+    }
+
+    .badge-soon {
+      background: rgba(158, 156, 150, 0.1);
+      color: var(--text-muted);
+    }
+
+    .tool-arrow {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 700;
+      transition: transform 0.15s;
+    }
+
+    .tool-card:hover .tool-arrow {
+      transform: translateX(3px);
+    }
+
+    /* ── Data Section ── */
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .data-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.6rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      text-transform: capitalize;
+      transition: border-color 0.15s;
+      text-decoration: none;
+    }
+
+    .data-chip:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .data-chip-icon {
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Responsive ── */
+    @media(max-width:600px) {
+      .hero h2 {
+        font-size: 1.5rem;
+      }
+
+      .hero {
+        padding: 2rem 1rem 1.5rem;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .data-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <h1>Winds of Valen</h1>
+    <span class="subtitle">Community Tools &amp; Data</span>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h2>Tools for <span>Winds of Valen</span></h2>
+    <p>Open-source calculators, game data, and guides built by the community. Everything you need to optimise your
+      gameplay.</p>
+  </section>
+
+  <!-- Tools -->
+  <main class="tools-section">
+    <div class="section-title">Tools &amp; Calculators</div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="tools/DPS%20Calculator/WoV_DPS_Calculator.html" id="tool-dps">
+        <div class="tool-card-header">
+          <div class="tool-card-icon">⚔️</div>
+          <h3>DPS Calculator</h3>
+        </div>
+        <div class="tool-card-body">
+          <p>Calculate hit chance, max hit, DPS, and time-to-kill for any gear loadout against any monster. Compare
+            multiple loadouts side-by-side with interactive charts.</p>
+        </div>
+        <div class="tool-card-footer">
+          <span class="tool-badge badge-live">Live</span>
+          <span class="tool-arrow">→</span>
+        </div>
+      </a>
+
+      <div class="tool-card" style="opacity:0.5;cursor:default;" id="tool-xp">
+        <div class="tool-card-header">
+          <div class="tool-card-icon">📊</div>
+          <h3>XP Calculator</h3>
+        </div>
+        <div class="tool-card-body">
+          <p>Calculate XP rates and estimate time to reach your target level for any skill.</p>
+        </div>
+        <div class="tool-card-footer">
+          <span class="tool-badge badge-soon">Coming Soon</span>
+          <span class="tool-arrow" style="opacity:0.3;">→</span>
+        </div>
+      </div>
+
+      <div class="tool-card" style="opacity:0.5;cursor:default;" id="tool-gold">
+        <div class="tool-card-header">
+          <div class="tool-card-icon">💰</div>
+          <h3>Money / Hour</h3>
+        </div>
+        <div class="tool-card-body">
+          <p>Estimate gold and currency earn rates for different activities and farming strategies.</p>
+        </div>
+        <div class="tool-card-footer">
+          <span class="tool-badge badge-soon">Coming Soon</span>
+          <span class="tool-arrow" style="opacity:0.3;">→</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Data Reference -->
+    <div class="section-title" style="margin-top:2rem;">Game Data</div>
+    <div class="data-grid">
+      <a class="data-chip" href="data/entities/weapons.json"><span class="data-chip-icon">⚔️</span> Weapons</a>
+      <a class="data-chip" href="data/entities/armor.json"><span class="data-chip-icon">🛡️</span> Armor</a>
+      <a class="data-chip" href="data/entities/shields.json"><span class="data-chip-icon">🔰</span> Shields</a>
+      <a class="data-chip" href="data/entities/jewelry.json"><span class="data-chip-icon">💍</span> Jewelry</a>
+      <a class="data-chip" href="data/entities/gems.json"><span class="data-chip-icon">💎</span> Gems</a>
+      <a class="data-chip" href="data/entities/ammo.json"><span class="data-chip-icon">🏹</span> Ammo</a>
+      <a class="data-chip" href="data/entities/tools.json"><span class="data-chip-icon">⛏️</span> Tools</a>
+      <a class="data-chip" href="data/entities/ores.json"><span class="data-chip-icon">🪨</span> Ores</a>
+      <a class="data-chip" href="data/npcs/monsters.json"><span class="data-chip-icon">👹</span> Monsters</a>
+      <a class="data-chip" href="data/recipes/smithing.json"><span class="data-chip-icon">🔨</span> Smithing</a>
+    </div>
+
+    <!-- Documentation -->
+    <div class="section-title" style="margin-top:2rem;">Documentation</div>
+    <div class="data-grid">
+      <a class="data-chip" href="formulas/damage.md"><span class="data-chip-icon">📐</span> Damage Formulas</a>
+      <a class="data-chip" href="formulas/experience.md"><span class="data-chip-icon">📈</span> XP Formulas</a>
+      <a class="data-chip" href="docs/formulas.md"><span class="data-chip-icon">📖</span> Guides</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    Winds of Valen Community Tools · <a href="https://github.com/Maurittius/WindsOfValen" target="_blank">GitHub</a>
+  </footer>
+
+</body>
+
+</html>

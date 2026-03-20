@@ -247,9 +247,12 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 /* ── Responsive ── */
 /* Loadout tabs */
 .loadout-tabs{
-  display:flex;align-items:center;gap:0.25rem;margin-bottom:0.5rem;
+  display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:0.5rem;
   padding-bottom:0.5rem;border-bottom:1px solid var(--border);
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
+}
+.loadout-tabs-inner{
+  display:flex;align-items:center;gap:0.25rem;flex-wrap:wrap;flex:1;min-width:0;
 }
 .loadout-tab{
   padding:0.3rem 0.6rem;border-radius:3px;cursor:pointer;
@@ -324,7 +327,8 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 <header class="site-header">
   <h1>WoV DPS Calculator</h1>
   <span class="subtitle">Winds of Valen</span>
-  <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v2.4</span>
+  <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v2.5</span>
+  <a href="../../index.html" style="margin-left:1rem;font-size:0.72rem;color:var(--text-dim);text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">← Home</a>
   <div class="page-tabs">
     <button class="page-tab active" data-page="calculator" onclick="switchPage('calculator')">Calculator</button>
     <button class="page-tab" data-page="methodology" onclick="switchPage('methodology')">Methodology</button>
@@ -349,27 +353,33 @@ function switchPage(page){
 
   <!-- LEFT: Player Loadout -->
   <div class="panel">
-    <div class="panel-header">Player Loadout <span id="weapon-badge" class="badge badge-none" style="margin-left:auto">No Weapon</span></div>
+    <div class="panel-header"><span id="loadout-header-name" style="cursor:pointer" title="Double-click to rename">Loadout 1</span> <span id="rename-hint" style="font-size:0.6rem;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">(Double click to edit)</span> <span id="weapon-badge" class="badge badge-none" style="margin-left:auto">No Weapon</span></div>
     <div class="panel-body">
       <!-- Loadout tabs -->
       <div class="loadout-tabs" id="loadout-tabs">
-        <div class="loadout-tab active" data-idx="0">Loadout 1</div>
-        <button class="loadout-add" id="add-loadout" title="Copy current loadout">+ New</button>
-        <select id="preset-select" style="margin-left:auto;background:var(--bg-input);border:1px solid var(--border);color:var(--text-muted);padding:0.25rem 0.4rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">
-          <option value="">— Preset —</option>
-          <option value="max-ranged">Max Ranged</option>
-          <option value="max-melee-pierce">Max Melee (Pierce)</option>
-          <option value="max-melee-slash">Max Melee (Slash)</option>
-        </select>
-        <button id="share-btn" title="Copy shareable URL" style="background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">🔗 Share</button>
+        <div class="loadout-tabs-inner" id="loadout-tabs-inner">
+          <div class="loadout-tab active" data-idx="0">Loadout 1</div>
+          <button class="loadout-add" id="add-loadout" title="Copy current loadout">+ New</button>
+        </div>
+        <div style="flex-shrink:0;display:flex;align-items:center;gap:0.4rem;">
+          <select id="preset-select" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text-muted);padding:0.25rem 0.4rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">
+            <option value="">— Preset —</option>
+            <option value="max-ranged">Max Ranged</option>
+            <option value="max-melee-pierce">Max Melee (Pierce)</option>
+            <option value="max-melee-slash">Max Melee (Slash)</option>
+          </select>
+          <button id="share-btn" title="Copy shareable URL" style="background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">🔗 Share</button>
+        </div>
       </div>
-      <div class="form-row">
-        <label>Attack Level</label>
-        <input type="number" id="attack-level" min="1" max="99" value="1" />
-      </div>
-      <div class="form-row">
-        <label>Ranged Level</label>
-        <input type="number" id="ranged-level" min="1" max="99" value="1" />
+      <div style="display:flex;gap:0.5rem;">
+        <div class="form-row" style="flex:1;">
+          <label>Attack Lvl</label>
+          <input type="number" id="attack-level" min="1" max="99" value="1" />
+        </div>
+        <div class="form-row" style="flex:1;">
+          <label>Ranged Lvl</label>
+          <input type="number" id="ranged-level" min="1" max="99" value="1" />
+        </div>
       </div>
 
       <hr class="section-divider" />
@@ -815,12 +825,14 @@ const slots={};
 SLOT_IDS.forEach(s=>slots[s]=$("slot-"+s));
 
 // ── Loadout State Management ──
-let loadouts=[{slots:{},gems:{ring:"",amulet:""}}];
+let loadouts=[{name:"",slots:{},gems:{ring:"",amulet:""}}];
 SLOT_IDS.forEach(s=>loadouts[0].slots[s]="");
 let activeLoadout=0;
 
+function getLoadoutName(i){return loadouts[i].name||"Loadout "+(i+1);}
+
 function captureState(){
-  const state={slots:{},gems:{ring:el.gR.value,amulet:el.gA.value}};
+  const state={name:loadouts[activeLoadout].name||"",slots:{},gems:{ring:el.gR.value,amulet:el.gA.value}};
   SLOT_IDS.forEach(s=>state.slots[s]=slots[s].value);
   return state;
 }
@@ -851,6 +863,7 @@ function switchLoadout(idx){
 function addLoadout(){
   saveCurrentLoadout();
   const copy=JSON.parse(JSON.stringify(loadouts[activeLoadout]));
+  copy.name="";
   loadouts.push(copy);
   activeLoadout=loadouts.length-1;
   renderTabs();
@@ -869,17 +882,37 @@ function removeLoadout(idx){
 }
 
 function renderTabs(){
-  const container=$("loadout-tabs");
+  const container=$("loadout-tabs-inner");
   container.querySelectorAll(".loadout-tab").forEach(t=>t.remove());
   const addBtn=$("add-loadout");
   loadouts.forEach((_,i)=>{
     const tab=document.createElement("div");
     tab.className="loadout-tab"+(i===activeLoadout?" active":"");
     tab.dataset.idx=i;
-    tab.innerHTML="Loadout "+(i+1)+(loadouts.length>1?'<span class="tab-close" data-delidx="'+i+'">&times;</span>':'');
+    const nameSpan=document.createElement("span");
+    nameSpan.className="tab-name";
+    nameSpan.textContent=getLoadoutName(i);
+    tab.appendChild(nameSpan);
+    if(loadouts.length>1){
+      const closeBtn=document.createElement("span");
+      closeBtn.className="tab-close";closeBtn.dataset.delidx=i;closeBtn.innerHTML="\u00d7";
+      tab.appendChild(closeBtn);
+    }
     tab.addEventListener("click",e=>{
       if(e.target.dataset.delidx!==undefined){removeLoadout(parseInt(e.target.dataset.delidx));return;}
       switchLoadout(i);
+    });
+    tab.addEventListener("dblclick",e=>{
+      e.stopPropagation();
+      const span=tab.querySelector(".tab-name");
+      if(!span)return;
+      const input=document.createElement("input");
+      input.type="text";input.value=getLoadoutName(i);
+      input.style.cssText="width:80px;padding:0.1rem 0.3rem;font-size:0.72rem;font-weight:700;font-family:inherit;background:var(--bg-input);border:1px solid var(--accent);border-radius:3px;color:var(--text);outline:none;";
+      span.replaceWith(input);input.focus();input.select();
+      function commit(){const v=input.value.trim();loadouts[i].name=v;const ns=document.createElement("span");ns.className="tab-name";ns.textContent=getLoadoutName(i);input.replaceWith(ns);renderResultRows();recalcAll();}
+      input.addEventListener("blur",commit);
+      input.addEventListener("keydown",ev=>{if(ev.key==="Enter"){ev.preventDefault();input.blur();}if(ev.key==="Escape"){input.value=getLoadoutName(i);input.blur();}});
     });
     container.insertBefore(tab,addBtn);
   });
@@ -892,7 +925,7 @@ function renderResultRows(){
     const tr=document.createElement("tr");
     tr.dataset.loadout=i;
     if(i===activeLoadout)tr.className="active-row";
-    tr.innerHTML='<td class="loadout-label">Loadout '+(i+1)+'</td>'+
+    tr.innerHTML='<td class="loadout-label">'+getLoadoutName(i)+'</td>'+
       '<td class="r-accuracy">&mdash;</td><td class="r-maxhit">&mdash;</td>'+
       '<td>&mdash;</td><td>&mdash;</td><td class="r-dps">&mdash;</td>'+
       '<td>&mdash;</td><td class="r-ttk">&mdash;</td><td>&mdash;</td>';
@@ -949,6 +982,7 @@ function calcLoadoutResults(state){
 
 // Active UI recalc (for the currently visible loadout's stats display)
 function recalcActiveUI(){
+  $("loadout-header-name").textContent=getLoadoutName(activeLoadout);
   const wpn=getItem("weapon");
   const isBow=wpn&&wpn.Type===ItemType.BOW;
   const is2H=wpn&&(wpn.Type===ItemType.WEAPON_2H||isBow);
@@ -1029,7 +1063,15 @@ function recalcAll(){
   $("dmg-reduction-disclaimer").style.display=anyReduced?"block":"none";
   const anyGems=loadouts.some(s=>(s.gems.ring||s.gems.amulet));
   $("gem-disclaimer").style.display=anyGems?"block":"none";
+  detectPreset();
   renderChart();
+  // Live-sync URL hash so the URL is always shareable
+  var newHash = encodeLoadout();
+  if (newHash) {
+    history.replaceState(null, '', '#' + newHash);
+  } else {
+    history.replaceState(null, '', location.pathname + location.search);
+  }
 }
 
 // ── Chart Rendering ──
@@ -1143,7 +1185,7 @@ function renderChart(){
   legend.innerHTML='';
   loadouts.forEach((_,i)=>{
     const item=document.createElement('div');item.className='chart-legend-item';
-    item.innerHTML='<div class="chart-legend-swatch" style="background:'+CHART_COLORS[i%CHART_COLORS.length]+'"></div>Loadout '+(i+1);
+    item.innerHTML='<div class="chart-legend-swatch" style="background:'+CHART_COLORS[i%CHART_COLORS.length]+'"></div>'+getLoadoutName(i);
     legend.appendChild(item);
   });
 
@@ -1212,7 +1254,7 @@ function drawChartOverlay(mouseX){
   let html='<div class="tt-header">'+xLabel+': '+values[0].x+'</div>';
   values.forEach(v=>{
     const c=CHART_COLORS[v.li%CHART_COLORS.length];
-    html+='<div class="tt-row"><div class="tt-swatch" style="background:'+c+'"></div>Loadout '+(v.li+1)+': <b>'+fmt(v.val)+'</b></div>';
+    html+='<div class="tt-row"><div class="tt-swatch" style="background:'+c+'"></div>'+getLoadoutName(v.li)+': <b>'+fmt(v.val)+'</b></div>';
   });
   tooltip.innerHTML=html;
 
@@ -1330,6 +1372,20 @@ function init(){
 
   // Share button
   $("share-btn").addEventListener("click",shareLoadout);
+
+  // Loadout header rename on double-click (delegated so it survives DOM replacement)
+  $("loadout-header-name").closest(".panel-header").addEventListener("dblclick",function(e){
+    const span=document.getElementById("loadout-header-name");
+    if(!span||!span.contains(e.target))return;
+    e.stopPropagation();
+    const input=document.createElement("input");
+    input.type="text";input.value=getLoadoutName(activeLoadout);
+    input.style.cssText="width:140px;padding:0.2rem 0.4rem;font-size:0.82rem;font-weight:700;font-family:inherit;background:var(--bg-input);border:1px solid var(--accent);border-radius:4px;color:var(--text);outline:none;text-transform:uppercase;letter-spacing:0.04em;";
+    span.replaceWith(input);input.focus();input.select();
+    function commit(){const v=input.value.trim();loadouts[activeLoadout].name=v;const ns=document.createElement("span");ns.id="loadout-header-name";ns.style.cursor="pointer";ns.title="Double-click to rename";ns.textContent=getLoadoutName(activeLoadout);input.replaceWith(ns);renderTabs();renderResultRows();recalcAll();}
+    input.addEventListener("blur",commit);
+    input.addEventListener("keydown",ev=>{if(ev.key==="Enter"){ev.preventDefault();input.blur();}if(ev.key==="Escape"){input.value=getLoadoutName(activeLoadout);input.blur();}});
+  });
 
   // Chart axis selectors
   $("chart-x").addEventListener("change",renderChart);
@@ -1687,6 +1743,9 @@ function applyPreset(key){
   const p=PRESETS[key];if(!p)return;
   SLOT_IDS.forEach(s=>{slots[s].value=p[s]||"";});
   el.gR.value=p.gems.ring||"";el.gA.value=p.gems.amulet||"";
+  // Name the loadout after the preset
+  const opt=$("preset-select").querySelector('option[value="'+key+'"]');
+  if(opt)loadouts[activeLoadout].name=opt.textContent;
   SLOT_IDS.forEach(s=>updateSlotVisual(s));
   document.querySelectorAll(".eslot[data-slot]").forEach(slotEl=>{
     const sn=slotEl.dataset.slot;const picker=slotEl.querySelector(".slot-picker-list");
@@ -1695,8 +1754,22 @@ function applyPreset(key){
     if(gs){const gemSel=sn==="ring"?el.gR:el.gA;updateGemPickerSelected(gs,gemSel);}
   });
   closePicker();
+  renderTabs();
   recalcAll();
-  $("preset-select").value="";
+}
+
+function detectPreset(){
+  const sel=$("preset-select");
+  for(const[key,p] of Object.entries(PRESETS)){
+    let match=true;
+    for(const s of SLOT_IDS){
+      if((slots[s].value||"")!==(p[s]||"")){match=false;break;}
+    }
+    if(match&&(el.gR.value||"")!==(p.gems.ring||""))match=false;
+    if(match&&(el.gA.value||"")!==(p.gems.amulet||""))match=false;
+    if(match){sel.value=key;return;}
+  }
+  sel.value="";
 }
 
 
