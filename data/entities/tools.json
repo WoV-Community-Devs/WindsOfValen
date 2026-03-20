@@ -1,0 +1,42 @@
+[
+  {
+    "Name": "Copper Pickaxe",
+    "Icon": "CopperPickaxe",
+    "Type": "PICKAXE",
+    "Level": 1,
+    "MiningPower": 1,
+    "Cost": "Starter Pickaxe"
+  },
+  {
+    "Name": "Bronze Pickaxe",
+    "Icon": "BronzePickaxe",
+    "Type": "PICKAXE",
+    "Level": 1,
+    "MiningPower": 4,
+    "Cost": "40g from Mining Stall"
+  },
+  {
+    "Name": "Iron Pickaxe",
+    "Icon": "IronPickaxe",
+    "Type": "PICKAXE",
+    "Level": 10,
+    "MiningPower": 12,
+    "Cost": "240g from Mining Stall"
+  },
+  {
+    "Name": "Steel Pickaxe",
+    "Icon": "SteelPickaxe",
+    "Type": "PICKAXE",
+    "Level": 20,
+    "MiningPower": 25,
+    "Cost": "960g from Mining Stall"
+  },
+  {
+    "Name": "Dwarven Pickaxe",
+    "Icon": "DwarvenPickaxe",
+    "Type": "PICKAXE",
+    "Level": 30,
+    "MiningPower": 40,
+    "Cost": "Mercenary Boss Drop"
+  }
+]

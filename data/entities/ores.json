@@ -1,0 +1,37 @@
+[
+  {
+    "Name": "Copper Ore",
+    "Icon": "copper_ore",
+    "Level": 1,
+    "Experience": 15,
+    "Location": "North of town, near Skeleton Miners (6 Copper Nodes)"
+  },
+  {
+    "Name": "Tin Ore",
+    "Icon": "tin_ore",
+    "Level": 1,
+    "Experience": 15,
+    "Location": "North of town, near Skeleton Miners (8 Tin Nodes)"
+  },
+  {
+    "Name": "Iron Ore",
+    "Icon": "iron_ore",
+    "Level": 10,
+    "Experience": 30,
+    "Location": "South of town before the forest (14 Nodes) / North-west cave (7 Nodes)"
+  },
+  {
+    "Name": "Coal Ore",
+    "Icon": "coal_ore",
+    "Level": 20,
+    "Experience": 80,
+    "Location": "South of town before the forest (2 Nodes) / North-west cave (10 Nodes)"
+  },
+  {
+    "Name": "Mithril Ore",
+    "Icon": "mithril_ore",
+    "Level": 30,
+    "Experience": 150,
+    "Location": "North-west cave (3 Nodes) / Deep forest Elf region (7 Nodes)"
+  }
+]

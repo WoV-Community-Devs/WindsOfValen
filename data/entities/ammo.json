@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "Wooden Arrow",
+    "Type": "ARROWS",
+    "Requirements": [{ "Skill": "RANGED", "Value": 1 }],
+    "Stats": [{ "Type": "PIECE_ACCURACY", "Value": 10 }]
+  },
+  {
+    "Name": "Bronze Arrow",
+    "Type": "ARROWS",
+    "Requirements": [{ "Skill": "RANGED", "Value": 1 }],
+    "Stats": [{ "Type": "PIECE_ACCURACY", "Value": 20 }]
+  },
+  {
+    "Name": "Iron Arrow",
+    "Type": "ARROWS",
+    "Requirements": [{ "Skill": "RANGED", "Value": 10 }],
+    "Stats": [{ "Type": "PIECE_ACCURACY", "Value": 40 }]
+  },
+  {
+    "Name": "Steel Arrow",
+    "Type": "ARROWS",
+    "Requirements": [{ "Skill": "RANGED", "Value": 20 }],
+    "Stats": [{ "Type": "PIECE_ACCURACY", "Value": 60 }]
+  }
+]
