@@ -320,6 +320,10 @@ The header uses `display:flex` with `position:relative`. The "Back to Home Page"
 | Blue (`#5ba8c8`) | Informational (accuracy, pierce type) |
 | `--text-muted` | Disabled/neutral states |
 
+### Emoji Usage
+- **Minimal emoji use.** Avoid emojis in headings, tabs, buttons, and labels. The medieval/fantasy theme relies on typography and color for visual hierarchy, not emoji icons.
+- Emojis are acceptable only as small decorative elements in the index page data chips (e.g. the Game Data grid), where they serve as compact category indicators.
+
 ### Methodology Sections
 - Use `<details open>` so all sections start expanded
 - Arrow indicator uses `::before` pseudo-element with `margin-right: 0.5rem`

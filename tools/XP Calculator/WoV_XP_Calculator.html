@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Winds of Valen — XP Calculator for Mining, Smithing, Fishing, and Alchemy." />
+  <title>WoV XP Calculator — Winds of Valen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-body: #1e2830;
+  --bg-panel: rgba(30, 40, 48, 0.88);
+  --bg-input: rgba(24, 32, 40, 0.75);
+  --bg-header: rgba(28, 38, 46, 0.92);
+  --border: rgba(100, 116, 90, 0.58);
+  --border-light: rgba(125, 142, 112, 0.58);
+  --accent: #d4a843;
+  --accent-hover: #e8c060;
+  --accent-glow: rgba(212,168,67,0.2);
+  --accent-dim: rgba(212,168,67,0.1);
+  --text: #e8e4d2;
+  --text-dim: #b8ae98;
+  --text-muted: #9a9280;
+  --green: #6abf69;
+  --red: #c9503a;
+  --blue: #5ba8c8;
+  --radius: 4px;
+  --panel-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;}
+body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-body);color:var(--text);min-height:100vh;line-height:1.6;}
+
+/* ── Living Background ── */
+#bg-scene{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden;}
+#bg-scene .bg-gradient{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at 50% 40%,rgba(75,115,75,0.32) 0%,transparent 60%),
+    radial-gradient(ellipse at 30% 70%,rgba(95,165,120,0.20) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 30%,rgba(185,125,60,0.15) 0%,transparent 50%),
+    linear-gradient(180deg,#1a2218 0%,#202e24 30%,#1c2820 60%,#192220 100%);}
+#bg-scene .bg-vignette{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.6) 100%);}
+@keyframes fireflyDrift{0%{transform:translate(0,0) scale(1);opacity:0;}15%{opacity:0.6;}50%{transform:translate(var(--dx),var(--dy)) scale(1.2);opacity:0.8;}85%{opacity:0.4;}100%{transform:translate(calc(var(--dx)*1.5),calc(var(--dy)*0.8)) scale(0.8);opacity:0;}}
+@keyframes fireflyGlow{0%,100%{box-shadow:0 0 3px 1px rgba(200,220,80,0.15);}50%{box-shadow:0 0 6px 3px rgba(200,220,80,0.3);}}
+.firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,rgba(210,230,100,0.5) 0%,rgba(180,200,60,0.2) 50%,transparent 100%);animation:fireflyDrift var(--duration) ease-in-out infinite,fireflyGlow 2s ease-in-out infinite;animation-delay:var(--delay);pointer-events:none;z-index:1;}
+
+/* ── Content z-index ── */
+.site-header,.page-content,.site-footer{position:relative;z-index:2;}
+
+/* ── Header ── */
+.site-header{
+  position:relative;
+  background:linear-gradient(180deg,rgba(15,20,15,0.95),rgba(12,18,14,0.92));
+  border-bottom:2px solid var(--accent);padding:0.6rem 1.5rem;
+  display:flex;align-items:center;gap:0.75rem;
+  backdrop-filter:blur(10px);box-shadow:0 2px 20px rgba(0,0,0,0.5),inset 0 -1px 0 rgba(212,168,67,0.15);
+}
+.site-header h1{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:var(--accent);letter-spacing:0.06em;text-shadow:0 0 20px rgba(212,168,67,0.3);}
+.site-header .subtitle{font-family:'Cinzel',serif;font-size:0.78rem;color:var(--text-dim);letter-spacing:0.04em;}
+.home-link{position:absolute;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s,text-shadow 0.2s;}
+.home-link:hover{color:var(--accent-hover);text-shadow:0 0 12px rgba(212,168,67,0.4);}
+
+/* ── Page Content ── */
+.page-content{max-width:900px;margin:0 auto;padding:1.5rem 1rem 2rem;}
+
+/* ── Panel ── */
+.panel{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  backdrop-filter:blur(10px);box-shadow:var(--panel-shadow);margin-bottom:1rem;overflow:hidden;
+}
+.panel-header{
+  padding:0.6rem 0.85rem;font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);
+  background:linear-gradient(180deg,rgba(20,28,22,0.9),rgba(15,22,18,0.85));
+  border-bottom:1px solid var(--border);text-shadow:0 0 12px rgba(212,168,67,0.15);
+}
+.panel-body{padding:0.85rem;}
+
+/* ── Form Controls ── */
+.form-row{display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.75rem;align-items:flex-end;}
+.form-group{display:flex;flex-direction:column;gap:0.25rem;flex:1;min-width:120px;}
+.form-label{font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;}
+.form-input,.form-select{
+  background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);
+  padding:0.45rem 0.6rem;color:var(--text);font-family:'Crimson Text',serif;font-size:0.88rem;
+  outline:none;transition:border-color 0.2s;
+}
+.form-input:focus,.form-select:focus{border-color:var(--accent);}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23b8ae98' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 0.5rem center;background-size:0.65em;padding-right:1.5rem;}
+.form-select option{background:#1e2830;color:var(--text);}
+
+/* ── Skill Tabs ── */
+.skill-tabs{display:flex;gap:0.35rem;margin-bottom:0.75rem;flex-wrap:wrap;}
+.skill-tab{
+  font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
+  padding:0.4rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius);
+  background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.2s;
+}
+.skill-tab:hover{border-color:var(--accent);color:var(--text);}
+.skill-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);text-shadow:0 0 8px rgba(212,168,67,0.2);}
+
+/* ── Sub-category tabs ── */
+.sub-tabs{display:flex;gap:0.25rem;margin-bottom:0.75rem;flex-wrap:wrap;}
+.sub-tab{
+  font-family:'Cinzel',serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
+  padding:0.3rem 0.65rem;border:1px solid rgba(100,116,90,0.3);border-radius:3px;
+  background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.2s;
+}
+.sub-tab:hover{border-color:var(--border-light);color:var(--text-dim);}
+.sub-tab.active{background:rgba(212,168,67,0.08);border-color:var(--accent);color:var(--accent);}
+
+/* ── Summary Box ── */
+.summary-box{
+  background:rgba(18,24,20,0.7);border:1px solid var(--border);border-radius:var(--radius);
+  padding:0.75rem 0.85rem;margin-bottom:0.75rem;
+}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:0.2rem 0;}
+.summary-label{font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;}
+.summary-value{font-family:'Crimson Text',serif;font-size:1rem;font-weight:700;color:var(--accent);text-shadow:0 0 8px rgba(212,168,67,0.15);}
+.summary-value.big{font-size:1.3rem;}
+
+/* ── Recipe Table ── */
+.recipe-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+.recipe-table th{
+  text-align:left;padding:0.4rem 0.6rem;background:rgba(18,24,20,0.85);
+  font-family:'Cinzel',serif;font-size:0.65rem;font-weight:700;color:var(--text-dim);
+  text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:1;
+}
+.recipe-table td{padding:0.4rem 0.6rem;border-bottom:1px solid rgba(100,116,90,0.2);color:var(--text);vertical-align:middle;}
+.recipe-table tr:last-child td{border-bottom:none;}
+.recipe-table tr:hover td{background:rgba(55,72,60,0.25);}
+.recipe-table .col-name{font-weight:700;color:var(--text);}
+.recipe-table .col-lvl{font-family:'Cinzel',serif;font-size:0.72rem;color:var(--text-dim);}
+.recipe-table .col-xp{color:var(--green);}
+.recipe-table .col-actions{font-weight:700;color:var(--accent);font-size:0.92rem;}
+.recipe-table .col-materials{font-size:0.78rem;color:var(--text-muted);}
+
+.recipe-table-wrap{max-height:420px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);}
+.recipe-table-wrap::-webkit-scrollbar{width:6px;}
+.recipe-table-wrap::-webkit-scrollbar-track{background:rgba(0,0,0,0.2);}
+.recipe-table-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+.no-recipes{text-align:center;padding:2rem;color:var(--text-muted);font-style:italic;font-size:0.88rem;}
+
+/* ── Footer ── */
+.site-footer{text-align:center;padding:1.5rem 1rem;border-top:1px solid var(--border);font-family:'Cinzel',serif;font-size:0.68rem;color:var(--text-muted);letter-spacing:0.04em;}
+.site-footer a{color:var(--accent);text-decoration:none;}
+.site-footer a:hover{color:var(--accent-hover);}
+
+@media(max-width:600px){
+  .page-content{padding:1rem 0.5rem;}
+  .form-row{flex-direction:column;}
+  .form-group{min-width:100%;}
+}
+  </style>
+</head>
+<body>
+
+<div id="bg-scene">
+  <div class="bg-gradient"></div>
+  <div class="bg-vignette"></div>
+</div>
+
+<script>
+(function(){
+  const scene=document.getElementById('bg-scene');
+  for(let i=0;i<30;i++){
+    const f=document.createElement('div');f.className='firefly';
+    const s=2+Math.random()*4;f.style.width=s+'px';f.style.height=s+'px';
+    f.style.left=Math.random()*100+'%';f.style.top=(10+Math.random()*70)+'%';
+    f.style.setProperty('--dx',(Math.random()*200-100)+'px');
+    f.style.setProperty('--dy',(Math.random()*150-75)+'px');
+    f.style.setProperty('--duration',(8+Math.random()*12)+'s');
+    f.style.setProperty('--delay',(Math.random()*10)+'s');
+    scene.appendChild(f);
+  }
+})();
+</script>
+
+<header class="site-header">
+  <h1>WoV XP Calculator</h1>
+  <span class="subtitle">Winds of Valen</span>
+  <a class="home-link" href="../../index.html">← Back to Home Page</a>
+</header>
+
+<div class="page-content">
+
+  <!-- Skill Selection -->
+  <div class="panel">
+    <div class="panel-header">Choose a Skill</div>
+    <div class="panel-body">
+      <div class="skill-tabs" id="skill-tabs">
+        <button class="skill-tab active" data-skill="mining">Mining</button>
+        <button class="skill-tab" data-skill="smithing">Smithing</button>
+        <button class="skill-tab" data-skill="fishing">Fishing</button>
+        <button class="skill-tab" data-skill="alchemy">Alchemy</button>
+      </div>
+      <div class="sub-tabs" id="sub-tabs" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Level Inputs -->
+  <div class="panel">
+    <div class="panel-header">Levels</div>
+    <div class="panel-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="current-level">Current Level</label>
+          <input type="number" class="form-input" id="current-level" min="1" max="99" value="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="target-level">Target Level</label>
+          <input type="number" class="form-input" id="target-level" min="2" max="99" value="10">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- XP Summary -->
+  <div class="panel">
+    <div class="panel-header">XP Summary</div>
+    <div class="panel-body">
+      <div class="summary-box">
+        <div class="summary-row">
+          <span class="summary-label">Current XP</span>
+          <span class="summary-value" id="current-xp">0</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Target XP</span>
+          <span class="summary-value" id="target-xp">0</span>
+        </div>
+        <div class="summary-row" style="border-top:1px solid var(--border);margin-top:0.3rem;padding-top:0.4rem;">
+          <span class="summary-label">XP Remaining</span>
+          <span class="summary-value big" id="xp-remaining">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recipe Table -->
+  <div class="panel">
+    <div class="panel-header">Available Recipes</div>
+    <div class="panel-body">
+      <div class="recipe-table-wrap">
+        <table class="recipe-table" id="recipe-table">
+          <thead>
+            <tr>
+              <th>Recipe</th>
+              <th>Lvl</th>
+              <th>XP</th>
+              <th>Actions Needed</th>
+              <th>Materials</th>
+            </tr>
+          </thead>
+          <tbody id="recipe-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  Winds of Valen Community Tools · <a href="https://github.com/Maurittius/WindsOfValen" target="_blank">GitHub</a>
+</footer>
+
+<script>
+/* ── XP Formula ── */
+function xpForLevel(level) {
+  if (level <= 1) return 0;
+  return Math.floor(500 * (Math.pow(2, (level - 1) / 5) - 1));
+}
+
+/* ── Data paths (relative to this file) ── */
+const DATA_PATHS = {
+  mining:   '../../data/recipes/mining.json',
+  smithing: '../../data/recipes/smithing.json',
+  fishing:  '../../data/recipes/fishing.json',
+  alchemy:  '../../data/recipes/alchemy.json'
+};
+
+/* ── Sub-categories for skills that have them ── */
+const SUB_CATEGORIES = {
+  smithing: ['Bars','Armor','Weapons','Tools'],
+  alchemy:  ['Reduction','Brew','Cutting','Bottle','Crushing']
+};
+
+/* ── State ── */
+let currentSkill = 'mining';
+let currentSubCategory = null;
+let recipeData = {};
+
+/* ── DOM refs ── */
+const $skillTabs    = document.getElementById('skill-tabs');
+const $subTabs      = document.getElementById('sub-tabs');
+const $currentLevel = document.getElementById('current-level');
+const $targetLevel  = document.getElementById('target-level');
+const $currentXp    = document.getElementById('current-xp');
+const $targetXp     = document.getElementById('target-xp');
+const $xpRemaining  = document.getElementById('xp-remaining');
+const $tbody        = document.getElementById('recipe-tbody');
+
+/* ── Format number with commas ── */
+function fmt(n) {
+  return n.toLocaleString();
+}
+
+/* ── Load recipe data ── */
+async function loadSkillData(skill) {
+  if (recipeData[skill]) return recipeData[skill];
+  try {
+    const resp = await fetch(DATA_PATHS[skill]);
+    if (!resp.ok) throw new Error('Failed to load');
+    recipeData[skill] = await resp.json();
+    return recipeData[skill];
+  } catch (e) {
+    console.error('Error loading ' + skill + ' data:', e);
+    return [];
+  }
+}
+
+/* ── Render sub-category tabs ── */
+function renderSubTabs(skill) {
+  const cats = SUB_CATEGORIES[skill];
+  if (!cats) {
+    $subTabs.style.display = 'none';
+    currentSubCategory = null;
+    return;
+  }
+  $subTabs.style.display = 'flex';
+  $subTabs.innerHTML = '<button class="sub-tab active" data-cat="all">All</button>' +
+    cats.map(c => `<button class="sub-tab" data-cat="${c}">${c}</button>`).join('');
+  currentSubCategory = 'all';
+}
+
+/* ── Recalculate and render ── */
+async function recalculate() {
+  const curLvl = Math.max(1, Math.min(99, parseInt($currentLevel.value) || 1));
+  const tgtLvl = Math.max(curLvl + 1, Math.min(99, parseInt($targetLevel.value) || 10));
+
+  // Enforce UI constraints without losing focus
+  if (parseInt($targetLevel.value) < curLvl + 1) {
+    $targetLevel.value = curLvl + 1;
+  }
+
+  const curXp = xpForLevel(curLvl);
+  const tgtXp = xpForLevel(tgtLvl);
+  const remaining = tgtXp - curXp;
+
+  $currentXp.textContent = fmt(curXp);
+  $targetXp.textContent = fmt(tgtXp);
+  $xpRemaining.textContent = fmt(remaining);
+
+  // Load recipes
+  const recipes = await loadSkillData(currentSkill);
+
+  // Filter by current level and sub-category
+  let filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null);
+
+  if (currentSubCategory && currentSubCategory !== 'all') {
+    filtered = filtered.filter(r => r.Category === currentSubCategory);
+  }
+
+  // Sort by XP descending (best first)
+  filtered.sort((a, b) => b.Experience - a.Experience);
+
+  // Render table
+  if (filtered.length === 0) {
+    $tbody.innerHTML = '<tr><td colspan="5" class="no-recipes">No recipes available at your current level.</td></tr>';
+    return;
+  }
+
+  $tbody.innerHTML = filtered.map(r => {
+    const actions = Math.ceil(remaining / r.Experience);
+    const matStr = r.Materials
+      ? r.Materials.map(m => `${m.Amount}× ${m.Material}`).join(', ')
+      : (r.Input ? `1× ${r.Input}` : '—');
+    const totalMats = r.Materials
+      ? r.Materials.map(m => `${fmt(m.Amount * actions)}× ${m.Material}`).join(', ')
+      : (r.Input ? `${fmt(actions)}× ${r.Input}` : '—');
+
+    return `<tr>
+      <td class="col-name">${r.Name}</td>
+      <td class="col-lvl">${r.Level}</td>
+      <td class="col-xp">${fmt(r.Experience)} XP</td>
+      <td class="col-actions">${fmt(actions)}</td>
+      <td class="col-materials" title="Total: ${totalMats}">${matStr}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Event: Skill tabs ── */
+$skillTabs.addEventListener('click', async (e) => {
+  const tab = e.target.closest('.skill-tab');
+  if (!tab) return;
+  $skillTabs.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  currentSkill = tab.dataset.skill;
+  renderSubTabs(currentSkill);
+  await recalculate();
+});
+
+/* ── Event: Sub-category tabs ── */
+$subTabs.addEventListener('click', async (e) => {
+  const tab = e.target.closest('.sub-tab');
+  if (!tab) return;
+  $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  currentSubCategory = tab.dataset.cat;
+  await recalculate();
+});
+
+/* ── Event: Level inputs ── */
+$currentLevel.addEventListener('input', recalculate);
+$targetLevel.addEventListener('input', recalculate);
+
+/* ── Init ── */
+recalculate();
+</script>
+
+</body>
+</html>

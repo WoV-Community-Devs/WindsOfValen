@@ -1,0 +1,37 @@
+[
+  {
+    "Name": "Copper Ore",
+    "Level": 1,
+    "Experience": 15
+  },
+  {
+    "Name": "Tin Ore",
+    "Level": 1,
+    "Experience": 15
+  },
+  {
+    "Name": "Iron Ore",
+    "Level": 10,
+    "Experience": 30
+  },
+  {
+    "Name": "Coal Ore",
+    "Level": 20,
+    "Experience": 80
+  },
+  {
+    "Name": "Mithril Ore",
+    "Level": 30,
+    "Experience": 150
+  },
+  {
+    "Name": "Gold Ore",
+    "Level": 40,
+    "Experience": 350
+  },
+  {
+    "Name": "Gold Dust",
+    "Level": 40,
+    "Experience": 350
+  }
+]

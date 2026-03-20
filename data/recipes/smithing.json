@@ -1,287 +1,254 @@
 [
   {
-    "Level": 1,
     "Name": "Bronze Bar",
-    "Materials": [
-      {
-        "Material": "Copper Ore",
-        "Amount": 1
-      },
-      {
-        "Material": "Tin Ore",
-        "Amount": 1
-      }
-    ],
+    "Category": "Bars",
+    "Level": 1,
+    "Experience": 15,
     "Duration": "3 seconds",
     "SellCost": "4g",
-    "Category": "Bars"
+    "Materials": [
+      { "Material": "Copper Ore", "Amount": 1 },
+      { "Material": "Tin Ore", "Amount": 1 }
+    ]
   },
   {
-    "Level": 10,
     "Name": "Iron Bar",
-    "Materials": [
-      {
-        "Material": "Iron Ore",
-        "Amount": 2
-      }
-    ],
+    "Category": "Bars",
+    "Level": 10,
+    "Experience": 30,
     "Duration": "4 seconds",
     "SellCost": "14g",
-    "Category": "Bars"
+    "Materials": [
+      { "Material": "Iron Ore", "Amount": 2 }
+    ]
   },
   {
-    "Level": 20,
     "Name": "Steel Bar",
-    "Materials": [
-      {
-        "Material": "Iron Ore",
-        "Amount": 1
-      },
-      {
-        "Material": "Coal",
-        "Amount": 1
-      }
-    ],
+    "Category": "Bars",
+    "Level": 20,
+    "Experience": 55,
     "Duration": "5 seconds",
     "SellCost": "28g",
-    "Category": "Bars"
+    "Materials": [
+      { "Material": "Iron Ore", "Amount": 1 },
+      { "Material": "Coal Ore", "Amount": 1 }
+    ]
   },
   {
-    "Level": 30,
     "Name": "Mithril Bar",
-    "Materials": [
-      {
-        "Material": "Mithril Ore",
-        "Amount": 1
-      },
-      {
-        "Material": "Coal",
-        "Amount": 2
-      }
-    ],
+    "Category": "Bars",
+    "Level": 30,
+    "Experience": 155,
     "Duration": "6 seconds",
     "SellCost": "140g",
-    "Category": "Bars"
+    "Materials": [
+      { "Material": "Mithril Ore", "Amount": 1 },
+      { "Material": "Coal Ore", "Amount": 2 }
+    ]
   },
   {
-    "Level": 2,
-    "Name": "Bronze Platelegs",
+    "Name": "Gold Bar",
+    "Category": "Bars",
+    "Level": 40,
+    "Experience": 800,
     "Materials": [
-      {
-        "Material": "Bronze Bar",
-        "Amount": 8
-      }
-    ],
+      { "Material": "Gold Ore", "Amount": 8 }
+    ]
+  },
+  {
+    "Name": "Gold Bar",
+    "Category": "Bars",
+    "Level": 40,
+    "Experience": 800,
+    "Materials": [
+      { "Material": "Gold Dust", "Amount": 8 }
+    ]
+  },
+  {
+    "Name": "Bronze Platelegs",
+    "Category": "Armor",
+    "Level": 2,
+    "Experience": 120,
     "Duration": "16 seconds",
     "SellCost": "49g",
-    "Category": "Armor"
-  },
-  {
-    "Level": 6,
-    "Name": "Bronze Platebody",
     "Materials": [
-      {
-        "Material": "Bronze Bar",
-        "Amount": 10
-      }
-    ],
-    "Duration": "18 seconds",
-    "SellCost": "70g",
-    "Category": "Armor"
+      { "Material": "Bronze Bar", "Amount": 8 }
+    ]
   },
   {
-    "Level": 8,
-    "Name": "Bronze Helmet",
-    "Materials": [
-      {
-        "Material": "Bronze Bar",
-        "Amount": 4
-      }
-    ],
-    "Duration": "6 seconds",
-    "SellCost": "35g",
-    "Category": "Armor"
-  },
-  {
-    "Level": 12,
     "Name": "Iron Platelegs",
-    "Materials": [
-      {
-        "Material": "Iron Bar",
-        "Amount": 8
-      }
-    ],
+    "Category": "Armor",
+    "Level": 12,
+    "Experience": 240,
     "Duration": "24 seconds",
     "SellCost": "140g",
-    "Category": "Armor"
-  },
-  {
-    "Level": 16,
-    "Name": "Iron Platebody",
     "Materials": [
-      {
-        "Material": "Iron Bar",
-        "Amount": 10
-      }
-    ],
-    "Duration": "28 seconds",
-    "SellCost": "175g",
-    "Category": "Armor"
+      { "Material": "Iron Bar", "Amount": 8 }
+    ]
   },
   {
-    "Level": 18,
-    "Name": "Iron Helmet",
-    "Materials": [
-      {
-        "Material": "Iron Bar",
-        "Amount": 4
-      }
-    ],
-    "Duration": "10 seconds",
-    "SellCost": "105g",
-    "Category": "Armor"
-  },
-  {
-    "Level": 22,
     "Name": "Steel Platelegs",
-    "Materials": [
-      {
-        "Material": "Steel Bar",
-        "Amount": 8
-      }
-    ],
+    "Category": "Armor",
+    "Level": 22,
+    "Experience": 440,
     "Duration": "32 seconds",
     "SellCost": "280g",
-    "Category": "Armor"
-  },
-  {
-    "Level": 26,
-    "Name": "Steel Platebody",
     "Materials": [
-      {
-        "Material": "Steel Bar",
-        "Amount": 10
-      }
-    ],
-    "Duration": "38 seconds",
-    "SellCost": "350g",
-    "Category": "Armor"
+      { "Material": "Steel Bar", "Amount": 8 }
+    ]
   },
   {
-    "Level": 28,
-    "Name": "Steel Helmet",
-    "Materials": [
-      {
-        "Material": "Steel Bar",
-        "Amount": 4
-      }
-    ],
-    "Duration": "14 seconds",
-    "SellCost": "210g",
-    "Category": "Armor"
-  },
-  {
-    "Level": 32,
     "Name": "Mithril Platelegs",
-    "Materials": [
-      {
-        "Material": "Mithril Bar",
-        "Amount": 8
-      }
-    ],
+    "Category": "Armor",
+    "Level": 32,
+    "Experience": 1240,
     "Duration": "40 seconds",
     "SellCost": "1400g",
-    "Category": "Armor"
+    "Materials": [
+      { "Material": "Mithril Bar", "Amount": 8 }
+    ]
   },
   {
-    "Level": 36,
-    "Name": "Mithril Platebody",
+    "Name": "Bronze Platebody",
+    "Category": "Armor",
+    "Level": 6,
+    "Experience": 60,
+    "Duration": "18 seconds",
+    "SellCost": "70g",
     "Materials": [
-      {
-        "Material": "Mithril Bar",
-        "Amount": 10
-      }
-    ],
+      { "Material": "Bronze Bar", "Amount": 10 }
+    ]
+  },
+  {
+    "Name": "Iron Platebody",
+    "Category": "Armor",
+    "Level": 16,
+    "Experience": 300,
+    "Duration": "28 seconds",
+    "SellCost": "175g",
+    "Materials": [
+      { "Material": "Iron Bar", "Amount": 10 }
+    ]
+  },
+  {
+    "Name": "Steel Platebody",
+    "Category": "Armor",
+    "Level": 26,
+    "Experience": 550,
+    "Duration": "38 seconds",
+    "SellCost": "350g",
+    "Materials": [
+      { "Material": "Steel Bar", "Amount": 10 }
+    ]
+  },
+  {
+    "Name": "Mithril Platebody",
+    "Category": "Armor",
+    "Level": 36,
+    "Experience": 1550,
     "Duration": "48 seconds",
     "SellCost": "1750g",
-    "Category": "Armor"
+    "Materials": [
+      { "Material": "Mithril Bar", "Amount": 10 }
+    ]
   },
   {
-    "Level": 38,
-    "Name": "Mithril Helmet",
+    "Name": "Bronze Helmet",
+    "Category": "Armor",
+    "Level": 8,
+    "Experience": 60,
+    "Duration": "6 seconds",
+    "SellCost": "35g",
     "Materials": [
-      {
-        "Material": "Mithril Bar",
-        "Amount": 4
-      }
-    ],
+      { "Material": "Bronze Bar", "Amount": 4 }
+    ]
+  },
+  {
+    "Name": "Iron Helmet",
+    "Category": "Armor",
+    "Level": 18,
+    "Experience": 120,
+    "Duration": "10 seconds",
+    "SellCost": "105g",
+    "Materials": [
+      { "Material": "Iron Bar", "Amount": 4 }
+    ]
+  },
+  {
+    "Name": "Steel Helmet",
+    "Category": "Armor",
+    "Level": 28,
+    "Experience": 220,
+    "Duration": "14 seconds",
+    "SellCost": "210g",
+    "Materials": [
+      { "Material": "Steel Bar", "Amount": 4 }
+    ]
+  },
+  {
+    "Name": "Mithril Helmet",
+    "Category": "Armor",
+    "Level": 38,
+    "Experience": 620,
     "Duration": "18 seconds",
     "SellCost": "700g",
-    "Category": "Armor"
+    "Materials": [
+      { "Material": "Mithril Bar", "Amount": 4 }
+    ]
   },
   {
-    "Level": 4,
     "Name": "Bronze Sword",
-    "Materials": [
-      {
-        "Material": "Bronze Bar",
-        "Amount": 6
-      }
-    ],
+    "Category": "Weapons",
+    "Level": 4,
+    "Experience": 90,
     "Duration": "8 seconds",
     "SellCost": "42g",
-    "Category": "Weapons"
+    "Materials": [
+      { "Material": "Bronze Bar", "Amount": 6 }
+    ]
   },
   {
-    "Level": 14,
     "Name": "Iron Sword",
-    "Materials": [
-      {
-        "Material": "Iron Bar",
-        "Amount": 6
-      }
-    ],
+    "Category": "Weapons",
+    "Level": 14,
+    "Experience": 180,
     "Duration": "12 seconds",
     "SellCost": "105g",
-    "Category": "Weapons"
+    "Materials": [
+      { "Material": "Iron Bar", "Amount": 6 }
+    ]
   },
   {
-    "Level": 24,
     "Name": "Steel Sword",
-    "Materials": [
-      {
-        "Material": "Steel Bar",
-        "Amount": 6
-      }
-    ],
+    "Category": "Weapons",
+    "Level": 24,
+    "Experience": 330,
     "Duration": "16 seconds",
     "SellCost": "210g",
-    "Category": "Weapons"
+    "Materials": [
+      { "Material": "Steel Bar", "Amount": 6 }
+    ]
   },
   {
-    "Level": 34,
     "Name": "Mithril Sword",
-    "Materials": [
-      {
-        "Material": "Mithril Bar",
-        "Amount": 6
-      }
-    ],
+    "Category": "Weapons",
+    "Level": 34,
+    "Experience": 930,
     "Duration": "20 seconds",
     "SellCost": "1050g",
-    "Category": "Weapons"
+    "Materials": [
+      { "Material": "Mithril Bar", "Amount": 6 }
+    ]
   },
   {
-    "Level": 21,
     "Name": "Mining Gloves",
-    "Materials": [
-      {
-        "Material": "Steel Bar",
-        "Amount": 3
-      }
-    ],
+    "Category": "Tools",
+    "Level": 21,
+    "Experience": 165,
     "Duration": "14 seconds",
     "SellCost": "140g",
-    "Category": "Tools"
+    "Materials": [
+      { "Material": "Steel Bar", "Amount": 3 }
+    ]
   }
 ]
