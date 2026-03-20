@@ -1,7 +1,7 @@
 # Damage Calculation
 
 > [!CAUTION]
-> **We do not currently know how damage reduction works.** The exact mechanics of how enemy Block Power and Deflect Power reduce incoming damage have not been validated against the game's source code. The 75% reduction value used in the DPS calculator is an assumption and may not be accurate.
+> **We do not currently know how damage reduction works.** The exact mechanics of how enemy `BLOCK_POWER` and `DEFLECT_POWER` reduce incoming damage have not been validated against the game's source code. The 75% reduction value used in the DPS calculator is an assumption and may not be accurate.
 
 ## Constants
 
@@ -21,16 +21,16 @@ effectiveAttackLevel = attackLevel + BASE_EFFECTIVE_LEVEL
 
 weaponDamageBonus = weaponDamage + BASE_EQUIPMENT_DAMAGE
 
-flatDamageBonus = meleePower × EQUIPMENT_POWER_STRENGTH × attackSpeed
+flatDamageBonus = power × EQUIPMENT_POWER_STRENGTH × ATTACK_SPEED
 
 maxHit = floor(BASE_DAMAGE + (effectiveAttackLevel × EFFECTIVE_LEVEL_DAMAGE_MULTIPLIER × (weaponDamageBonus + flatDamageBonus)) / DAMAGE_DIVIDER)
 ```
 
 **Where:**
-- `attackLevel` — Attack Level (melee) or Ranged Level (bows), 1–99
-- `weaponDamage` — Sum of Quick Damage + Heavy Damage from the weapon
-- `attackSpeed` — Speed value on the weapon (1.0–5.0)
-- `meleePower` — Total Melee Power or Range Power from all equipped gear (each item's power is individually boosted by its socketed gem, if any)
+- `attackLevel` — `ATTACK` level (melee) or `RANGED` level (bows), 1–99
+- `weaponDamage` — Sum of `QUICK_DAMAGE` + `HEAVY_DAMAGE` from the weapon
+- `ATTACK_SPEED` — Speed stat on the weapon (1.0–5.0)
+- `power` — Total `MELEE_POWER` or `RANGE_POWER` from all equipped gear (each item's power is individually boosted by its socketed gem, if any)
 
 ## Damage Range
 
@@ -44,21 +44,21 @@ Every hit rolls uniformly between `minHit` and `maxHit`.
 
 ## Gem Power Bonus
 
-Gems can be socketed into **Ring** and **Amulet** slots. Each gem adds a percentage bonus **only to the Melee/Range Power of the item it is slotted into**, not to total power across all gear.
+Gems can be socketed into `RING` and `AMULET` slots. Each gem has a `StatType` (e.g., `MELEE_POWER`) and a `ValueType` of `PERCENTAGE`. The gem bonus applies **only to the matching stat on the item it is slotted into** — a gem with `StatType: MELEE_POWER` will not affect `RANGE_POWER`, and vice versa.
 
 ```
-itemPower = floor(baseItemPower × (1 + gemPct / 100))
+itemPower = floor(baseItemPower × (1 + Value / 100))
 ```
 
-| Gem | Bonus |
-|---|---|
-| Weak Power Gem | +20% |
-| Power Gem | +30% |
-| Strong Power Gem | +40% |
+| Gem | StatType | Value |
+|---|---|---|
+| Weak Power Gem | `MELEE_POWER` | +20% |
+| Power Gem | `MELEE_POWER` | +30% |
+| Strong Power Gem | `MELEE_POWER` | +40% |
 
 ## Weapon Types
 
-- **Slash weapons** use Slash Accuracy vs enemy Slash Defence
-- **Pierce weapons** (including bows) use Pierce Accuracy vs enemy Pierce Defence
-- **Bows** use Ranged Level instead of Attack Level for both accuracy and damage
-- **Two-handed weapons** (greatswords, axes, bows) disable the shield slot
+- **Slash weapons** — Use `SLASH_ACCURACY` vs enemy `SLASH_DEFENSE`
+- **Pierce weapons** (including bows) — Use `PIECE_ACCURACY` vs enemy `PIECE_DEFENSE`
+- **Bows** (`BOW`) — Use `RANGED` level instead of `ATTACK` level for both accuracy and damage
+- **Two-handed weapons** (`WEAPON_2H`, `BOW`) — Disable the `SHIELD` slot
