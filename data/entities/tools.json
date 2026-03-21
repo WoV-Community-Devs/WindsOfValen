@@ -1,7 +1,7 @@
 [
   {
     "Name": "Copper Pickaxe",
-    "Icon": "CopperPickaxe",
+    "Icon": "copper_pickaxe",
     "Type": "PICKAXE",
     "Level": 1,
     "MiningPower": 1,
@@ -9,7 +9,7 @@
   },
   {
     "Name": "Bronze Pickaxe",
-    "Icon": "BronzePickaxe",
+    "Icon": "bronze_pickaxe",
     "Type": "PICKAXE",
     "Level": 1,
     "MiningPower": 4,
@@ -17,7 +17,7 @@
   },
   {
     "Name": "Iron Pickaxe",
-    "Icon": "IronPickaxe",
+    "Icon": "iron_pickaxe",
     "Type": "PICKAXE",
     "Level": 10,
     "MiningPower": 12,
@@ -25,7 +25,7 @@
   },
   {
     "Name": "Steel Pickaxe",
-    "Icon": "SteelPickaxe",
+    "Icon": "steel_pickaxe",
     "Type": "PICKAXE",
     "Level": 20,
     "MiningPower": 25,
@@ -33,7 +33,7 @@
   },
   {
     "Name": "Dwarven Pickaxe",
-    "Icon": "DwarvenPickaxe",
+    "Icon": "dwarven_pickaxe",
     "Type": "PICKAXE",
     "Level": 30,
     "MiningPower": 40,
