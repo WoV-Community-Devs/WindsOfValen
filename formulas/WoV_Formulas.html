@@ -119,7 +119,25 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .site-footer a{color:var(--accent);text-decoration:none;}
 .site-footer a:hover{color:var(--accent-hover);}
 
+/* ── Side Nav ── */
+.page-layout{display:flex;gap:0;max-width:1100px;margin:0 auto;position:relative;z-index:2;}
+.side-nav{
+  position:sticky;top:0;align-self:flex-start;width:180px;flex-shrink:0;
+  padding:1rem 0 1rem 0.75rem;height:100vh;overflow-y:auto;
+}
+.side-nav-title{font-family:'Cinzel',serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);padding:0.5rem 0.5rem 0.4rem;}
+.side-nav a{
+  display:block;padding:0.4rem 0.6rem;font-size:0.78rem;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;transition:all 0.2s;border-radius:0 3px 3px 0;
+}
+.side-nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-dim);}
+.side-nav a.active{color:var(--accent);border-left-color:var(--accent);background:var(--accent-dim);font-weight:600;}
+
 @media(max-width:600px){
+  .page-layout{flex-direction:column;}
+  .side-nav{position:relative;width:100%;height:auto;display:flex;flex-wrap:wrap;gap:0.25rem;padding:0.5rem;}
+  .side-nav-title{display:none;}
+  .side-nav a{border-left:none;border-bottom:2px solid transparent;font-size:0.72rem;padding:0.3rem 0.5rem;}
   .page-content{padding:1rem 0.5rem;}
 }
   </style>
@@ -153,10 +171,19 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
   <a class="home-link" href="../index.html">← Back to Home Page</a>
 </header>
 
+<div class="page-layout">
+<nav class="side-nav">
+  <div class="side-nav-title">Sections</div>
+  <a href="#damage" data-section="damage">Damage</a>
+  <a href="#accuracy" data-section="accuracy">Accuracy</a>
+  <a href="#experience" data-section="experience">Experience</a>
+  <a href="#dps" data-section="dps">DPS & KPH</a>
+</nav>
+
 <div class="page-content">
 
   <!-- ═══════ DAMAGE ═══════ -->
-  <details class="formula-section" open>
+  <details id="damage" class="formula-section" open>
     <summary>Damage Calculation</summary>
     <div class="formula-body">
 
@@ -219,7 +246,7 @@ maxHit = maxHit</div>
   </details>
 
   <!-- ═══════ ACCURACY ═══════ -->
-  <details class="formula-section" open>
+  <details id="accuracy" class="formula-section" open>
     <summary>Accuracy Calculation</summary>
     <div class="formula-body">
 
@@ -241,7 +268,7 @@ MaxDefenceRoll  = (defenceLevel + 8) × (equippedDefence + 16)</div>
   </details>
 
   <!-- ═══════ EXPERIENCE ═══════ -->
-  <details class="formula-section" open>
+  <details id="experience" class="formula-section" open>
     <summary>Experience Calculation</summary>
     <div class="formula-body">
 
@@ -270,7 +297,7 @@ MaxDefenceRoll  = (defenceLevel + 8) × (equippedDefence + 16)</div>
   </details>
 
   <!-- ═══════ DPS ═══════ -->
-  <details class="formula-section" open>
+  <details id="dps" class="formula-section" open>
     <summary>DPS & Kills Per Hour</summary>
     <div class="formula-body">
 
@@ -288,6 +315,34 @@ MaxDefenceRoll  = (defenceLevel + 8) × (equippedDefence + 16)</div>
   </details>
 
 </div>
+</div><!-- end page-layout -->
+
+<script>
+// Highlight active side-nav link on scroll
+const navLinks = document.querySelectorAll('.side-nav a[data-section]');
+const sections = ['damage','accuracy','experience','dps'].map(id => document.getElementById(id)).filter(Boolean);
+function updateNav() {
+  // If scrolled near bottom, highlight the last section
+  const nearBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 50;
+  if (nearBottom) {
+    navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === sections[sections.length-1].id));
+    return;
+  }
+  let active = sections[0];
+  for (const s of sections) {
+    if (s.getBoundingClientRect().top <= 80) active = s;
+  }
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.dataset.section === (active && active.id));
+  });
+}
+window.addEventListener('scroll', updateNav, {passive:true});
+navLinks.forEach(a => a.addEventListener('click', () => {
+  const el = document.getElementById(a.dataset.section);
+  if (el && !el.open) el.open = true;
+}));
+updateNav();
+</script>
 
 <footer class="site-footer">
   Winds of Valen Community Tools · <a href="https://github.com/Maurittius/WindsOfValen" target="_blank">GitHub</a>
