@@ -77,6 +77,7 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
   text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);
   background:linear-gradient(180deg,rgba(20,28,22,0.9),rgba(15,22,18,0.85));
   border-bottom:1px solid var(--border);text-shadow:0 0 12px rgba(212,168,67,0.15);
+  display:flex;align-items:center;justify-content:space-between;
 }
 .panel-body{padding:0.85rem;}
 
@@ -207,7 +208,6 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
   <span class="subtitle">Winds of Valen</span>
   <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v1.1</span>
   <a class="home-link" href="../../index.html">← Back to Home Page</a>
-  <button class="share-btn" id="share-btn" title="Copy shareable URL">Share</button>
 </header>
 
 <div class="page-content">
@@ -217,7 +217,7 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 
       <!-- Skill Selection -->
       <div class="panel">
-        <div class="panel-header">Choose a Skill</div>
+        <div class="panel-header"><span>Choose a Skill</span> <button class="share-btn" id="share-btn" title="Copy shareable URL">Share</button></div>
         <div class="panel-body">
           <div class="skill-tabs" id="skill-tabs">
             <button class="skill-tab active" data-skill="mining">Mining</button>
