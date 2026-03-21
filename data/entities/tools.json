@@ -38,5 +38,21 @@
     "Level": 30,
     "MiningPower": 40,
     "Cost": "Mercenary Boss Drop"
+  },
+  {
+    "Name": "Mining Gloves",
+    "Icon": "mining_gloves",
+    "Smithing": {
+      "Level": 21,
+      "Experience": 165,
+      "Duration": "14 seconds",
+      "SellCost": "140g",
+      "Materials": [
+        {
+          "Material": "Steel Bar",
+          "Amount": 3
+        }
+      ]
+    }
   }
 ]

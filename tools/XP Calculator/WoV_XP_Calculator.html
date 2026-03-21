@@ -437,10 +437,10 @@ function switchPage(page) {
       <div class="meth-body">
         <p>All recipe data is sourced from the community-maintained JSON files in this repository:</p>
         <ul>
-          <li><code>mining.json</code> — Ore types, levels, and XP</li>
-          <li><code>smithing.json</code> — Bars, armor, weapons, tools with materials and XP</li>
-          <li><code>fishing.json</code> — Fish types, levels, and XP</li>
-          <li><code>potion_making.json</code> — All potion making recipes: brew, bottle, cut, crush, reduce</li>
+          <li><code>ores.json</code> — Ore types, levels, and XP (entities)</li>
+          <li><code>bars.json</code>, <code>armor.json</code>, <code>weapons.json</code>, <code>tools.json</code> — Smithing data embedded in entities</li>
+          <li><code>fish.json</code> — Fish types, levels, XP, and cutting recipes (entities)</li>
+          <li><code>ingredients.json</code>, <code>potions.json</code> — Potion making data embedded in entities</li>
         </ul>
         <p>If you find inaccurate data, please submit a pull request or open an issue on <a href="https://github.com/Maurittius/WindsOfValen" target="_blank" style="color:var(--accent)">GitHub</a>.</p>
       </div>
@@ -462,11 +462,24 @@ function xpForLevel(level) {
 
 /* ── Data paths (relative to this file) ── */
 const DATA_PATHS = {
-  mining:   '../../data/recipes/mining.json',
-  smithing: '../../data/recipes/smithing.json',
-  fishing:  '../../data/recipes/fishing.json',
-  alchemy:  '../../data/recipes/potion_making.json'
+  mining:   '../../data/entities/ores.json',
+  fishing:  '../../data/entities/fish.json',
 };
+
+/* ── Alchemy entity sources (loaded + flattened into recipe format) ── */
+const ALCHEMY_SOURCES = [
+  { path: '../../data/entities/fish.json',        extract: 'cutting' },
+  { path: '../../data/entities/ingredients.json',  extract: 'crushing_reduction' },
+  { path: '../../data/entities/potions.json',      extract: 'brew_bottle' },
+];
+
+/* ── Smithing entity sources (loaded + flattened into recipe format) ── */
+const SMITHING_SOURCES = [
+  { path: '../../data/entities/bars.json',    category: 'Bars' },
+  { path: '../../data/entities/armor.json',   category: 'Armor' },
+  { path: '../../data/entities/weapons.json', category: 'Weapons' },
+  { path: '../../data/entities/tools.json',   category: 'Tools' },
+];
 
 /* ── Sub-categories for skills that have them ── */
 const SUB_CATEGORIES = {
@@ -629,9 +642,70 @@ function deduplicateBottles(bottles) {
 async function loadSkillData(skill) {
   if (recipeData[skill]) return recipeData[skill];
   try {
-    const resp = await fetch(DATA_PATHS[skill]);
-    if (!resp.ok) throw new Error('Failed to load');
-    recipeData[skill] = await resp.json();
+    if (skill === 'smithing') {
+      // Aggregate smithing data from multiple entity files
+      const results = await Promise.all(
+        SMITHING_SOURCES.map(async ({ path, category }) => {
+          const resp = await fetch(path);
+          if (!resp.ok) return [];
+          const entities = await resp.json();
+          // Extract items that have a Smithing sub-object, flatten into recipe format
+          return entities
+            .filter(e => e.Smithing)
+            .map(e => ({
+              Name: e.Name,
+              Category: category,
+              Level: e.Smithing.Level,
+              Experience: e.Smithing.Experience,
+              Duration: e.Smithing.Duration,
+              SellCost: e.Smithing.SellCost,
+              Materials: e.Smithing.Materials,
+            }));
+        })
+      );
+      recipeData[skill] = results.flat();
+    } else if (skill === 'alchemy') {
+      // Aggregate potion making from entity files
+      const results = await Promise.all(
+        ALCHEMY_SOURCES.map(async ({ path, extract }) => {
+          const resp = await fetch(path);
+          if (!resp.ok) return [];
+          const entities = await resp.json();
+          const recipes = [];
+          for (const e of entities) {
+            if (!e.PotionMaking) continue;
+            const pm = e.PotionMaking;
+            if (extract === 'cutting' && pm.Action === 'Cut') {
+              recipes.push({ Name: e.Name, Category: 'Cutting', Level: pm.Level, Experience: pm.Experience, Input: e.Name, Output: pm.Output });
+            } else if (extract === 'crushing_reduction') {
+              if (pm.Action === 'Crush') {
+                recipes.push({ Name: e.Name, Category: 'Crushing', Level: pm.Level, Experience: pm.Experience, Input: e.Name, Output: pm.Output });
+              } else if (pm.Action === 'Reduce') {
+                recipes.push({ Name: e.Name, Category: 'Reduction', Level: pm.Level, Experience: pm.Experience, Input: e.Name, Output: pm.Output });
+              }
+            } else if (extract === 'brew_bottle') {
+              if (pm.Action === 'Brew') {
+                recipes.push({ Name: e.Name, Category: 'Brew', Level: pm.Level, Experience: pm.Experience, Materials: pm.Materials });
+              } else if (pm.Action === 'Bottle') {
+                // Expand Small/Large back to separate entries
+                if (pm.Small) {
+                  recipes.push({ Name: 'Small ' + e.Name, Category: 'Bottle', Level: pm.Level, Experience: pm.Experience, Materials: pm.Small.Materials, Output: pm.Small.Output });
+                }
+                if (pm.Large) {
+                  recipes.push({ Name: 'Large ' + e.Name, Category: 'Bottle', Level: pm.Large.Materials ? pm.Level : pm.Level, Experience: pm.Experience, Materials: pm.Large.Materials, Output: pm.Large.Output });
+                }
+              }
+            }
+          }
+          return recipes;
+        })
+      );
+      recipeData[skill] = results.flat();
+    } else {
+      const resp = await fetch(DATA_PATHS[skill]);
+      if (!resp.ok) throw new Error('Failed to load');
+      recipeData[skill] = await resp.json();
+    }
     return recipeData[skill];
   } catch (e) {
     console.error('Error loading ' + skill + ' data:', e);

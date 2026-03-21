@@ -47,7 +47,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 6
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 8,
+      "Experience": 60,
+      "Duration": "6 seconds",
+      "SellCost": "35g",
+      "Materials": [
+        {
+          "Material": "Bronze Bar",
+          "Amount": 4
+        }
+      ]
+    }
   },
   {
     "Name": "Iron Helmet",
@@ -69,7 +81,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 10
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 18,
+      "Experience": 120,
+      "Duration": "10 seconds",
+      "SellCost": "105g",
+      "Materials": [
+        {
+          "Material": "Iron Bar",
+          "Amount": 4
+        }
+      ]
+    }
   },
   {
     "Name": "Steel Helmet",
@@ -91,7 +115,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 16
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 28,
+      "Experience": 220,
+      "Duration": "14 seconds",
+      "SellCost": "210g",
+      "Materials": [
+        {
+          "Material": "Steel Bar",
+          "Amount": 4
+        }
+      ]
+    }
   },
   {
     "Name": "Mithril Helmet",
@@ -113,7 +149,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 25
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 38,
+      "Experience": 620,
+      "Duration": "18 seconds",
+      "SellCost": "700g",
+      "Materials": [
+        {
+          "Material": "Mithril Bar",
+          "Amount": 4
+        }
+      ]
+    }
   },
   {
     "Name": "Leather Armour",
@@ -146,7 +194,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 7
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 6,
+      "Experience": 60,
+      "Duration": "18 seconds",
+      "SellCost": "70g",
+      "Materials": [
+        {
+          "Material": "Bronze Bar",
+          "Amount": 10
+        }
+      ]
+    }
   },
   {
     "Name": "Iron Platebody",
@@ -168,7 +228,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 11
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 16,
+      "Experience": 300,
+      "Duration": "28 seconds",
+      "SellCost": "175g",
+      "Materials": [
+        {
+          "Material": "Iron Bar",
+          "Amount": 10
+        }
+      ]
+    }
   },
   {
     "Name": "Steel Platebody",
@@ -190,7 +262,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 18
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 26,
+      "Experience": 550,
+      "Duration": "38 seconds",
+      "SellCost": "350g",
+      "Materials": [
+        {
+          "Material": "Steel Bar",
+          "Amount": 10
+        }
+      ]
+    }
   },
   {
     "Name": "Mithril Platebody",
@@ -212,7 +296,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 29
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 36,
+      "Experience": 1550,
+      "Duration": "48 seconds",
+      "SellCost": "1750g",
+      "Materials": [
+        {
+          "Material": "Mithril Bar",
+          "Amount": 10
+        }
+      ]
+    }
   },
   {
     "Name": "Leather Legs",
@@ -245,7 +341,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 6
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 2,
+      "Experience": 120,
+      "Duration": "16 seconds",
+      "SellCost": "49g",
+      "Materials": [
+        {
+          "Material": "Bronze Bar",
+          "Amount": 8
+        }
+      ]
+    }
   },
   {
     "Name": "Iron Platelegs",
@@ -267,7 +375,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 10
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 12,
+      "Experience": 240,
+      "Duration": "24 seconds",
+      "SellCost": "140g",
+      "Materials": [
+        {
+          "Material": "Iron Bar",
+          "Amount": 8
+        }
+      ]
+    }
   },
   {
     "Name": "Steel Platelegs",
@@ -289,7 +409,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 16
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 22,
+      "Experience": 440,
+      "Duration": "32 seconds",
+      "SellCost": "280g",
+      "Materials": [
+        {
+          "Material": "Steel Bar",
+          "Amount": 8
+        }
+      ]
+    }
   },
   {
     "Name": "Mithril Platelegs",
@@ -311,7 +443,19 @@
         "Type": "SLASH_DEFENSE",
         "Value": 27
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 32,
+      "Experience": 1240,
+      "Duration": "40 seconds",
+      "SellCost": "1400g",
+      "Materials": [
+        {
+          "Material": "Mithril Bar",
+          "Amount": 8
+        }
+      ]
+    }
   },
   {
     "Name": "Berserker Gloves",

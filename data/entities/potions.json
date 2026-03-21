@@ -1,0 +1,392 @@
+[
+  {
+    "Name": "Weak Health Potion",
+    "Icon": "weak_health_potion",
+    "PotionMaking": {
+      "Action": "Brew",
+      "Level": 1,
+      "Experience": 500,
+      "Materials": [
+        {
+          "Material": "Scrap Fish Flesh",
+          "Amount": 10
+        },
+        {
+          "Material": "Essence",
+          "Amount": 25
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Fishing Potion",
+    "PotionMaking": {
+      "Action": "Brew",
+      "Level": 5,
+      "Experience": 500,
+      "Materials": [
+        {
+          "Material": "Fish Oil",
+          "Amount": 10
+        },
+        {
+          "Material": "Essence",
+          "Amount": 25
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Shields Potion",
+    "Icon": "shield_potion",
+    "PotionMaking": {
+      "Action": "Brew",
+      "Level": 10,
+      "Experience": 1500,
+      "Materials": [
+        {
+          "Material": "Crushed Fish Scales",
+          "Amount": 10
+        },
+        {
+          "Material": "Essence",
+          "Amount": 50
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Mining Potion",
+    "PotionMaking": {
+      "Action": "Brew",
+      "Level": 15,
+      "Experience": 1500,
+      "Materials": [
+        {
+          "Material": "Root Paste",
+          "Amount": 10
+        },
+        {
+          "Material": "Essence",
+          "Amount": 50
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Health Potion",
+    "Icon": "health_potion",
+    "PotionMaking": {
+      "Action": "Brew",
+      "Level": 20,
+      "Experience": 2500,
+      "Materials": [
+        {
+          "Material": "Fish Mash",
+          "Amount": 10
+        },
+        {
+          "Material": "Essence",
+          "Amount": 50
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Attack Potion",
+    "PotionMaking": {
+      "Action": "Brew",
+      "Level": 30,
+      "Experience": 5000,
+      "Materials": [
+        {
+          "Material": "Fang Dust",
+          "Amount": 10
+        },
+        {
+          "Material": "Essence",
+          "Amount": 200
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Strong Health Potion",
+    "Icon": "strong_health_potion",
+    "PotionMaking": {
+      "Action": "Brew",
+      "Level": 40,
+      "Experience": 3250,
+      "Materials": [
+        {
+          "Material": "Hearty Extract",
+          "Amount": 10
+        },
+        {
+          "Material": "Essence",
+          "Amount": 200
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Strong Shield Potion",
+    "PotionMaking": {
+      "Action": "Brew",
+      "Level": 50,
+      "Experience": null,
+      "Materials": [
+        {
+          "Material": "Fine Fish Scales",
+          "Amount": 10
+        },
+        {
+          "Material": "Essence",
+          "Amount": 500
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Weak Health Potion",
+    "Icon": "weak_health_potion",
+    "PotionMaking": {
+      "Action": "Bottle",
+      "Level": 1,
+      "Experience": 200,
+      "Small": {
+        "Materials": [
+          {
+            "Material": "Small Vial",
+            "Amount": 20
+          },
+          {
+            "Material": "Weak Health Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "20x Small Weak Health Potion"
+      },
+      "Large": {
+        "Materials": [
+          {
+            "Material": "Large Vial",
+            "Amount": 10
+          },
+          {
+            "Material": "Weak Health Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "10x Large Weak Health Potion"
+      }
+    }
+  },
+  {
+    "Name": "Fishing Potion",
+    "PotionMaking": {
+      "Action": "Bottle",
+      "Level": 5,
+      "Experience": 200,
+      "Small": {
+        "Materials": [
+          {
+            "Material": "Small Vial",
+            "Amount": 20
+          },
+          {
+            "Material": "Fishing Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "20x Small Fishing Potion"
+      },
+      "Large": {
+        "Materials": [
+          {
+            "Material": "Large Vial",
+            "Amount": 10
+          },
+          {
+            "Material": "Fishing Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "10x Large Fishing Potion"
+      }
+    }
+  },
+  {
+    "Name": "Shields Potion",
+    "Icon": "shield_potion",
+    "PotionMaking": {
+      "Action": "Bottle",
+      "Level": 10,
+      "Experience": 200,
+      "Small": {
+        "Materials": [
+          {
+            "Material": "Small Vial",
+            "Amount": 20
+          },
+          {
+            "Material": "Shields Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "20x Small Shields Potion"
+      },
+      "Large": {
+        "Materials": [
+          {
+            "Material": "Large Vial",
+            "Amount": 10
+          },
+          {
+            "Material": "Shields Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "10x Large Shields Potion"
+      }
+    }
+  },
+  {
+    "Name": "Mining Potion",
+    "PotionMaking": {
+      "Action": "Bottle",
+      "Level": 15,
+      "Experience": 200,
+      "Small": {
+        "Materials": [
+          {
+            "Material": "Small Vial",
+            "Amount": 20
+          },
+          {
+            "Material": "Mining Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "20x Small Mining Potion"
+      },
+      "Large": {
+        "Materials": [
+          {
+            "Material": "Large Vial",
+            "Amount": 10
+          },
+          {
+            "Material": "Mining Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "10x Large Mining Potion"
+      }
+    }
+  },
+  {
+    "Name": "Health Potion",
+    "Icon": "health_potion",
+    "PotionMaking": {
+      "Action": "Bottle",
+      "Level": 20,
+      "Experience": 200,
+      "Small": {
+        "Materials": [
+          {
+            "Material": "Small Vial",
+            "Amount": 1
+          },
+          {
+            "Material": "Health Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "20x Small Health Potion"
+      },
+      "Large": {
+        "Materials": [
+          {
+            "Material": "Large Vial",
+            "Amount": 10
+          },
+          {
+            "Material": "Health Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "10x Large Health Potion"
+      }
+    }
+  },
+  {
+    "Name": "Attack Potion",
+    "PotionMaking": {
+      "Action": "Bottle",
+      "Level": 25,
+      "Experience": 200,
+      "Small": {
+        "Materials": [
+          {
+            "Material": "Small Vial",
+            "Amount": 20
+          },
+          {
+            "Material": "Attack Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "20x Small Attack Potion"
+      },
+      "Large": {
+        "Materials": [
+          {
+            "Material": "Large Vial",
+            "Amount": 10
+          },
+          {
+            "Material": "Attack Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "10x Large Attack Potion"
+      }
+    }
+  },
+  {
+    "Name": "Strong Health Potion",
+    "Icon": "strong_health_potion",
+    "PotionMaking": {
+      "Action": "Bottle",
+      "Level": 40,
+      "Experience": 200,
+      "Small": {
+        "Materials": [
+          {
+            "Material": "Small Vial",
+            "Amount": 20
+          },
+          {
+            "Material": "Strong Health Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "20x Small Strong Health Potion"
+      },
+      "Large": {
+        "Materials": [
+          {
+            "Material": "Large Vial",
+            "Amount": 10
+          },
+          {
+            "Material": "Strong Health Potion Brew",
+            "Amount": 1
+          }
+        ],
+        "Output": "10x Large Strong Health Potion"
+      }
+    }
+  }
+]

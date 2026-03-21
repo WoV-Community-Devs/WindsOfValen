@@ -1,0 +1,68 @@
+[
+  {
+    "Name": "Minnow",
+    "Level": 1,
+    "Experience": 8,
+    "PotionMaking": {
+      "Action": "Cut",
+      "Level": 1,
+      "Experience": 10,
+      "Output": "2x Small Essence Gland"
+    }
+  },
+  {
+    "Name": "Common Trout",
+    "Level": 5,
+    "Experience": 75,
+    "PotionMaking": {
+      "Action": "Cut",
+      "Level": 5,
+      "Experience": 10,
+      "Output": "Scrap Fish Flesh, Small Essence Gland"
+    }
+  },
+  {
+    "Name": "Perch",
+    "Level": 10,
+    "Experience": 225,
+    "PotionMaking": {
+      "Action": "Cut",
+      "Level": 10,
+      "Experience": 30,
+      "Output": "Fish Scales, Small Essence Gland"
+    }
+  },
+  {
+    "Name": "Bass",
+    "Level": 20,
+    "Experience": 200,
+    "PotionMaking": {
+      "Action": "Cut",
+      "Level": 20,
+      "Experience": 20,
+      "Output": "Plain Fish Flesh, Small Essence Gland"
+    }
+  },
+  {
+    "Name": "Blue Gill",
+    "Level": 30,
+    "Experience": 75,
+    "PotionMaking": {
+      "Action": "Cut",
+      "Level": 30,
+      "Experience": 40,
+      "Output": "2x Essence Gland"
+    }
+  },
+  {
+    "Name": "Elder Trout",
+    "Level": 40,
+    "Experience": 500,
+    "PotionMaking": {
+      "Action": "Cut",
+      "Level": 40,
+      "Experience": 70,
+      "Output": "Essence Gland, Hearty Fish Flesh"
+    }
+  }
+]

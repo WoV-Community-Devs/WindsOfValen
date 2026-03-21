@@ -57,7 +57,19 @@
         "Type": "QUICK_DAMAGE",
         "Value": 15
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 4,
+      "Experience": 90,
+      "Duration": "8 seconds",
+      "SellCost": "42g",
+      "Materials": [
+        {
+          "Material": "Bronze Bar",
+          "Amount": 6
+        }
+      ]
+    }
   },
   {
     "Name": "Iron Sword",
@@ -87,7 +99,19 @@
         "Type": "QUICK_DAMAGE",
         "Value": 25
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 14,
+      "Experience": 180,
+      "Duration": "12 seconds",
+      "SellCost": "105g",
+      "Materials": [
+        {
+          "Material": "Iron Bar",
+          "Amount": 6
+        }
+      ]
+    }
   },
   {
     "Name": "Steel Sword",
@@ -117,7 +141,19 @@
         "Type": "QUICK_DAMAGE",
         "Value": 40
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 24,
+      "Experience": 330,
+      "Duration": "16 seconds",
+      "SellCost": "210g",
+      "Materials": [
+        {
+          "Material": "Steel Bar",
+          "Amount": 6
+        }
+      ]
+    }
   },
   {
     "Name": "Mithril Sword",
@@ -147,7 +183,19 @@
         "Type": "QUICK_DAMAGE",
         "Value": 60
       }
-    ]
+    ],
+    "Smithing": {
+      "Level": 34,
+      "Experience": 930,
+      "Duration": "20 seconds",
+      "SellCost": "1050g",
+      "Materials": [
+        {
+          "Material": "Mithril Bar",
+          "Amount": 6
+        }
+      ]
+    }
   },
   {
     "Name": "Skeleton Rapier",

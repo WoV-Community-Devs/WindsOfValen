@@ -1,0 +1,106 @@
+[
+  {
+    "Name": "Bronze Bar",
+    "Icon": "bronze_bar",
+    "Smithing": {
+      "Level": 1,
+      "Experience": 15,
+      "Duration": "3 seconds",
+      "SellCost": "4g",
+      "Materials": [
+        {
+          "Material": "Copper Ore",
+          "Amount": 1
+        },
+        {
+          "Material": "Tin Ore",
+          "Amount": 1
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Iron Bar",
+    "Icon": "iron_bar",
+    "Smithing": {
+      "Level": 10,
+      "Experience": 30,
+      "Duration": "4 seconds",
+      "SellCost": "14g",
+      "Materials": [
+        {
+          "Material": "Iron Ore",
+          "Amount": 2
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Steel Bar",
+    "Icon": "steel_bar",
+    "Smithing": {
+      "Level": 20,
+      "Experience": 55,
+      "Duration": "5 seconds",
+      "SellCost": "28g",
+      "Materials": [
+        {
+          "Material": "Iron Ore",
+          "Amount": 1
+        },
+        {
+          "Material": "Coal Ore",
+          "Amount": 1
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Mithril Bar",
+    "Icon": "mithril_bar",
+    "Smithing": {
+      "Level": 30,
+      "Experience": 155,
+      "Duration": "6 seconds",
+      "SellCost": "140g",
+      "Materials": [
+        {
+          "Material": "Mithril Ore",
+          "Amount": 1
+        },
+        {
+          "Material": "Coal Ore",
+          "Amount": 2
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Gold Bar",
+    "Icon": "gold_bar",
+    "Smithing": {
+      "Level": 40,
+      "Experience": 800,
+      "Materials": [
+        {
+          "Material": "Gold Ore",
+          "Amount": 8
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Gold Bar",
+    "Icon": "gold_bar",
+    "Smithing": {
+      "Level": 40,
+      "Experience": 800,
+      "Materials": [
+        {
+          "Material": "Gold Dust",
+          "Amount": 8
+        }
+      ]
+    }
+  }
+]

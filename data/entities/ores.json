@@ -33,5 +33,15 @@
     "Level": 30,
     "Experience": 150,
     "Location": "North-west cave (3 Nodes) / Deep forest Elf region (7 Nodes)"
+  },
+  {
+    "Name": "Gold Ore",
+    "Level": 40,
+    "Experience": 350
+  },
+  {
+    "Name": "Gold Dust",
+    "Level": 40,
+    "Experience": 350
   }
 ]

@@ -206,8 +206,11 @@ const CATEGORIES = [
   { key:'ammo',     label:'Ammo',     path:'entities/ammo.json',     icon:'🏹' },
   { key:'tools',    label:'Tools',    path:'entities/tools.json',    icon:'⛏️' },
   { key:'ores',     label:'Ores',     path:'entities/ores.json',     icon:'🪨' },
-  { key:'monsters', label:'Monsters', path:'npcs/monsters.json',    icon:'👹' },
-  { key:'smithing', label:'Smithing', path:'recipes/smithing.json', icon:'🔨' }
+  { key:'fish',     label:'Fish',     path:'entities/fish.json',     icon:'🐟' },
+  { key:'monsters', label:'Monsters', path:'npcs/monsters.json',       icon:'👹' },
+  { key:'bars',     label:'Bars',     path:'entities/bars.json',       icon:'🔨' },
+  { key:'ingredients', label:'Ingredients', path:'entities/ingredients.json', icon:'🧪' },
+  { key:'potions',  label:'Potions',  path:'entities/potions.json',    icon:'🧫' }
 ];
 
 const cache = {};
@@ -291,9 +294,12 @@ function renderCards() {
     card.className = 'item-card';
 
     if (activeCat === 'monsters') card.innerHTML = renderMonster(item);
-    else if (activeCat === 'smithing') card.innerHTML = renderSmithing(item);
+    else if (activeCat === 'bars') card.innerHTML = renderBar(item);
     else if (activeCat === 'ores') card.innerHTML = renderOre(item);
+    else if (activeCat === 'fish') card.innerHTML = renderFish(item);
     else if (activeCat === 'gems') card.innerHTML = renderGem(item);
+    else if (activeCat === 'ingredients') card.innerHTML = renderIngredient(item);
+    else if (activeCat === 'potions') card.innerHTML = renderPotion(item);
     else card.innerHTML = renderEquipment(item);
 
     grid.appendChild(card);
@@ -320,12 +326,28 @@ function renderEquipment(item) {
     ).join('');
   }
 
+  let smithing = '';
+  if (item.Smithing) {
+    const s = item.Smithing;
+    const matsHtml = s.Materials.map(m =>
+      `<div class="mat-row"><span class="mat-name">${m.Material}</span><span class="mat-amt">×${m.Amount}</span></div>`
+    ).join('');
+    smithing = `<div class="card-section"><div class="card-section-title">Smithing</div>
+      <div class="card-stats">
+        <div class="card-stat"><span class="stat-name">Smithing Lvl</span><span class="stat-val">${s.Level}</span></div>
+        <div class="card-stat"><span class="stat-name">XP</span><span class="stat-val" style="color:var(--green)">${s.Experience}</span></div>
+        ${s.Duration ? `<div class="card-stat"><span class="stat-name">Duration</span><span class="stat-val">${s.Duration}</span></div>` : ''}
+        ${s.SellCost ? `<div class="card-stat"><span class="stat-name">Sell</span><span class="stat-val" style="color:var(--accent)">${s.SellCost}</span></div>` : ''}
+      </div>${matsHtml}</div>`;
+  }
+
   return `
     <div class="card-head"><span class="card-name">${item.Name}</span>${badge}</div>
     <div class="card-body">
       ${iconHtml}
       ${desc}
       ${reqs || stats ? `<div class="card-stats">${reqs}${stats}</div>` : ''}
+      ${smithing}
       ${item.Location ? `<div class="card-location">${item.Location}</div>` : ''}
     </div>`;
 }
@@ -373,26 +395,25 @@ function renderMonster(m) {
     </div>`;
 }
 
-// ── Smithing renderer ──
-function renderSmithing(r) {
-  const badge = r.Category ? `<span class="card-badge badge-cat">${r.Category}</span>` : '';
-
-  const matsHtml = r.Materials.map(m =>
+// ── Bar renderer ──
+function renderBar(item) {
+  const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
+  const s = item.Smithing || {};
+  const matsHtml = (s.Materials || []).map(m =>
     `<div class="mat-row"><span class="mat-name">${m.Material}</span><span class="mat-amt">×${m.Amount}</span></div>`
   ).join('');
 
   return `
-    <div class="card-head"><span class="card-name">${r.Name}</span>${badge}</div>
+    <div class="card-head"><span class="card-name">${item.Name}</span></div>
     <div class="card-body">
+      ${iconHtml}
       <div class="card-stats">
-        <div class="card-stat"><span class="stat-name">Smithing Lvl</span><span class="stat-val">${r.Level}</span></div>
-        <div class="card-stat"><span class="stat-name">Duration</span><span class="stat-val">${r.Duration}</span></div>
-        <div class="card-stat full"><span class="stat-name">Sell Price</span><span class="stat-val" style="color:var(--accent)">${r.SellCost}</span></div>
+        <div class="card-stat"><span class="stat-name">Smithing Lvl</span><span class="stat-val">${s.Level || '?'}</span></div>
+        <div class="card-stat"><span class="stat-name">XP</span><span class="stat-val" style="color:var(--green)">${s.Experience || '?'}</span></div>
+        ${s.Duration ? `<div class="card-stat"><span class="stat-name">Duration</span><span class="stat-val">${s.Duration}</span></div>` : ''}
+        ${s.SellCost ? `<div class="card-stat full"><span class="stat-name">Sell Price</span><span class="stat-val" style="color:var(--accent)">${s.SellCost}</span></div>` : ''}
       </div>
-      <div class="card-section">
-        <div class="card-section-title">Materials</div>
-        ${matsHtml}
-      </div>
+      ${matsHtml ? `<div class="card-section"><div class="card-section-title">Materials</div>${matsHtml}</div>` : ''}
     </div>`;
 }
 
@@ -411,6 +432,21 @@ function renderOre(item) {
     </div>`;
 }
 
+// ── Fish renderer ──
+function renderFish(item) {
+  const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
+  return `
+    <div class="card-head"><span class="card-name">${item.Name}</span></div>
+    <div class="card-body">
+      ${iconHtml}
+      <div class="card-stats">
+        <div class="card-stat"><span class="stat-name">Fishing Lvl</span><span class="stat-val">${item.Level}</span></div>
+        <div class="card-stat"><span class="stat-name">Experience</span><span class="stat-val" style="color:var(--green)">${item.Experience} XP</span></div>
+      </div>
+      ${item.Location ? `<div class="card-location">${item.Location}</div>` : ''}
+    </div>`;
+}
+
 // ── Gem renderer ──
 function renderGem(item) {
   const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
@@ -423,6 +459,69 @@ function renderGem(item) {
         <div class="card-stat"><span class="stat-name">Affects</span><span class="stat-val">${statLabel(item.StatType)}</span></div>
         <div class="card-stat full"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price}g</span></div>
       </div>
+    </div>`;
+}
+
+// ── Ingredient renderer ──
+function renderIngredient(item) {
+  const pm = item.PotionMaking;
+  if (!pm) {
+    return `
+    <div class="card-head"><span class="card-name">${item.Name}</span><span class="card-badge badge-type">Material</span></div>
+    <div class="card-body">
+      <div class="card-stats">
+        <div class="card-stat full"><span class="stat-name">Intermediate ingredient</span><span class="stat-val">—</span></div>
+      </div>
+    </div>`;
+  }
+  const badge = `<span class="card-badge badge-type">${pm.Action}</span>`;
+  return `
+    <div class="card-head"><span class="card-name">${item.Name}</span>${badge}</div>
+    <div class="card-body">
+      <div class="card-stats">
+        <div class="card-stat"><span class="stat-name">Potion Lvl</span><span class="stat-val">${pm.Level}</span></div>
+        <div class="card-stat"><span class="stat-name">XP</span><span class="stat-val" style="color:var(--green)">${pm.Experience}</span></div>
+        <div class="card-stat full"><span class="stat-name">Output</span><span class="stat-val">${pm.Output}</span></div>
+      </div>
+    </div>`;
+}
+
+// ── Potion renderer ──
+function renderPotion(item) {
+  const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
+  const pm = item.PotionMaking;
+  if (!pm) return `<div class="card-head"><span class="card-name">${item.Name}</span></div><div class="card-body">${iconHtml}</div>`;
+  const badge = `<span class="card-badge badge-type">${pm.Action}</span>`;
+  let matsHtml = '';
+  if (pm.Materials) {
+    matsHtml = pm.Materials.map(m =>
+      `<div class="mat-row"><span class="mat-name">${m.Material}</span><span class="mat-amt">\u00d7${m.Amount}</span></div>`
+    ).join('');
+  }
+  // For bottles, show Small/Large variants
+  let variants = '';
+  if (pm.Small || pm.Large) {
+    const parts = [];
+    if (pm.Small) {
+      const smMats = pm.Small.Materials.map(m => `<div class="mat-row"><span class="mat-name">${m.Material}</span><span class="mat-amt">\u00d7${m.Amount}</span></div>`).join('');
+      parts.push(`<div class="card-section"><div class="card-section-title">Small (${pm.Small.Output})</div>${smMats}</div>`);
+    }
+    if (pm.Large) {
+      const lgMats = pm.Large.Materials.map(m => `<div class="mat-row"><span class="mat-name">${m.Material}</span><span class="mat-amt">\u00d7${m.Amount}</span></div>`).join('');
+      parts.push(`<div class="card-section"><div class="card-section-title">Large (${pm.Large.Output})</div>${lgMats}</div>`);
+    }
+    variants = parts.join('');
+  }
+  return `
+    <div class="card-head"><span class="card-name">${item.Name}</span>${badge}</div>
+    <div class="card-body">
+      ${iconHtml}
+      <div class="card-stats">
+        <div class="card-stat"><span class="stat-name">Potion Lvl</span><span class="stat-val">${pm.Level}</span></div>
+        ${pm.Experience !== null ? `<div class="card-stat"><span class="stat-name">XP</span><span class="stat-val" style="color:var(--green)">${pm.Experience}</span></div>` : ''}
+      </div>
+      ${matsHtml ? `<div class="card-section"><div class="card-section-title">Materials</div>${matsHtml}</div>` : ''}
+      ${variants}
     </div>`;
 }
 

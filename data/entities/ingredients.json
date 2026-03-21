@@ -1,0 +1,146 @@
+[
+  {
+    "Name": "Fish Scales",
+    "PotionMaking": {
+      "Action": "Crush",
+      "Level": 5,
+      "Experience": 30,
+      "Output": "Crushed Fish Scales"
+    }
+  },
+  {
+    "Name": "Mud Root",
+    "PotionMaking": {
+      "Action": "Crush",
+      "Level": 10,
+      "Experience": 35,
+      "Output": "Root Paste"
+    }
+  },
+  {
+    "Name": "Plain Fish Flesh",
+    "PotionMaking": {
+      "Action": "Crush",
+      "Level": 15,
+      "Experience": 40,
+      "Output": "Fish Mash"
+    }
+  },
+  {
+    "Name": "Small Fang",
+    "PotionMaking": {
+      "Action": "Crush",
+      "Level": 20,
+      "Experience": 45,
+      "Output": "2x Fang Dust"
+    }
+  },
+  {
+    "Name": "Hearty Fish Flesh",
+    "PotionMaking": {
+      "Action": "Crush",
+      "Level": 35,
+      "Experience": 80,
+      "Output": "Hearty Fish Mash"
+    }
+  },
+  {
+    "Name": "Small Essence Gland",
+    "PotionMaking": {
+      "Action": "Reduce",
+      "Level": 1,
+      "Experience": 4,
+      "Output": "2x Essence"
+    }
+  },
+  {
+    "Name": "Rare Minnow",
+    "PotionMaking": {
+      "Action": "Reduce",
+      "Level": 1,
+      "Experience": 50,
+      "Output": "5x Fish Oil"
+    }
+  },
+  {
+    "Name": "Rare Blue Gill",
+    "PotionMaking": {
+      "Action": "Reduce",
+      "Level": 25,
+      "Experience": 140,
+      "Output": "15x Fish Oil"
+    }
+  },
+  {
+    "Name": "Essence Gland",
+    "PotionMaking": {
+      "Action": "Reduce",
+      "Level": 30,
+      "Experience": 10,
+      "Output": "10x Essence"
+    }
+  },
+  {
+    "Name": "Hearty Fish Mash",
+    "PotionMaking": {
+      "Action": "Reduce",
+      "Level": 35,
+      "Experience": 90,
+      "Output": "Hearty Extract"
+    }
+  },
+  {
+    "Name": "Attack Potion Brew"
+  },
+  {
+    "Name": "Crushed Fish Scales"
+  },
+  {
+    "Name": "Essence"
+  },
+  {
+    "Name": "Fang Dust"
+  },
+  {
+    "Name": "Fine Fish Scales"
+  },
+  {
+    "Name": "Fish Mash"
+  },
+  {
+    "Name": "Fish Oil"
+  },
+  {
+    "Name": "Fishing Potion Brew"
+  },
+  {
+    "Name": "Health Potion Brew"
+  },
+  {
+    "Name": "Hearty Extract"
+  },
+  {
+    "Name": "Large Vial"
+  },
+  {
+    "Name": "Mining Potion Brew"
+  },
+  {
+    "Name": "Root Paste"
+  },
+  {
+    "Name": "Scrap Fish Flesh"
+  },
+  {
+    "Name": "Shields Potion Brew"
+  },
+  {
+    "Name": "Small Vial"
+  },
+  {
+    "Name": "Strong Health Potion Brew"
+  },
+  {
+    "Name": "Weak Health Potion Brew"
+  }
+]
