@@ -62,22 +62,39 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .home-link{position:absolute;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s,text-shadow 0.2s;}
 .home-link:hover{color:var(--accent-hover);text-shadow:0 0 12px rgba(212,168,67,0.4);}
 
-/* ── Category Tabs ── */
-.cat-tabs{
-  display:flex;flex-wrap:wrap;gap:0.35rem;justify-content:center;
-  max-width:1100px;margin:1.5rem auto 0.75rem;padding:0 1rem;
+/* ── Page Layout ── */
+.page-layout{display:flex;max-width:1300px;margin:0 auto;position:relative;z-index:2;}
+
+/* ── Left Sidebar ── */
+.side-filters{
+  position:sticky;top:0;align-self:flex-start;width:170px;flex-shrink:0;
+  height:100vh;overflow-y:auto;padding:1rem 0.5rem 1rem 0.75rem;
+  border-right:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(18,24,20,0.6),rgba(15,22,18,0.4));
+}
+.side-filters-title{
+  font-family:'Cinzel',serif;font-size:0.6rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.08em;color:var(--text-muted);padding:0.3rem 0.4rem 0.5rem;
 }
 .cat-tab{
-  font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
-  padding:0.35rem 0.8rem;border-radius:3px;cursor:pointer;
-  background:rgba(38,50,44,0.74);border:1px solid var(--border);color:var(--text-muted);
-  transition:all 0.2s;
+  display:block;width:100%;text-align:left;
+  font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;letter-spacing:0.03em;
+  padding:0.4rem 0.6rem;border-radius:3px;cursor:pointer;
+  background:transparent;border:1px solid transparent;color:var(--text-muted);
+  transition:all 0.2s;margin-bottom:0.15rem;
 }
-.cat-tab:hover{border-color:var(--text-muted);color:var(--text);}
+.cat-tab:hover{border-color:var(--text-muted);color:var(--text);background:rgba(38,50,44,0.5);}
 .cat-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.12);}
 
+/* ── Main Content ── */
+.main-content{flex:1;min-width:0;padding:1rem 1rem 2rem;}
+
 /* ── Search ── */
-.search-bar{max-width:1100px;margin:0 auto 1rem;padding:0 1rem;}
+.search-bar{
+  margin:0 0 0.75rem;padding:0.6rem 0.75rem;
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  backdrop-filter:blur(10px);box-shadow:var(--panel-shadow);
+}
 .search-bar input{
   width:100%;padding:0.5rem 0.85rem;font-family:'Crimson Text',serif;font-size:0.9rem;
   background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
@@ -89,7 +106,6 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 
 /* ── Card Grid ── */
 .card-grid{
-  max-width:1100px;margin:0 auto;padding:0 1rem 2rem;
   display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0.75rem;
 }
 .item-card{
@@ -144,7 +160,15 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .site-footer a:hover{color:var(--accent-hover);}
 
 /* ── Item Count ── */
-.item-count{max-width:1100px;margin:0 auto;padding:0 1rem 0.5rem;font-family:'Cinzel',serif;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.03em;}
+.item-count{padding:0 0 0.5rem;font-family:'Cinzel',serif;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.03em;}
+
+@media(max-width:700px){
+  .page-layout{flex-direction:column;}
+  .side-filters{position:relative;width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:0.5rem;}
+  .side-filters-title{display:none;}
+  #cat-tabs{display:flex;flex-wrap:wrap;gap:0.25rem;}
+  .cat-tab{display:inline-block;width:auto;font-size:0.62rem;padding:0.3rem 0.5rem;}
+}
 
 @media(max-width:600px){
   .card-grid{grid-template-columns:1fr;}
@@ -182,14 +206,19 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
   <a class="home-link" href="../index.html">← Back to Home Page</a>
 </header>
 
-<div class="page-content">
-  <nav class="cat-tabs" id="cat-tabs"></nav>
-  <div class="search-bar">
-    <input type="text" id="search-input" placeholder="Search items by name..." />
+<div class="page-layout">
+  <aside class="side-filters">
+    <div class="side-filters-title">Categories</div>
+    <nav id="cat-tabs"></nav>
+  </aside>
+  <div class="main-content">
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search items by name..." />
+    </div>
+    <div class="item-count" id="item-count"></div>
+    <div class="card-grid" id="card-grid"></div>
+    <div class="no-results" id="no-results" style="display:none;">No items match your search.</div>
   </div>
-  <div class="item-count" id="item-count"></div>
-  <div class="card-grid" id="card-grid"></div>
-  <div class="no-results" id="no-results" style="display:none;">No items match your search.</div>
 </div>
 
 <footer class="site-footer">
@@ -237,6 +266,14 @@ function typeLabel(t){ return TYPE_LABELS[t] || t.replace(/_/g,' ').replace(/\b\
 
 // ── Build tabs ──
 const tabsEl = document.getElementById('cat-tabs');
+// Add 'All' tab first
+const allBtn = document.createElement('button');
+allBtn.className = 'cat-tab';
+allBtn.textContent = '📚 All';
+allBtn.dataset.key = 'all';
+allBtn.addEventListener('click', () => selectCategory('all'));
+tabsEl.appendChild(allBtn);
+
 CATEGORIES.forEach(cat => {
   const btn = document.createElement('button');
   btn.className = 'cat-tab';
@@ -250,10 +287,24 @@ CATEGORIES.forEach(cat => {
 async function selectCategory(key) {
   activeCat = key;
   document.querySelectorAll('.cat-tab').forEach(b => b.classList.toggle('active', b.dataset.key === key));
-  // Update URL
   history.replaceState(null, '', '?cat=' + key);
 
-  if (!cache[key]) {
+  if (key === 'all') {
+    // Load all categories
+    if (!cache['all']) {
+      const allItems = [];
+      await Promise.all(CATEGORIES.map(async cat => {
+        if (!cache[cat.key]) {
+          try {
+            const res = await fetch(cat.path);
+            cache[cat.key] = await res.json();
+          } catch(e) { cache[cat.key] = []; }
+        }
+        cache[cat.key].forEach(item => allItems.push({...item, _cat: cat.key}));
+      }));
+      cache['all'] = allItems;
+    }
+  } else if (!cache[key]) {
     const cat = CATEGORIES.find(c => c.key === key);
     try {
       const res = await fetch(cat.path);
@@ -293,13 +344,14 @@ function renderCards() {
     const card = document.createElement('div');
     card.className = 'item-card';
 
-    if (activeCat === 'monsters') card.innerHTML = renderMonster(item);
-    else if (activeCat === 'bars') card.innerHTML = renderBar(item);
-    else if (activeCat === 'ores') card.innerHTML = renderOre(item);
-    else if (activeCat === 'fish') card.innerHTML = renderFish(item);
-    else if (activeCat === 'gems') card.innerHTML = renderGem(item);
-    else if (activeCat === 'ingredients') card.innerHTML = renderIngredient(item);
-    else if (activeCat === 'potions') card.innerHTML = renderPotion(item);
+    const cat = item._cat || activeCat;
+    if (cat === 'monsters') card.innerHTML = renderMonster(item);
+    else if (cat === 'bars') card.innerHTML = renderBar(item);
+    else if (cat === 'ores') card.innerHTML = renderOre(item);
+    else if (cat === 'fish') card.innerHTML = renderFish(item);
+    else if (cat === 'gems') card.innerHTML = renderGem(item);
+    else if (cat === 'ingredients') card.innerHTML = renderIngredient(item);
+    else if (cat === 'potions') card.innerHTML = renderPotion(item);
     else card.innerHTML = renderEquipment(item);
 
     grid.appendChild(card);
