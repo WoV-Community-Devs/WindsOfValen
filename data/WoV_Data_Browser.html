@@ -85,6 +85,34 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 }
 .cat-tab:hover{border-color:var(--text-muted);color:var(--text);background:rgba(38,50,44,0.5);}
 .cat-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.12);}
+.cat-tab.cat-sub{padding-left:1.1rem;font-size:0.64rem;}
+.cat-tab.cat-sub-deep{padding-left:1.8rem;font-size:0.62rem;border-left:1px solid rgba(100,116,90,0.4);margin-left:0.9rem;}
+
+/* ── Group headers ── */
+.cat-group-header{
+  display:block;width:100%;text-align:left;
+  font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;
+  padding:0.45rem 0.6rem;margin-top:0.5rem;cursor:pointer;
+  background:transparent;border:none;border-left:3px solid var(--text-muted);
+  color:var(--text);transition:all 0.2s;border-radius:0;
+}
+.cat-group-header:first-of-type{margin-top:0.2rem;}
+.cat-group-header:hover{border-left-color:var(--accent);color:var(--accent);background:rgba(212,168,67,0.06);}
+.cat-group-header.active{border-left-color:var(--accent);color:var(--accent);background:rgba(212,168,67,0.08);}
+.cat-group-header.child-active{border-left-color:var(--text-muted);color:var(--text);}
+
+/* ── Sub-filters ── */
+.sub-filters{padding:0.15rem 0 0.15rem 0.8rem;display:none;}
+.sub-filters.visible{display:block;}
+.sub-filter{
+  display:block;width:100%;text-align:left;
+  font-family:'Crimson Text',serif;font-size:0.72rem;font-weight:600;
+  padding:0.25rem 0.5rem;border-radius:2px;cursor:pointer;
+  background:transparent;border:none;color:var(--text-muted);
+  transition:all 0.15s;margin-bottom:0.1rem;
+}
+.sub-filter:hover{color:var(--text);}
+.sub-filter.active{color:var(--accent);}
 
 /* ── Main Content ── */
 .main-content{flex:1;min-width:0;padding:1rem 1rem 2rem;}
@@ -267,8 +295,22 @@ const TYPE_LABELS = {
 };
 function typeLabel(t){ return TYPE_LABELS[t] || t.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()); }
 
-// ── Build tabs ──
+// ── Sidebar groups ──
+const GROUPS = [
+  { label:'Equipment', keys:['weapons','armor','shields','jewelry','gems','ammo'] },
+  { label:'Crafting',  keys:['tools','bars','ingredients','potions'] },
+  { label:'Gathering', keys:['ores','fish'] },
+  { label:'NPCs',      keys:['monsters','mobs','bosses'] },
+];
+
+// Virtual categories (derived from monsters)
+const VIRTUAL_CATS = {
+  mobs:   { label:'Mobs',   icon:'🗡️', sourceKey:'monsters', filter: m => !m.IsBoss },
+  bosses: { label:'Bosses', icon:'💀', sourceKey:'monsters', filter: m => !!m.IsBoss },
+};
+
 const tabsEl = document.getElementById('cat-tabs');
+
 // Add 'All' tab first
 const allBtn = document.createElement('button');
 allBtn.className = 'cat-tab';
@@ -277,36 +319,82 @@ allBtn.dataset.key = 'all';
 allBtn.addEventListener('click', () => selectCategory('all'));
 tabsEl.appendChild(allBtn);
 
-CATEGORIES.forEach(cat => {
-  const btn = document.createElement('button');
-  btn.className = 'cat-tab';
-  btn.textContent = cat.icon + ' ' + cat.label;
-  btn.dataset.key = cat.key;
-  btn.addEventListener('click', () => selectCategory(cat.key));
-  tabsEl.appendChild(btn);
+GROUPS.forEach(group => {
+  // Group header (clickable to show combined view)
+  const groupKey = 'group_' + group.label.toLowerCase();
+  const header = document.createElement('button');
+  header.className = 'cat-group-header';
+  header.textContent = group.label;
+  header.dataset.key = groupKey;
+  header.addEventListener('click', () => selectCategory(groupKey));
+  tabsEl.appendChild(header);
+
+  // Individual category tabs
+  group.keys.forEach(key => {
+    const cat = CATEGORIES.find(c => c.key === key);
+    const virt = VIRTUAL_CATS[key];
+    const label = cat ? cat.icon + ' ' + cat.label : (virt ? virt.icon + ' ' + virt.label : key);
+    const btn = document.createElement('button');
+    btn.className = 'cat-tab cat-sub' + (virt ? ' cat-sub-deep' : '');
+    btn.textContent = label;
+    btn.dataset.key = key;
+    btn.addEventListener('click', () => selectCategory(key));
+    tabsEl.appendChild(btn);
+  });
 });
 
 // ── Select category ──
 async function selectCategory(key) {
   activeCat = key;
+  // Highlight: group headers and individual tabs
   document.querySelectorAll('.cat-tab').forEach(b => b.classList.toggle('active', b.dataset.key === key));
+  document.querySelectorAll('.cat-group-header').forEach(h => {
+    const isGroupActive = h.dataset.key === key;
+    const group = GROUPS.find(g => 'group_' + g.label.toLowerCase() === h.dataset.key);
+    const isChildActive = group && group.keys.includes(key);
+    h.classList.remove('active','child-active');
+    if (isGroupActive) h.classList.add('active');
+    else if (isChildActive) h.classList.add('child-active');
+  });
   history.replaceState(null, '', '?cat=' + key);
 
   if (key === 'all') {
-    // Load all categories
     if (!cache['all']) {
       const allItems = [];
       await Promise.all(CATEGORIES.map(async cat => {
         if (!cache[cat.key]) {
-          try {
-            const res = await fetch(cat.path);
-            cache[cat.key] = await res.json();
-          } catch(e) { cache[cat.key] = []; }
+          try { const res = await fetch(cat.path); cache[cat.key] = await res.json(); }
+          catch(e) { cache[cat.key] = []; }
         }
         cache[cat.key].forEach(item => allItems.push({...item, _cat: cat.key}));
       }));
       cache['all'] = allItems;
     }
+  } else if (key.startsWith('group_')) {
+    // Load a group of categories combined
+    const group = GROUPS.find(g => 'group_' + g.label.toLowerCase() === key);
+    if (group && !cache[key]) {
+      const items = [];
+      await Promise.all(group.keys.map(async k => {
+        const cat = CATEGORIES.find(c => c.key === k);
+        if (!cat) return;
+        if (!cache[k]) {
+          try { const res = await fetch(cat.path); cache[k] = await res.json(); }
+          catch(e) { cache[k] = []; }
+        }
+        cache[k].forEach(item => items.push({...item, _cat: k}));
+      }));
+      cache[key] = items;
+    }
+  } else if (VIRTUAL_CATS[key]) {
+    // Virtual category: load source then filter
+    const vc = VIRTUAL_CATS[key];
+    if (!cache[vc.sourceKey]) {
+      const cat = CATEGORIES.find(c => c.key === vc.sourceKey);
+      try { const res = await fetch(cat.path); cache[vc.sourceKey] = await res.json(); }
+      catch(e) { cache[vc.sourceKey] = []; }
+    }
+    cache[key] = cache[vc.sourceKey].filter(vc.filter).map(item => ({...item, _cat: vc.sourceKey}));
   } else if (!cache[key]) {
     const cat = CATEGORIES.find(c => c.key === key);
     try {
