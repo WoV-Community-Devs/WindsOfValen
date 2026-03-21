@@ -4,9 +4,16 @@
     "Type": "HELMET",
     "Requirements": [],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 3 },
-      { "Type": "SLASH_DEFENSE", "Value": 3 }
-    ]
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 3
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 3
+      }
+    ],
+    "Icon": "leather_hood"
   },
   {
     "Name": "Skeleton Helmet",
@@ -15,8 +22,14 @@
     "Type": "HELMET",
     "Requirements": [],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 7 },
-      { "Type": "SLASH_DEFENSE", "Value": 5 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 7
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 5
+      }
     ]
   },
   {
@@ -26,8 +39,14 @@
     "Type": "HELMET",
     "Requirements": [],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 6 },
-      { "Type": "SLASH_DEFENSE", "Value": 6 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 6
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 6
+      }
     ]
   },
   {
@@ -35,10 +54,21 @@
     "Description": "Sturdy helmet made from iron.",
     "Icon": "iron_helmet",
     "Type": "HELMET",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 10 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 10
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 10 },
-      { "Type": "SLASH_DEFENSE", "Value": 10 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 10
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 10
+      }
     ]
   },
   {
@@ -46,10 +76,21 @@
     "Description": "Strong helmet made from steel.",
     "Icon": "steel_helmet",
     "Type": "HELMET",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 20 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 20
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 16 },
-      { "Type": "SLASH_DEFENSE", "Value": 16 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 16
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 16
+      }
     ]
   },
   {
@@ -57,10 +98,21 @@
     "Description": "Elegant helmet made from mithril.",
     "Icon": "mithril_helmet",
     "Type": "HELMET",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 30 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 30
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 25 },
-      { "Type": "SLASH_DEFENSE", "Value": 25 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 25
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 25
+      }
     ]
   },
   {
@@ -68,9 +120,16 @@
     "Type": "CHEST",
     "Requirements": [],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 4 },
-      { "Type": "SLASH_DEFENSE", "Value": 3 }
-    ]
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 4
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 3
+      }
+    ],
+    "Icon": "leather_armor"
   },
   {
     "Name": "Bronze Platebody",
@@ -79,8 +138,14 @@
     "Type": "CHEST",
     "Requirements": [],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 9 },
-      { "Type": "SLASH_DEFENSE", "Value": 7 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 9
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 7
+      }
     ]
   },
   {
@@ -88,10 +153,21 @@
     "Description": "Sturdy platebody made from iron.",
     "Icon": "iron_platebody",
     "Type": "CHEST",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 10 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 10
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 14 },
-      { "Type": "SLASH_DEFENSE", "Value": 11 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 14
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 11
+      }
     ]
   },
   {
@@ -99,10 +175,21 @@
     "Description": "Strong platebody made from steel.",
     "Icon": "steel_platebody",
     "Type": "CHEST",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 20 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 20
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 21 },
-      { "Type": "SLASH_DEFENSE", "Value": 18 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 21
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 18
+      }
     ]
   },
   {
@@ -110,10 +197,21 @@
     "Description": "Elegant platebody made from mithril.",
     "Icon": "mithril_platebody",
     "Type": "CHEST",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 30 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 30
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 35 },
-      { "Type": "SLASH_DEFENSE", "Value": 29 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 35
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 29
+      }
     ]
   },
   {
@@ -121,9 +219,16 @@
     "Type": "LEGS",
     "Requirements": [],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 4 },
-      { "Type": "SLASH_DEFENSE", "Value": 3 }
-    ]
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 4
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 3
+      }
+    ],
+    "Icon": "leather_legs"
   },
   {
     "Name": "Bronze Platelegs",
@@ -132,8 +237,14 @@
     "Type": "LEGS",
     "Requirements": [],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 8 },
-      { "Type": "SLASH_DEFENSE", "Value": 6 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 8
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 6
+      }
     ]
   },
   {
@@ -141,10 +252,21 @@
     "Description": "Sturdy platelegs made from iron.",
     "Icon": "iron_platelegs",
     "Type": "LEGS",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 10 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 10
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 13 },
-      { "Type": "SLASH_DEFENSE", "Value": 10 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 13
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 10
+      }
     ]
   },
   {
@@ -152,10 +274,21 @@
     "Description": "Strong platelegs made from steel.",
     "Icon": "steel_platelegs",
     "Type": "LEGS",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 20 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 20
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 21 },
-      { "Type": "SLASH_DEFENSE", "Value": 16 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 21
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 16
+      }
     ]
   },
   {
@@ -163,10 +296,21 @@
     "Description": "Elegant platelegs made from mithril.",
     "Icon": "mithril_platelegs",
     "Type": "LEGS",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 30 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 30
+      }
+    ],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 30 },
-      { "Type": "SLASH_DEFENSE", "Value": 27 }
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 30
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 27
+      }
     ]
   },
   {
@@ -174,11 +318,25 @@
     "Description": "A menacing pair of gloves.",
     "Icon": "berserker_gloves",
     "Type": "GLOVES",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 15 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 15
+      }
+    ],
     "Stats": [
-      { "Type": "MELEE_POWER", "Value": 10 },
-      { "Type": "SLASH_DEFENSE", "Value": 5 },
-      { "Type": "PIECE_DEFENSE", "Value": 5 }
+      {
+        "Type": "MELEE_POWER",
+        "Value": 10
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 5
+      },
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 5
+      }
     ]
   },
   {
@@ -186,20 +344,41 @@
     "Type": "BOOTS",
     "Requirements": [],
     "Stats": [
-      { "Type": "PIECE_DEFENSE", "Value": 2 },
-      { "Type": "SLASH_DEFENSE", "Value": 2 }
-    ]
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 2
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 2
+      }
+    ],
+    "Icon": "leather_boots"
   },
   {
     "Name": "Berserker Boots",
     "Description": "A menacing pair of boots.",
     "Icon": "berserker_boots",
     "Type": "BOOTS",
-    "Requirements": [{ "Skill": "DEFENSE", "Value": 25 }],
+    "Requirements": [
+      {
+        "Skill": "DEFENSE",
+        "Value": 25
+      }
+    ],
     "Stats": [
-      { "Type": "MELEE_POWER", "Value": 20 },
-      { "Type": "PIECE_DEFENSE", "Value": 7 },
-      { "Type": "SLASH_DEFENSE", "Value": 7 }
+      {
+        "Type": "MELEE_POWER",
+        "Value": 20
+      },
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 7
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 7
+      }
     ]
   }
 ]

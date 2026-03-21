@@ -1,0 +1,412 @@
+[
+  {
+    "Name": "Small Essence Gland",
+    "Category": "Reduction",
+    "Level": 1,
+    "Experience": 4,
+    "Input": "Small Essence Gland",
+    "Output": "2x Essence"
+  },
+  {
+    "Name": "Rare Minnow",
+    "Category": "Reduction",
+    "Level": 1,
+    "Experience": 50,
+    "Input": "Rare Minnow",
+    "Output": "5x Fish Oil"
+  },
+  {
+    "Name": "Rare Blue Gill",
+    "Category": "Reduction",
+    "Level": 25,
+    "Experience": 140,
+    "Input": "Rare Blue Gill",
+    "Output": "15x Fish Oil"
+  },
+  {
+    "Name": "Essence Gland",
+    "Category": "Reduction",
+    "Level": 30,
+    "Experience": 10,
+    "Input": "Essence Gland",
+    "Output": "10x Essence"
+  },
+  {
+    "Name": "Hearty Fish Mash",
+    "Category": "Reduction",
+    "Level": 35,
+    "Experience": 90,
+    "Input": "Hearty Fish Mash",
+    "Output": "Hearty Extract"
+  },
+  {
+    "Name": "Weak Health Potion",
+    "Category": "Brew",
+    "Level": 1,
+    "Experience": 500,
+    "Materials": [
+      {
+        "Material": "Scrap Fish Flesh",
+        "Amount": 10
+      },
+      {
+        "Material": "Essence",
+        "Amount": 25
+      }
+    ]
+  },
+  {
+    "Name": "Fishing Potion",
+    "Category": "Brew",
+    "Level": 5,
+    "Experience": 500,
+    "Materials": [
+      {
+        "Material": "Fish Oil",
+        "Amount": 10
+      },
+      {
+        "Material": "Essence",
+        "Amount": 25
+      }
+    ]
+  },
+  {
+    "Name": "Shields Potion",
+    "Category": "Brew",
+    "Level": 10,
+    "Experience": 1500,
+    "Materials": [
+      {
+        "Material": "Crushed Fish Scales",
+        "Amount": 10
+      },
+      {
+        "Material": "Essence",
+        "Amount": 50
+      }
+    ]
+  },
+  {
+    "Name": "Mining Potion",
+    "Category": "Brew",
+    "Level": 15,
+    "Experience": 1500,
+    "Materials": [
+      {
+        "Material": "Root Paste",
+        "Amount": 10
+      },
+      {
+        "Material": "Essence",
+        "Amount": 50
+      }
+    ]
+  },
+  {
+    "Name": "Health Potion",
+    "Category": "Brew",
+    "Level": 20,
+    "Experience": 2500,
+    "Materials": [
+      {
+        "Material": "Fish Mash",
+        "Amount": 10
+      },
+      {
+        "Material": "Essence",
+        "Amount": 50
+      }
+    ]
+  },
+  {
+    "Name": "Attack Potion",
+    "Category": "Brew",
+    "Level": 30,
+    "Experience": 5000,
+    "Materials": [
+      {
+        "Material": "Fang Dust",
+        "Amount": 10
+      },
+      {
+        "Material": "Essence",
+        "Amount": 200
+      }
+    ]
+  },
+  {
+    "Name": "Strong Health Potion",
+    "Category": "Brew",
+    "Level": 40,
+    "Experience": 3250,
+    "Materials": [
+      {
+        "Material": "Hearty Extract",
+        "Amount": 10
+      },
+      {
+        "Material": "Essence",
+        "Amount": 200
+      }
+    ]
+  },
+  {
+    "Name": "Strong Shield Potion",
+    "Category": "Brew",
+    "Level": 50,
+    "Experience": null,
+    "Materials": [
+      {
+        "Material": "Fine Fish Scales",
+        "Amount": 10
+      },
+      {
+        "Material": "Essence",
+        "Amount": 500
+      }
+    ]
+  },
+  {
+    "Name": "Minnow",
+    "Category": "Cutting",
+    "Level": 1,
+    "Experience": 10,
+    "Input": "Minnow",
+    "Output": "2x Small Essence Gland"
+  },
+  {
+    "Name": "Common Trout",
+    "Category": "Cutting",
+    "Level": 5,
+    "Experience": 10,
+    "Input": "Common Trout",
+    "Output": "Scrap Fish Flesh, Small Essence Gland"
+  },
+  {
+    "Name": "Perch",
+    "Category": "Cutting",
+    "Level": 10,
+    "Experience": 30,
+    "Input": "Perch",
+    "Output": "Fish Scales, Small Essence Gland"
+  },
+  {
+    "Name": "Bass",
+    "Category": "Cutting",
+    "Level": 20,
+    "Experience": 20,
+    "Input": "Bass",
+    "Output": "Plain Fish Flesh, Small Essence Gland"
+  },
+  {
+    "Name": "Blue Gill",
+    "Category": "Cutting",
+    "Level": 30,
+    "Experience": 40,
+    "Input": "Blue Gill",
+    "Output": "2x Essence Gland"
+  },
+  {
+    "Name": "Elder Trout",
+    "Category": "Cutting",
+    "Level": 40,
+    "Experience": 70,
+    "Input": "Elder Trout",
+    "Output": "Essence Gland, Hearty Fish Flesh"
+  },
+  {
+    "Name": "Small Weak Health Potion",
+    "Category": "Bottle",
+    "Level": 1,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Small Vial", "Amount": 20 },
+      { "Material": "Weak Health Potion Brew", "Amount": 1 }
+    ],
+    "Output": "20x Small Weak Health Potion"
+  },
+  {
+    "Name": "Small Fishing Potion",
+    "Category": "Bottle",
+    "Level": 5,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Small Vial", "Amount": 20 },
+      { "Material": "Fishing Potion Brew", "Amount": 1 }
+    ],
+    "Output": "20x Small Fishing Potion"
+  },
+  {
+    "Name": "Small Shields Potion",
+    "Category": "Bottle",
+    "Level": 10,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Small Vial", "Amount": 20 },
+      { "Material": "Shields Potion Brew", "Amount": 1 }
+    ],
+    "Output": "20x Small Shields Potion"
+  },
+  {
+    "Name": "Small Mining Potion",
+    "Category": "Bottle",
+    "Level": 15,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Small Vial", "Amount": 20 },
+      { "Material": "Mining Potion Brew", "Amount": 1 }
+    ],
+    "Output": "20x Small Mining Potion"
+  },
+  {
+    "Name": "Small Health Potion",
+    "Category": "Bottle",
+    "Level": 20,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Small Vial", "Amount": 1 },
+      { "Material": "Health Potion Brew", "Amount": 1 }
+    ],
+    "Output": "20x Small Health Potion"
+  },
+  {
+    "Name": "Small Attack Potion",
+    "Category": "Bottle",
+    "Level": 25,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Small Vial", "Amount": 20 },
+      { "Material": "Attack Potion Brew", "Amount": 1 }
+    ],
+    "Output": "20x Small Attack Potion"
+  },
+  {
+    "Name": "Large Weak Health Potion",
+    "Category": "Bottle",
+    "Level": 25,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Large Vial", "Amount": 10 },
+      { "Material": "Weak Health Potion Brew", "Amount": 1 }
+    ],
+    "Output": "10x Large Weak Health Potion"
+  },
+  {
+    "Name": "Large Fishing Potion",
+    "Category": "Bottle",
+    "Level": 25,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Large Vial", "Amount": 10 },
+      { "Material": "Fishing Potion Brew", "Amount": 1 }
+    ],
+    "Output": "10x Large Fishing Potion"
+  },
+  {
+    "Name": "Large Shields Potion",
+    "Category": "Bottle",
+    "Level": 25,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Large Vial", "Amount": 10 },
+      { "Material": "Shields Potion Brew", "Amount": 1 }
+    ],
+    "Output": "10x Large Shields Potion"
+  },
+  {
+    "Name": "Large Mining Potion",
+    "Category": "Bottle",
+    "Level": 25,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Large Vial", "Amount": 10 },
+      { "Material": "Mining Potion Brew", "Amount": 1 }
+    ],
+    "Output": "10x Large Mining Potion"
+  },
+  {
+    "Name": "Large Health Potion",
+    "Category": "Bottle",
+    "Level": 25,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Large Vial", "Amount": 10 },
+      { "Material": "Health Potion Brew", "Amount": 1 }
+    ],
+    "Output": "10x Large Health Potion"
+  },
+  {
+    "Name": "Large Attack Potion",
+    "Category": "Bottle",
+    "Level": 25,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Large Vial", "Amount": 10 },
+      { "Material": "Attack Potion Brew", "Amount": 1 }
+    ],
+    "Output": "10x Large Attack Potion"
+  },
+  {
+    "Name": "Small Strong Health Potion",
+    "Category": "Bottle",
+    "Level": 40,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Small Vial", "Amount": 20 },
+      { "Material": "Strong Health Potion Brew", "Amount": 1 }
+    ],
+    "Output": "20x Small Strong Health Potion"
+  },
+  {
+    "Name": "Large Strong Health Potion",
+    "Category": "Bottle",
+    "Level": 40,
+    "Experience": 200,
+    "Materials": [
+      { "Material": "Large Vial", "Amount": 10 },
+      { "Material": "Strong Health Potion Brew", "Amount": 1 }
+    ],
+    "Output": "10x Large Strong Health Potion"
+  },
+  {
+    "Name": "Fish Scales",
+    "Category": "Crushing",
+    "Level": 5,
+    "Experience": 30,
+    "Input": "Fish Scales",
+    "Output": "Crushed Fish Scales"
+  },
+  {
+    "Name": "Mud Root",
+    "Category": "Crushing",
+    "Level": 10,
+    "Experience": 35,
+    "Input": "Mud Root",
+    "Output": "Root Paste"
+  },
+  {
+    "Name": "Plain Fish Flesh",
+    "Category": "Crushing",
+    "Level": 15,
+    "Experience": 40,
+    "Input": "Plain Fish Flesh",
+    "Output": "Fish Mash"
+  },
+  {
+    "Name": "Small Fang",
+    "Category": "Crushing",
+    "Level": 20,
+    "Experience": 45,
+    "Input": "Small Fang",
+    "Output": "2x Fang Dust"
+  },
+  {
+    "Name": "Hearty Fish Flesh",
+    "Category": "Crushing",
+    "Level": 35,
+    "Experience": 80,
+    "Input": "Hearty Fish Flesh",
+    "Output": "Hearty Fish Mash"
+  }
+]

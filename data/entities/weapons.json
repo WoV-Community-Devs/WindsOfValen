@@ -4,12 +4,29 @@
     "Description": "Made of copper, very weak.",
     "Icon": "copper_sword",
     "Type": "WEAPON_1H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 1 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 1
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 120 },
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "SLASH_ACCURACY", "Value": 8 },
-      { "Type": "QUICK_DAMAGE", "Value": 10 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 120
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "SLASH_ACCURACY",
+        "Value": 8
+      },
+      {
+        "Type": "QUICK_DAMAGE",
+        "Value": 10
+      }
     ]
   },
   {
@@ -17,12 +34,29 @@
     "Description": "Basic sword made from Bronze.",
     "Icon": "bronze_sword",
     "Type": "WEAPON_1H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 1 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 1
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 120 },
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "SLASH_ACCURACY", "Value": 15 },
-      { "Type": "QUICK_DAMAGE", "Value": 15 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 120
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "SLASH_ACCURACY",
+        "Value": 15
+      },
+      {
+        "Type": "QUICK_DAMAGE",
+        "Value": 15
+      }
     ]
   },
   {
@@ -30,12 +64,29 @@
     "Description": "Sturdy sword made from Iron.",
     "Icon": "iron_sword",
     "Type": "WEAPON_1H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 10 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 10
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 120 },
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "SLASH_ACCURACY", "Value": 30 },
-      { "Type": "QUICK_DAMAGE", "Value": 25 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 120
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "SLASH_ACCURACY",
+        "Value": 30
+      },
+      {
+        "Type": "QUICK_DAMAGE",
+        "Value": 25
+      }
     ]
   },
   {
@@ -43,12 +94,29 @@
     "Description": "Sturdy sword made from Steel.",
     "Icon": "steel_sword",
     "Type": "WEAPON_1H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 20 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 20
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 120 },
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "SLASH_ACCURACY", "Value": 50 },
-      { "Type": "QUICK_DAMAGE", "Value": 40 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 120
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "SLASH_ACCURACY",
+        "Value": 50
+      },
+      {
+        "Type": "QUICK_DAMAGE",
+        "Value": 40
+      }
     ]
   },
   {
@@ -56,12 +124,29 @@
     "Description": "Mystical sword made from mythril.",
     "Icon": "mithril_sword",
     "Type": "WEAPON_1H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 30 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 30
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 120 },
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "SLASH_ACCURACY", "Value": 75 },
-      { "Type": "QUICK_DAMAGE", "Value": 60 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 120
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "SLASH_ACCURACY",
+        "Value": 75
+      },
+      {
+        "Type": "QUICK_DAMAGE",
+        "Value": 60
+      }
     ]
   },
   {
@@ -69,12 +154,29 @@
     "Description": "A rapier used by once proud pioneer.",
     "Icon": "skeleton_rapier",
     "Type": "WEAPON_1H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 30 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 30
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 120 },
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "PIECE_ACCURACY", "Value": 75 },
-      { "Type": "QUICK_DAMAGE", "Value": 60 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 120
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "PIECE_ACCURACY",
+        "Value": 75
+      },
+      {
+        "Type": "QUICK_DAMAGE",
+        "Value": 60
+      }
     ]
   },
   {
@@ -82,12 +184,29 @@
     "Description": "A make shift goblin axe.",
     "Icon": "goblin_axe",
     "Type": "WEAPON_2H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 5 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 5
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 150 },
-      { "Type": "ATTACK_SPEED", "Value": 3 },
-      { "Type": "SLASH_ACCURACY", "Value": 30 },
-      { "Type": "HEAVY_DAMAGE", "Value": 40 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 150
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 3
+      },
+      {
+        "Type": "SLASH_ACCURACY",
+        "Value": 30
+      },
+      {
+        "Type": "HEAVY_DAMAGE",
+        "Value": 40
+      }
     ]
   },
   {
@@ -95,12 +214,29 @@
     "Description": "A powerful spear.",
     "Icon": "bandit_spear",
     "Type": "WEAPON_2H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 15 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 15
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 150 },
-      { "Type": "ATTACK_SPEED", "Value": 3 },
-      { "Type": "PIECE_ACCURACY", "Value": 50 },
-      { "Type": "HEAVY_DAMAGE", "Value": 60 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 150
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 3
+      },
+      {
+        "Type": "PIECE_ACCURACY",
+        "Value": 50
+      },
+      {
+        "Type": "HEAVY_DAMAGE",
+        "Value": 60
+      }
     ]
   },
   {
@@ -108,12 +244,29 @@
     "Description": "A dark and powerful greatsword.",
     "Icon": "skeleton_greatsword",
     "Type": "WEAPON_2H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 25 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 25
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 150 },
-      { "Type": "ATTACK_SPEED", "Value": 3 },
-      { "Type": "SLASH_ACCURACY", "Value": 70 },
-      { "Type": "HEAVY_DAMAGE", "Value": 100 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 150
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 3
+      },
+      {
+        "Type": "SLASH_ACCURACY",
+        "Value": 70
+      },
+      {
+        "Type": "HEAVY_DAMAGE",
+        "Value": 100
+      }
     ]
   },
   {
@@ -121,57 +274,134 @@
     "Description": "A powerful elven greatsword.",
     "Icon": "elven_greatsword",
     "Type": "WEAPON_2H",
-    "Requirements": [{ "Skill": "ATTACK", "Value": 35 }],
+    "Requirements": [
+      {
+        "Skill": "ATTACK",
+        "Value": 35
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_RANGE", "Value": 150 },
-      { "Type": "ATTACK_SPEED", "Value": 3 },
-      { "Type": "SLASH_ACCURACY", "Value": 100 },
-      { "Type": "HEAVY_DAMAGE", "Value": 150 }
+      {
+        "Type": "ATTACK_RANGE",
+        "Value": 150
+      },
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 3
+      },
+      {
+        "Type": "SLASH_ACCURACY",
+        "Value": 100
+      },
+      {
+        "Type": "HEAVY_DAMAGE",
+        "Value": 150
+      }
     ]
   },
   {
     "Name": "Crude Bow",
     "Type": "BOW",
-    "Requirements": [{ "Skill": "RANGED", "Value": 1 }],
+    "Requirements": [
+      {
+        "Skill": "RANGED",
+        "Value": 1
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "QUICK_DAMAGE", "Value": 5 }
-    ]
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "QUICK_DAMAGE",
+        "Value": 5
+      }
+    ],
+    "Icon": "crude_bow"
   },
   {
     "Name": "Wood Bow",
     "Type": "BOW",
-    "Requirements": [{ "Skill": "RANGED", "Value": 1 }],
+    "Requirements": [
+      {
+        "Skill": "RANGED",
+        "Value": 1
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "HEAVY_DAMAGE", "Value": 15 }
-    ]
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "HEAVY_DAMAGE",
+        "Value": 15
+      }
+    ],
+    "Icon": "wood_bow"
   },
   {
     "Name": "Goblin Bow",
     "Type": "BOW",
-    "Requirements": [{ "Skill": "RANGED", "Value": 5 }],
+    "Requirements": [
+      {
+        "Skill": "RANGED",
+        "Value": 5
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "QUICK_DAMAGE", "Value": 20 }
-    ]
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "QUICK_DAMAGE",
+        "Value": 20
+      }
+    ],
+    "Icon": "goblin_bow"
   },
   {
     "Name": "Birch Bow",
     "Type": "BOW",
-    "Requirements": [{ "Skill": "RANGED", "Value": 10 }],
+    "Requirements": [
+      {
+        "Skill": "RANGED",
+        "Value": 10
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "HEAVY_DAMAGE", "Value": 30 }
-    ]
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "HEAVY_DAMAGE",
+        "Value": 30
+      }
+    ],
+    "Icon": "birch_bow"
   },
   {
     "Name": "Willow Bow",
     "Type": "BOW",
-    "Requirements": [{ "Skill": "RANGED", "Value": 20 }],
+    "Requirements": [
+      {
+        "Skill": "RANGED",
+        "Value": 20
+      }
+    ],
     "Stats": [
-      { "Type": "ATTACK_SPEED", "Value": 2 },
-      { "Type": "HEAVY_DAMAGE", "Value": 45 }
-    ]
+      {
+        "Type": "ATTACK_SPEED",
+        "Value": 2
+      },
+      {
+        "Type": "HEAVY_DAMAGE",
+        "Value": 45
+      }
+    ],
+    "Icon": "willow_bow"
   }
 ]
