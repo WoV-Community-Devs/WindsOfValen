@@ -45,7 +45,20 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,rgba(210,230,100,0.5) 0%,rgba(180,200,60,0.2) 50%,transparent 100%);animation:fireflyDrift var(--duration) ease-in-out infinite,fireflyGlow 2s ease-in-out infinite;animation-delay:var(--delay);pointer-events:none;z-index:1;}
 
 /* ── Content z-index ── */
-.site-header,.page-content,.site-footer,#share-toast{position:relative;z-index:2;}
+.site-header,.page-content,.page-view,.methodology,.site-footer,#share-toast{position:relative;z-index:2;}
+
+/* Page-level tabs */
+.page-tabs{display:flex;gap:0;margin-left:auto;}
+.page-tab{
+  padding:0.4rem 1rem;font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.06em;color:var(--text-muted);cursor:pointer;border:none;
+  background:transparent;transition:color 0.2s;
+  border-bottom:2px solid transparent;margin-bottom:-2px;
+}
+.page-tab:hover{color:var(--text);}
+.page-tab.active{color:var(--accent);border-bottom-color:var(--accent);text-shadow:0 0 12px rgba(212,168,67,0.3);}
+.page-view{display:none;}
+.page-view.active{display:block;}
 
 /* ── Header ── */
 .site-header{
@@ -61,7 +74,7 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 .home-link:hover{color:var(--accent-hover);text-shadow:0 0 12px rgba(212,168,67,0.4);}
 
 /* ── Share Button ── */
-.share-btn{background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;margin-left:auto;transition:border-color 0.2s,color 0.2s;}
+.share-btn{background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;transition:border-color 0.2s,color 0.2s;text-transform:none;letter-spacing:normal;font-weight:400;}
 .share-btn:hover{border-color:var(--accent);color:var(--accent-hover);}
 
 /* ── Page Content ── */
@@ -178,6 +191,22 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
   .form-row{flex-direction:column;}
   .form-group{min-width:100%;}
 }
+
+/* ── Methodology ── */
+.methodology{max-width:900px;margin:0.75rem auto;padding:0 1rem;}
+.methodology details{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);backdrop-filter:blur(10px);box-shadow:var(--panel-shadow);margin-bottom:0.5rem;}
+.methodology summary{padding:0.6rem 0.85rem;font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);cursor:pointer;user-select:none;background:var(--bg-header);border-bottom:1px solid transparent;list-style:none;text-shadow:0 0 12px rgba(212,168,67,0.15);}
+.methodology summary::-webkit-details-marker{display:none;}
+.methodology summary::before{content:'\25B6';font-size:0.55rem;transition:transform 0.2s;display:inline-block;margin-right:0.5rem;}
+.methodology details[open] summary::before{transform:rotate(90deg);}
+.methodology details[open] summary{border-bottom-color:var(--border);}
+.methodology .meth-body{padding:1rem 1.2rem;font-size:0.78rem;line-height:1.7;color:var(--text-dim);}
+.methodology .meth-body h3{color:var(--accent);font-size:0.82rem;margin:1.2rem 0 0.4rem;text-transform:uppercase;letter-spacing:0.03em;}
+.methodology .meth-body h3:first-child{margin-top:0;}
+.methodology .meth-body code{background:var(--bg-input);padding:0.15rem 0.35rem;border-radius:3px;font-size:0.72rem;color:var(--green);font-family:'Courier New',monospace;}
+.methodology .meth-body p{margin:0.3rem 0;}
+.methodology .meth-body ul{margin:0.3rem 0;padding-left:1.2rem;}
+.methodology .meth-body li{margin:0.15rem 0;}
   </style>
 </head>
 <body>
@@ -208,8 +237,24 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
   <span class="subtitle">Winds of Valen</span>
   <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v1.1</span>
   <a class="home-link" href="../../index.html">← Back to Home Page</a>
+  <div class="page-tabs">
+    <button class="page-tab active" data-page="calculator" onclick="switchPage('calculator')">Calculator</button>
+    <button class="page-tab" data-page="methodology" onclick="switchPage('methodology')">Methodology</button>
+  </div>
 </header>
 
+<script>
+function switchPage(page) {
+  document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+  const btn = document.querySelector('[data-page="' + page + '"]');
+  if (btn) btn.classList.add('active');
+  const view = document.getElementById('page-' + page);
+  if (view) view.classList.add('active');
+}
+</script>
+
+<div id="page-calculator" class="page-view active">
 <div class="page-content">
 
   <div class="top-grid">
@@ -217,7 +262,7 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
 
       <!-- Skill Selection -->
       <div class="panel">
-        <div class="panel-header"><span>Choose a Skill</span> <button class="share-btn" id="share-btn" title="Copy shareable URL">Share</button></div>
+        <div class="panel-header"><span>Choose a Skill</span> <button class="share-btn" id="share-btn" title="Copy shareable URL">🔗 Share</button></div>
         <div class="panel-body">
           <div class="skill-tabs" id="skill-tabs">
             <button class="skill-tab active" data-skill="mining">Mining</button>
@@ -303,6 +348,105 @@ body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-bod
     </div>
   </div>
 
+</div>
+</div>
+
+<div id="page-methodology" class="page-view">
+<div class="methodology">
+
+    <details open>
+      <summary>Overview</summary>
+      <div class="meth-body">
+        <p>The <strong>WoV XP Calculator</strong> helps you plan your skilling journey in Winds of Valen. Select a skill, set your current and target levels, and instantly see how many actions (or crafting cycles) you need for each available recipe.</p>
+        <p>The calculator supports <strong>Mining</strong>, <strong>Smithing</strong>, <strong>Fishing</strong>, and <strong>Potion Making</strong>, with special supply chain calculations for Smithing and Potion Making.</p>
+      </div>
+    </details>
+
+    <details open>
+      <summary>XP Formula</summary>
+      <div class="meth-body">
+        <p>Winds of Valen uses an exponential XP curve. The XP required for any given level is calculated as:</p>
+        <p><code>XP(level) = floor(100 × 1.1 ^ (level - 1))</code></p>
+        <p>The XP remaining to reach your target level is simply:</p>
+        <p><code>XP Remaining = XP(target) - XP(current)</code></p>
+        <p>The number of actions needed for a given recipe is:</p>
+        <p><code>Actions = ceil(XP Remaining / XP per action)</code></p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Include All Steps — Potion Making</summary>
+      <div class="meth-body">
+        <p>When <strong>Include all steps</strong> is checked for Potion Making, the calculator shows only <strong>Bottle</strong> recipes but computes the total XP from the entire production chain:</p>
+        <h3>Production Chain</h3>
+        <ul>
+          <li><strong>Bottling</strong> — XP from bottling the final potion</li>
+          <li><strong>Brewing</strong> — XP from brewing the base brew</li>
+          <li><strong>Ingredient Preparation</strong> — XP from cutting, crushing, or reducing the non-essence ingredient</li>
+          <li><strong>Essence Sourcing</strong> — If the brew requires more essence than the ingredient preparation produces, the deficit is sourced from <strong>Blue Gill</strong> (Cut → 2 Essence Glands, each Reduced → 10 Essence)</li>
+        </ul>
+        <h3>Example: Weak Health Potion</h3>
+        <ul>
+          <li>Bottle: 200 XP</li>
+          <li>Brew (Weak Health Brew): 100 XP, needs 10 Common Essence + 1 Common Trout</li>
+          <li>Cut Common Trout: 20 XP, yields 1 Cut Common Trout + 1 Essence Gland</li>
+          <li>Reduce Essence Gland: 10 XP, yields 10 Common Essence (covers the 10 needed)</li>
+          <li><strong>Total: 330 XP/cycle</strong></li>
+        </ul>
+        <p>Small and Large bottle variants are consolidated since they yield the same net XP.</p>
+        <p>The materials column shows the <strong>total</strong> raw materials needed across all cycles.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Include All Steps — Smithing</summary>
+      <div class="meth-body">
+        <p>When <strong>Include all steps</strong> is checked for Smithing, the calculator filters out <strong>Bars</strong> and shows only finished items (Armor, Weapons, Tools). The total XP includes:</p>
+        <ul>
+          <li><strong>Item Smithing</strong> — XP from smithing the final item</li>
+          <li><strong>Bar Smelting</strong> — XP from smelting the required bars</li>
+        </ul>
+        <p>Mining XP is <strong>not</strong> included since the calculator only counts XP for the selected skill.</p>
+        <h3>Example: Bronze Platelegs (8 Bronze Bars)</h3>
+        <ul>
+          <li>Smith Bronze Platelegs: 120 XP</li>
+          <li>Smelt 8 Bronze Bars: 8 × 15 = 120 XP</li>
+          <li><strong>Total: 240 XP/cycle</strong></li>
+          <li>Raw materials: 8× Copper Ore, 8× Tin Ore</li>
+        </ul>
+        <p>You can filter by sub-category (Armor, Weapons, Tools) while in all-steps mode.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Shareable URLs</summary>
+      <div class="meth-body">
+        <p>The calculator encodes your current configuration into the URL as query parameters:</p>
+        <ul>
+          <li><code>skill</code> — The selected skill (mining, smithing, fishing, potion_making)</li>
+          <li><code>cat</code> — The selected sub-category (omitted when "All")</li>
+          <li><code>cur</code> / <code>tgt</code> — Current and target levels</li>
+          <li><code>allSteps</code> — Whether "Include all steps" is enabled</li>
+        </ul>
+        <p>Click the <strong>Share</strong> button to copy the URL to your clipboard. Anyone who opens the link will see the exact same configuration.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Data Sources</summary>
+      <div class="meth-body">
+        <p>All recipe data is sourced from the community-maintained JSON files in this repository:</p>
+        <ul>
+          <li><code>mining.json</code> — Ore types, levels, and XP</li>
+          <li><code>smithing.json</code> — Bars, armor, weapons, tools with materials and XP</li>
+          <li><code>fishing.json</code> — Fish types, levels, and XP</li>
+          <li><code>potion_making.json</code> — All potion making recipes: brew, bottle, cut, crush, reduce</li>
+        </ul>
+        <p>If you find inaccurate data, please submit a pull request or open an issue on <a href="https://github.com/Maurittius/WindsOfValen" target="_blank" style="color:var(--accent)">GitHub</a>.</p>
+      </div>
+    </details>
+
+</div>
 </div>
 
 <footer class="site-footer">
@@ -732,8 +876,8 @@ function shareConfig() {
   const url = window.location.href;
   navigator.clipboard.writeText(url).then(() => {
     const btn = document.getElementById('share-btn');
-    btn.textContent = 'Copied!';
-    setTimeout(() => { btn.textContent = 'Share'; }, 2000);
+    btn.textContent = '\u2705 Copied!';
+    setTimeout(() => { btn.textContent = '\ud83d\udd17 Share'; }, 2000);
   }).catch(() => {
     prompt('Copy this URL:', url);
   });
