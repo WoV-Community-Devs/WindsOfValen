@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Winds of Valen — XP Calculator for Mining, Smithing, Fishing, and Alchemy." />
+  <title>WoV XP Calculator — Winds of Valen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-body: #1e2830;
+  --bg-panel: rgba(30, 40, 48, 0.88);
+  --bg-input: rgba(24, 32, 40, 0.75);
+  --bg-header: rgba(28, 38, 46, 0.92);
+  --border: rgba(100, 116, 90, 0.58);
+  --border-light: rgba(125, 142, 112, 0.58);
+  --accent: #d4a843;
+  --accent-hover: #e8c060;
+  --accent-glow: rgba(212,168,67,0.2);
+  --accent-dim: rgba(212,168,67,0.1);
+  --text: #e8e4d2;
+  --text-dim: #b8ae98;
+  --text-muted: #9a9280;
+  --green: #6abf69;
+  --red: #c9503a;
+  --blue: #5ba8c8;
+  --radius: 4px;
+  --panel-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;}
+body{font-family:'Crimson Text','Segoe UI',Georgia,serif;background:var(--bg-body);color:var(--text);min-height:100vh;line-height:1.6;}
+
+/* ── Living Background ── */
+#bg-scene{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden;}
+#bg-scene .bg-gradient{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at 50% 40%,rgba(75,115,75,0.32) 0%,transparent 60%),
+    radial-gradient(ellipse at 30% 70%,rgba(95,165,120,0.20) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 30%,rgba(185,125,60,0.15) 0%,transparent 50%),
+    linear-gradient(180deg,#1a2218 0%,#202e24 30%,#1c2820 60%,#192220 100%);}
+#bg-scene .bg-vignette{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.6) 100%);}
+@keyframes fireflyDrift{0%{transform:translate(0,0) scale(1);opacity:0;}15%{opacity:0.6;}50%{transform:translate(var(--dx),var(--dy)) scale(1.2);opacity:0.8;}85%{opacity:0.4;}100%{transform:translate(calc(var(--dx)*1.5),calc(var(--dy)*0.8)) scale(0.8);opacity:0;}}
+@keyframes fireflyGlow{0%,100%{box-shadow:0 0 3px 1px rgba(200,220,80,0.15);}50%{box-shadow:0 0 6px 3px rgba(200,220,80,0.3);}}
+.firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,rgba(210,230,100,0.5) 0%,rgba(180,200,60,0.2) 50%,transparent 100%);animation:fireflyDrift var(--duration) ease-in-out infinite,fireflyGlow 2s ease-in-out infinite;animation-delay:var(--delay);pointer-events:none;z-index:1;}
+
+/* ── Content z-index ── */
+.site-header,.page-content,.page-view,.methodology,.site-footer,#share-toast{position:relative;z-index:2;}
+
+/* Page-level tabs */
+.page-tabs{display:flex;gap:0;margin-left:auto;}
+.page-tab{
+  padding:0.4rem 1rem;font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.06em;color:var(--text-muted);cursor:pointer;border:none;
+  background:transparent;transition:color 0.2s;
+  border-bottom:2px solid transparent;margin-bottom:-2px;
+}
+.page-tab:hover{color:var(--text);}
+.page-tab.active{color:var(--accent);border-bottom-color:var(--accent);text-shadow:0 0 12px rgba(212,168,67,0.3);}
+.page-view{display:none;}
+.page-view.active{display:block;}
+
+/* ── Header ── */
+.site-header{
+  position:relative;
+  background:linear-gradient(180deg,rgba(15,20,15,0.95),rgba(12,18,14,0.92));
+  border-bottom:2px solid var(--accent);padding:0.6rem 1.5rem;
+  display:flex;align-items:center;gap:0.75rem;
+  backdrop-filter:blur(10px);box-shadow:0 2px 20px rgba(0,0,0,0.5),inset 0 -1px 0 rgba(212,168,67,0.15);
+}
+.site-header h1{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:var(--accent);letter-spacing:0.06em;text-shadow:0 0 20px rgba(212,168,67,0.3);}
+.site-header .subtitle{font-family:'Cinzel',serif;font-size:0.78rem;color:var(--text-dim);letter-spacing:0.04em;}
+.home-link{position:absolute;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s,text-shadow 0.2s;}
+.home-link:hover{color:var(--accent-hover);text-shadow:0 0 12px rgba(212,168,67,0.4);}
+
+/* ── Share Button ── */
+.share-btn{background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;transition:border-color 0.2s,color 0.2s;text-transform:none;letter-spacing:normal;font-weight:400;}
+.share-btn:hover{border-color:var(--accent);color:var(--accent-hover);}
+
+/* ── Page Content ── */
+.page-content{max-width:900px;margin:0 auto;padding:1.5rem 1rem 2rem;}
+
+/* ── Panel ── */
+.panel{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  backdrop-filter:blur(10px);box-shadow:var(--panel-shadow);margin-bottom:1rem;overflow:hidden;
+}
+.panel-header{
+  padding:0.6rem 0.85rem;font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);
+  background:linear-gradient(180deg,rgba(20,28,22,0.9),rgba(15,22,18,0.85));
+  border-bottom:1px solid var(--border);text-shadow:0 0 12px rgba(212,168,67,0.15);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.panel-body{padding:0.85rem;}
+
+/* ── Form Controls ── */
+.form-row{display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.75rem;align-items:flex-end;}
+.form-group{display:flex;flex-direction:column;gap:0.25rem;flex:1;min-width:120px;}
+.form-label{font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;}
+.form-input,.form-select{
+  background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);
+  padding:0.45rem 0.6rem;color:var(--text);font-family:'Crimson Text',serif;font-size:0.88rem;
+  outline:none;transition:border-color 0.2s;
+}
+.form-input:focus,.form-select:focus{border-color:var(--accent);}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23b8ae98' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 0.5rem center;background-size:0.65em;padding-right:1.5rem;}
+.form-select option{background:#1e2830;color:var(--text);}
+
+/* ── Skill Tabs ── */
+.skill-tabs{display:flex;gap:0.35rem;margin-bottom:0.75rem;flex-wrap:wrap;}
+.skill-tab{
+  font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
+  padding:0.4rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius);
+  background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.2s;
+}
+.skill-tab:hover{border-color:var(--accent);color:var(--text);}
+.skill-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);text-shadow:0 0 8px rgba(212,168,67,0.2);}
+
+/* ── Sub-category tabs ── */
+.sub-tabs-wrap{padding-left:0.5rem;}
+.sub-tabs-label{font-family:'Cinzel',serif;font-size:0.58rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.25rem;}
+.sub-tabs{display:flex;gap:0.25rem;margin-bottom:0.5rem;flex-wrap:wrap;}
+.sub-tab{
+  font-family:'Cinzel',serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
+  padding:0.3rem 0.65rem;border:1px solid rgba(100,116,90,0.3);border-radius:3px;
+  background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.2s;
+}
+.sub-tab:hover{border-color:var(--border-light);color:var(--text-dim);}
+.sub-tab.active{background:rgba(212,168,67,0.08);border-color:var(--accent);color:var(--accent);}
+
+/* ── Checkbox ── */
+.all-steps-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;}
+.all-steps-row input[type="checkbox"]{accent-color:var(--accent);width:14px;height:14px;cursor:pointer;}
+.all-steps-label{font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;cursor:pointer;}
+
+/* ── Summary Box ── */
+.summary-box{
+  background:rgba(18,24,20,0.7);border:1px solid var(--border);border-radius:var(--radius);
+  padding:0.75rem 0.85rem;margin-bottom:0.75rem;
+}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:0.2rem 0;}
+.summary-label{font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;}
+.summary-value{font-family:'Crimson Text',serif;font-size:1rem;font-weight:700;color:var(--accent);text-shadow:0 0 8px rgba(212,168,67,0.15);}
+.summary-value.big{font-size:1.3rem;}
+
+/* ── Recipe Table ── */
+.recipe-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+.recipe-table th{
+  text-align:left;padding:0.4rem 0.6rem;background:rgba(18,24,20,0.85);
+  font-family:'Cinzel',serif;font-size:0.65rem;font-weight:700;color:var(--text-dim);
+  text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:1;
+}
+.recipe-table td{padding:0.4rem 0.6rem;border-bottom:1px solid rgba(100,116,90,0.2);color:var(--text);vertical-align:middle;}
+.recipe-table tr:last-child td{border-bottom:none;}
+.recipe-table tr:hover td{background:rgba(55,72,60,0.25);}
+.recipe-table .col-name{font-weight:700;color:var(--text);}
+.recipe-table .col-lvl{font-family:'Cinzel',serif;font-size:0.72rem;color:var(--text-dim);}
+.recipe-table .col-xp{color:var(--green);}
+.recipe-table .col-actions{font-weight:700;color:var(--accent);font-size:0.92rem;}
+.recipe-table .col-materials{font-size:0.78rem;color:var(--text-muted);}
+
+.recipe-table-wrap{max-height:420px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);}
+.recipe-table-wrap::-webkit-scrollbar{width:6px;}
+.recipe-table-wrap::-webkit-scrollbar-track{background:rgba(0,0,0,0.2);}
+.recipe-table-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+.no-recipes{text-align:center;padding:2rem;color:var(--text-muted);font-style:italic;font-size:0.88rem;}
+
+/* ── Top Grid Layout ── */
+.top-grid{display:grid;grid-template-columns:1fr 280px;gap:1rem;margin-bottom:1rem;}
+.top-left{display:flex;flex-direction:column;gap:1rem;}
+.top-left .panel,.top-right .panel{margin-bottom:0;}
+.top-right .panel{height:100%;}
+.top-right .panel-body{display:flex;flex-direction:column;justify-content:center;height:calc(100% - 2.2rem);}
+.top-right .summary-box{margin-bottom:0;}
+
+/* ── Skill Icon ── */
+.skill-icon-wrap{display:flex;align-items:center;justify-content:center;padding:0.5rem 0 0.25rem;}
+.skill-icon-wrap img{width:64px;height:64px;filter:drop-shadow(0 0 8px rgba(212,168,67,0.3));transition:opacity 0.3s;}
+
+/* ── Footer ── */
+.site-footer{text-align:center;padding:1.5rem 1rem;border-top:1px solid var(--border);font-family:'Cinzel',serif;font-size:0.68rem;color:var(--text-muted);letter-spacing:0.04em;}
+.site-footer a{color:var(--accent);text-decoration:none;}
+.site-footer a:hover{color:var(--accent-hover);}
+
+@media(max-width:700px){
+  .page-content{padding:1rem 0.5rem;}
+  .top-grid{grid-template-columns:1fr;}
+  .form-row{flex-direction:column;}
+  .form-group{min-width:100%;}
+}
+
+/* ── Methodology ── */
+.methodology{max-width:900px;margin:0.75rem auto;padding:0 1rem;}
+.methodology details{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);backdrop-filter:blur(10px);box-shadow:var(--panel-shadow);margin-bottom:0.5rem;}
+.methodology summary{padding:0.6rem 0.85rem;font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);cursor:pointer;user-select:none;background:var(--bg-header);border-bottom:1px solid transparent;list-style:none;text-shadow:0 0 12px rgba(212,168,67,0.15);}
+.methodology summary::-webkit-details-marker{display:none;}
+.methodology summary::before{content:'\25B6';font-size:0.55rem;transition:transform 0.2s;display:inline-block;margin-right:0.5rem;}
+.methodology details[open] summary::before{transform:rotate(90deg);}
+.methodology details[open] summary{border-bottom-color:var(--border);}
+.methodology .meth-body{padding:1rem 1.2rem;font-size:0.78rem;line-height:1.7;color:var(--text-dim);}
+.methodology .meth-body h3{color:var(--accent);font-size:0.82rem;margin:1.2rem 0 0.4rem;text-transform:uppercase;letter-spacing:0.03em;}
+.methodology .meth-body h3:first-child{margin-top:0;}
+.methodology .meth-body code{background:var(--bg-input);padding:0.15rem 0.35rem;border-radius:3px;font-size:0.72rem;color:var(--green);font-family:'Courier New',monospace;}
+.methodology .meth-body p{margin:0.3rem 0;}
+.methodology .meth-body ul{margin:0.3rem 0;padding-left:1.2rem;}
+.methodology .meth-body li{margin:0.15rem 0;}
+  </style>
+</head>
+<body>
+
+<div id="bg-scene">
+  <div class="bg-gradient"></div>
+  <div class="bg-vignette"></div>
+</div>
+
+<script>
+(function(){
+  const scene=document.getElementById('bg-scene');
+  for(let i=0;i<30;i++){
+    const f=document.createElement('div');f.className='firefly';
+    const s=2+Math.random()*4;f.style.width=s+'px';f.style.height=s+'px';
+    f.style.left=Math.random()*100+'%';f.style.top=(10+Math.random()*70)+'%';
+    f.style.setProperty('--dx',(Math.random()*200-100)+'px');
+    f.style.setProperty('--dy',(Math.random()*150-75)+'px');
+    f.style.setProperty('--duration',(8+Math.random()*12)+'s');
+    f.style.setProperty('--delay',(Math.random()*10)+'s');
+    scene.appendChild(f);
+  }
+})();
+</script>
+
+<header class="site-header">
+  <h1>WoV XP Calculator</h1>
+  <span class="subtitle">Winds of Valen</span>
+  <span style="font-size:0.6rem;color:var(--text-muted);margin-left:0.25rem;">v1.1</span>
+  <a class="home-link" href="../../index.html">← Back to Home Page</a>
+  <div class="page-tabs">
+    <button class="page-tab active" data-page="calculator" onclick="switchPage('calculator')">Calculator</button>
+    <button class="page-tab" data-page="methodology" onclick="switchPage('methodology')">Methodology</button>
+  </div>
+</header>
+
+<script>
+function switchPage(page) {
+  document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+  const btn = document.querySelector('[data-page="' + page + '"]');
+  if (btn) btn.classList.add('active');
+  const view = document.getElementById('page-' + page);
+  if (view) view.classList.add('active');
+}
+</script>
+
+<div id="page-calculator" class="page-view active">
+<div class="page-content">
+
+  <div class="top-grid">
+    <div class="top-left">
+
+      <!-- Skill Selection -->
+      <div class="panel">
+        <div class="panel-header"><span>Choose a Skill</span> <button class="share-btn" id="share-btn" title="Copy shareable URL">🔗 Share</button></div>
+        <div class="panel-body">
+          <div class="skill-tabs" id="skill-tabs">
+            <button class="skill-tab active" data-skill="mining">Mining</button>
+            <button class="skill-tab" data-skill="smithing">Smithing</button>
+            <button class="skill-tab" data-skill="fishing">Fishing</button>
+            <button class="skill-tab" data-skill="alchemy">Potion Making</button>
+          </div>
+          <div class="sub-tabs-wrap" id="sub-tabs-wrap" style="display:none;">
+            <div class="sub-tabs-label">Category</div>
+            <div class="sub-tabs" id="sub-tabs"></div>
+          </div>
+          <div class="all-steps-row" id="all-steps-row" style="display:none;">
+            <input type="checkbox" id="all-steps-check">
+            <label class="all-steps-label" for="all-steps-check">Include all steps</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level Inputs -->
+      <div class="panel">
+        <div class="panel-header">Levels</div>
+        <div class="panel-body">
+          <div class="form-row" style="margin-bottom:0;">
+            <div class="form-group">
+              <label class="form-label" for="current-level">Current Level</label>
+              <input type="number" class="form-input" id="current-level" min="1" max="99" value="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="target-level">Target Level</label>
+              <input type="number" class="form-input" id="target-level" min="2" max="99" value="10">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- XP Summary (right side) -->
+    <div class="top-right">
+      <div class="panel">
+        <div class="panel-header">XP Summary</div>
+        <div class="panel-body">
+          <div class="skill-icon-wrap">
+            <img id="skill-icon" src="../../icons/skills/mining.png" alt="Skill Icon">
+          </div>
+          <div class="summary-box">
+            <div class="summary-row">
+              <span class="summary-label">Current XP</span>
+              <span class="summary-value" id="current-xp">0</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Target XP</span>
+              <span class="summary-value" id="target-xp">0</span>
+            </div>
+            <div class="summary-row" style="border-top:1px solid var(--border);margin-top:0.3rem;padding-top:0.4rem;">
+              <span class="summary-label">XP Remaining</span>
+              <span class="summary-value big" id="xp-remaining">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recipe Table -->
+  <div class="panel">
+    <div class="panel-header">Available Recipes</div>
+    <div class="panel-body">
+      <div class="recipe-table-wrap">
+        <table class="recipe-table" id="recipe-table">
+          <thead>
+            <tr>
+              <th>Recipe</th>
+              <th>Lvl</th>
+              <th>XP</th>
+              <th>Actions Needed</th>
+              <th>Materials</th>
+            </tr>
+          </thead>
+          <tbody id="recipe-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="page-methodology" class="page-view">
+<div class="methodology">
+
+    <details open>
+      <summary>Overview</summary>
+      <div class="meth-body">
+        <p>The <strong>WoV XP Calculator</strong> helps you plan your skilling journey in Winds of Valen. Select a skill, set your current and target levels, and instantly see how many actions (or crafting cycles) you need for each available recipe.</p>
+        <p>The calculator supports <strong>Mining</strong>, <strong>Smithing</strong>, <strong>Fishing</strong>, and <strong>Potion Making</strong>, with special supply chain calculations for Smithing and Potion Making.</p>
+      </div>
+    </details>
+
+    <details open>
+      <summary>XP Formula</summary>
+      <div class="meth-body">
+        <p>Winds of Valen uses an exponential XP curve. The XP required for any given level is calculated as:</p>
+        <p><code>XP(level) = floor(100 × 1.1 ^ (level - 1))</code></p>
+        <p>The XP remaining to reach your target level is simply:</p>
+        <p><code>XP Remaining = XP(target) - XP(current)</code></p>
+        <p>The number of actions needed for a given recipe is:</p>
+        <p><code>Actions = ceil(XP Remaining / XP per action)</code></p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Include All Steps — Potion Making</summary>
+      <div class="meth-body">
+        <p>When <strong>Include all steps</strong> is checked for Potion Making, the calculator shows only <strong>Bottle</strong> recipes but computes the total XP from the entire production chain:</p>
+        <h3>Production Chain</h3>
+        <ul>
+          <li><strong>Bottling</strong> — XP from bottling the final potion</li>
+          <li><strong>Brewing</strong> — XP from brewing the base brew</li>
+          <li><strong>Ingredient Preparation</strong> — XP from cutting, crushing, or reducing the non-essence ingredient</li>
+          <li><strong>Essence Sourcing</strong> — If the brew requires more essence than the ingredient preparation produces, the deficit is sourced from <strong>Blue Gill</strong> (Cut → 2 Essence Glands, each Reduced → 10 Essence)</li>
+        </ul>
+        <h3>Example: Weak Health Potion</h3>
+        <ul>
+          <li>Bottle: 200 XP</li>
+          <li>Brew (Weak Health Brew): 100 XP, needs 10 Common Essence + 1 Common Trout</li>
+          <li>Cut Common Trout: 20 XP, yields 1 Cut Common Trout + 1 Essence Gland</li>
+          <li>Reduce Essence Gland: 10 XP, yields 10 Common Essence (covers the 10 needed)</li>
+          <li><strong>Total: 330 XP/cycle</strong></li>
+        </ul>
+        <p>Small and Large bottle variants are consolidated since they yield the same net XP.</p>
+        <p>The materials column shows the <strong>total</strong> raw materials needed across all cycles.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Include All Steps — Smithing</summary>
+      <div class="meth-body">
+        <p>When <strong>Include all steps</strong> is checked for Smithing, the calculator filters out <strong>Bars</strong> and shows only finished items (Armor, Weapons, Tools). The total XP includes:</p>
+        <ul>
+          <li><strong>Item Smithing</strong> — XP from smithing the final item</li>
+          <li><strong>Bar Smelting</strong> — XP from smelting the required bars</li>
+        </ul>
+        <p>Mining XP is <strong>not</strong> included since the calculator only counts XP for the selected skill.</p>
+        <h3>Example: Bronze Platelegs (8 Bronze Bars)</h3>
+        <ul>
+          <li>Smith Bronze Platelegs: 120 XP</li>
+          <li>Smelt 8 Bronze Bars: 8 × 15 = 120 XP</li>
+          <li><strong>Total: 240 XP/cycle</strong></li>
+          <li>Raw materials: 8× Copper Ore, 8× Tin Ore</li>
+        </ul>
+        <p>You can filter by sub-category (Armor, Weapons, Tools) while in all-steps mode.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Shareable URLs</summary>
+      <div class="meth-body">
+        <p>The calculator encodes your current configuration into the URL as query parameters:</p>
+        <ul>
+          <li><code>skill</code> — The selected skill (mining, smithing, fishing, potion_making)</li>
+          <li><code>cat</code> — The selected sub-category (omitted when "All")</li>
+          <li><code>cur</code> / <code>tgt</code> — Current and target levels</li>
+          <li><code>allSteps</code> — Whether "Include all steps" is enabled</li>
+        </ul>
+        <p>Click the <strong>Share</strong> button to copy the URL to your clipboard. Anyone who opens the link will see the exact same configuration.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Data Sources</summary>
+      <div class="meth-body">
+        <p>All recipe data is sourced from the community-maintained JSON files in this repository:</p>
+        <ul>
+          <li><code>mining.json</code> — Ore types, levels, and XP</li>
+          <li><code>smithing.json</code> — Bars, armor, weapons, tools with materials and XP</li>
+          <li><code>fishing.json</code> — Fish types, levels, and XP</li>
+          <li><code>potion_making.json</code> — All potion making recipes: brew, bottle, cut, crush, reduce</li>
+        </ul>
+        <p>If you find inaccurate data, please submit a pull request or open an issue on <a href="https://github.com/Maurittius/WindsOfValen" target="_blank" style="color:var(--accent)">GitHub</a>.</p>
+      </div>
+    </details>
+
+</div>
+</div>
+
+<footer class="site-footer">
+  Winds of Valen Community Tools · <a href="https://github.com/Maurittius/WindsOfValen" target="_blank">GitHub</a>
+</footer>
+
+<script>
+/* ── XP Formula ── */
+function xpForLevel(level) {
+  if (level <= 1) return 0;
+  return Math.floor(500 * (Math.pow(2, (level - 1) / 5) - 1));
+}
+
+/* ── Data paths (relative to this file) ── */
+const DATA_PATHS = {
+  mining:   '../../data/recipes/mining.json',
+  smithing: '../../data/recipes/smithing.json',
+  fishing:  '../../data/recipes/fishing.json',
+  alchemy:  '../../data/recipes/potion_making.json'
+};
+
+/* ── Sub-categories for skills that have them ── */
+const SUB_CATEGORIES = {
+  smithing: ['Bars','Armor','Weapons','Tools'],
+  alchemy:  ['Bottle','Brew','Crushing','Reduction','Cutting']
+};
+
+/* ── Supply chain for brew ingredients (non-Essence) ── */
+const INGREDIENT_SOURCE = {
+  'Scrap Fish Flesh': { xpPerAction: 10, yieldsPerAction: 1, glandType: 'small', glandsPerAction: 1, rawSource: 'Common Trout' },
+  'Fish Oil':          { xpPerAction: 50, yieldsPerAction: 5, glandType: null,    glandsPerAction: 0, rawSource: 'Rare Minnow' },
+  'Crushed Fish Scales':{ xpPerAction: 60, yieldsPerAction: 1, glandType: 'small', glandsPerAction: 1, rawSource: 'Perch' },
+  'Root Paste':        { xpPerAction: 35, yieldsPerAction: 1, glandType: null,    glandsPerAction: 0, rawSource: 'Mud Root' },
+  'Fish Mash':         { xpPerAction: 60, yieldsPerAction: 1, glandType: 'small', glandsPerAction: 1, rawSource: 'Bass' },
+  'Fang Dust':         { xpPerAction: 45, yieldsPerAction: 2, glandType: null,    glandsPerAction: 0, rawSource: 'Small Fang' },
+  'Hearty Extract':    { xpPerAction: 240,yieldsPerAction: 1, glandType: 'essence',glandsPerAction: 1, rawSource: 'Elder Trout' },
+};
+const GLAND_INFO = {
+  'small':   { reduceXP: 4,  essencePerGland: 2 },
+  'essence': { reduceXP: 10, essencePerGland: 10 }
+};
+// Blue Gill: Cut (40 XP) → 2 Essence Glands, Reduce each (10 XP) → 10 Essence
+const BG_CUT_XP = 40, BG_GLANDS = 2, BG_REDUCE_XP = 10, BG_ESSENCE_PER_GLAND = 10;
+
+/* ── Smithing bar supply chain ── */
+const BAR_DATA = {};
+
+function buildBarLookup(smithingRecipes) {
+  smithingRecipes.filter(r => r.Category === 'Bars').forEach(r => {
+    if (!BAR_DATA[r.Name]) BAR_DATA[r.Name] = r;
+  });
+}
+
+function computeSmithingCycle(itemRecipe, allSmithingRecipes) {
+  buildBarLookup(allSmithingRecipes);
+
+  let totalXP = itemRecipe.Experience; // Smithing the item
+  const rawMats = [];
+
+  for (const mat of itemRecipe.Materials) {
+    const bar = BAR_DATA[mat.Material];
+    if (!bar) {
+      rawMats.push(`${mat.Amount}× ${mat.Material}`);
+      continue;
+    }
+    // Smelting bars XP (smithing skill)
+    totalXP += mat.Amount * bar.Experience;
+    // List ores as raw materials (no mining XP counted)
+    for (const oreMat of bar.Materials) {
+      const oreCount = oreMat.Amount * mat.Amount;
+      rawMats.push(`${oreCount}× ${oreMat.Material}`);
+    }
+  }
+
+  return { totalXP, rawMats: rawMats.join(', ') };
+}
+
+function computeFullCycle(bottleRecipe, allRecipes) {
+  // Find brew name from bottle materials
+  const brewMat = bottleRecipe.Materials.find(m => m.Material.includes('Brew'));
+  if (!brewMat) return null;
+  const brewName = brewMat.Material.replace(' Brew', '');
+  const brew = allRecipes.find(r => r.Name === brewName && r.Category === 'Brew');
+  if (!brew || !brew.Materials || brew.Experience === null) return null;
+
+  const nonEssence = brew.Materials.find(m => m.Material !== 'Essence');
+  const essenceNeeded = (brew.Materials.find(m => m.Material === 'Essence') || {}).Amount || 0;
+  if (!nonEssence) return null;
+
+  const source = INGREDIENT_SOURCE[nonEssence.Material];
+  if (!source) return null;
+
+  let totalXP = bottleRecipe.Experience + brew.Experience;
+  const actions = Math.ceil(nonEssence.Amount / source.yieldsPerAction);
+  totalXP += actions * source.xpPerAction;
+
+  // Essence from byproduct glands
+  let essenceFromByproduct = 0;
+  let glandCount = 0;
+  if (source.glandType) {
+    glandCount = actions * source.glandsPerAction;
+    const gi = GLAND_INFO[source.glandType];
+    totalXP += glandCount * gi.reduceXP;
+    essenceFromByproduct = glandCount * gi.essencePerGland;
+  }
+
+  // Extra Essence from Blue Gill
+  const essenceDeficit = Math.max(0, essenceNeeded - essenceFromByproduct);
+  let blueGills = 0;
+  if (essenceDeficit > 0) {
+    const reductionsNeeded = Math.ceil(essenceDeficit / BG_ESSENCE_PER_GLAND);
+    blueGills = Math.ceil(reductionsNeeded / BG_GLANDS);
+    totalXP += blueGills * BG_CUT_XP;
+    totalXP += reductionsNeeded * BG_REDUCE_XP;
+  }
+
+  // Build raw materials list
+  const rawMats = [];
+  rawMats.push(`${actions}× ${source.rawSource}`);
+  if (blueGills > 0) rawMats.push(`${blueGills}× Blue Gill`);
+  // Vials
+  const vialMat = bottleRecipe.Materials.find(m => m.Material.includes('Vial'));
+  if (vialMat) rawMats.push(`${vialMat.Amount}× ${vialMat.Material}`);
+
+  return { totalXP, rawMats: rawMats.join(', ') };
+}
+
+/* ── State ── */
+let currentSkill = 'mining';
+let currentSubCategory = null;
+let allStepsMode = false;
+let recipeData = {};
+
+/* ── DOM refs ── */
+const $skillTabs      = document.getElementById('skill-tabs');
+const $subTabsWrap    = document.getElementById('sub-tabs-wrap');
+const $subTabs        = document.getElementById('sub-tabs');
+const $allStepsRow    = document.getElementById('all-steps-row');
+const $allStepsCheck  = document.getElementById('all-steps-check');
+const $currentLevel   = document.getElementById('current-level');
+const $targetLevel    = document.getElementById('target-level');
+const $currentXp      = document.getElementById('current-xp');
+const $targetXp       = document.getElementById('target-xp');
+const $xpRemaining    = document.getElementById('xp-remaining');
+const $tbody          = document.getElementById('recipe-tbody');
+const $skillIcon      = document.getElementById('skill-icon');
+
+const SKILL_ICONS = {
+  mining:   '../../icons/skills/mining.png',
+  smithing: '../../icons/skills/smithing.png',
+  fishing:  '../../icons/skills/fishing.png',
+  alchemy:  '../../icons/skills/potion_making.png'
+};
+
+/* ── Format number with commas ── */
+function fmt(n) {
+  return n.toLocaleString();
+}
+
+/* ── Multiply a raw materials string by N cycles ── */
+function multiplyMats(matStr, n) {
+  return matStr.replace(/(\d+)×/g, (_, qty) => fmt(parseInt(qty) * n) + '×');
+}
+
+/* ── Deduplicate Small/Large Bottle recipes into one per potion type ── */
+function deduplicateBottles(bottles) {
+  const seen = {};
+  const result = [];
+  for (const r of bottles) {
+    const baseName = r.Name.replace(/^Small /, '').replace(/^Large /, '');
+    if (!seen[baseName]) {
+      seen[baseName] = true;
+      result.push({ ...r, Name: baseName });
+    }
+  }
+  return result;
+}
+
+/* ── Load recipe data ── */
+async function loadSkillData(skill) {
+  if (recipeData[skill]) return recipeData[skill];
+  try {
+    const resp = await fetch(DATA_PATHS[skill]);
+    if (!resp.ok) throw new Error('Failed to load');
+    recipeData[skill] = await resp.json();
+    return recipeData[skill];
+  } catch (e) {
+    console.error('Error loading ' + skill + ' data:', e);
+    return [];
+  }
+}
+
+/* ── Render sub-category tabs ── */
+function renderSubTabs(skill) {
+  const cats = SUB_CATEGORIES[skill];
+  if (!cats) {
+    $subTabsWrap.style.display = 'none';
+    $allStepsRow.style.display = 'none';
+    allStepsMode = false;
+    $allStepsCheck.checked = false;
+    currentSubCategory = null;
+    return;
+  }
+  $subTabsWrap.style.display = 'block';
+  $subTabs.innerHTML = '<button class="sub-tab active" data-cat="all">All</button>' +
+    cats.map(c => `<button class="sub-tab" data-cat="${c}">${c}</button>`).join('');
+  currentSubCategory = 'all';
+
+  // Show/hide All Steps checkbox
+  $allStepsRow.style.display = (skill === 'alchemy' || skill === 'smithing') ? 'flex' : 'none';
+  if (skill !== 'alchemy' && skill !== 'smithing') {
+    allStepsMode = false;
+    $allStepsCheck.checked = false;
+  }
+}
+
+/* ── Recalculate and render ── */
+async function recalculate(validate) {
+  const curLvl = Math.max(1, Math.min(99, parseInt($currentLevel.value) || 1));
+  let tgtLvl = parseInt($targetLevel.value) || curLvl + 1;
+
+  if (validate) {
+    if (tgtLvl <= curLvl) tgtLvl = curLvl + 1;
+    if (tgtLvl > 99) tgtLvl = 99;
+    $targetLevel.value = tgtLvl;
+  }
+
+  tgtLvl = Math.max(curLvl + 1, Math.min(99, tgtLvl));
+
+  const curXp = xpForLevel(curLvl);
+  const tgtXp = xpForLevel(tgtLvl);
+  const remaining = tgtXp - curXp;
+
+  $currentXp.textContent = fmt(curXp);
+  $targetXp.textContent = fmt(tgtXp);
+  $xpRemaining.textContent = fmt(Math.max(0, remaining));
+
+  const recipes = await loadSkillData(currentSkill);
+
+  // Filter by current level and sub-category
+  let filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null);
+
+  if (allStepsMode && currentSkill === 'alchemy') {
+    // All Steps: show only Bottle recipes, deduplicated
+    filtered = recipes.filter(r => r.Level <= curLvl && r.Category === 'Bottle');
+    filtered = deduplicateBottles(filtered);
+  } else if (allStepsMode && currentSkill === 'smithing') {
+    // All Steps: show non-Bar recipes, filtered by selected sub-category
+    filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null && r.Category !== 'Bars');
+    if (currentSubCategory && currentSubCategory !== 'all') {
+      filtered = filtered.filter(r => r.Category === currentSubCategory);
+    }
+  } else if (currentSubCategory && currentSubCategory !== 'all') {
+    filtered = filtered.filter(r => r.Category === currentSubCategory);
+    if (currentSubCategory === 'Bottle') filtered = deduplicateBottles(filtered);
+  }
+
+  // Always deduplicate bottles when viewing all alchemy recipes
+  if (currentSkill === 'alchemy' && !allStepsMode) {
+    filtered = deduplicateBottles(filtered);
+  }
+
+  // Sort by level descending (highest level first)
+  filtered.sort((a, b) => (b.Level || 0) - (a.Level || 0));
+
+  if (filtered.length === 0 || remaining <= 0) {
+    $tbody.innerHTML = '<tr><td colspan="5" class="no-recipes">No recipes available at your current level.</td></tr>';
+    return;
+  }
+
+  $tbody.innerHTML = filtered.map(r => {
+    if (allStepsMode && currentSkill === 'alchemy') {
+      // Compute full cycle
+      const cycle = computeFullCycle(r, recipes);
+      if (!cycle) {
+        return `<tr>
+          <td class="col-name">${r.Name}</td>
+          <td class="col-lvl">${r.Level}</td>
+          <td class="col-xp">—</td>
+          <td class="col-actions">—</td>
+          <td class="col-materials">Recipe chain unknown</td>
+        </tr>`;
+      }
+      const cycles = Math.ceil(remaining / cycle.totalXP);
+      return `<tr>
+        <td class="col-name">${r.Name}</td>
+        <td class="col-lvl">${r.Level}</td>
+        <td class="col-xp">${fmt(cycle.totalXP)} XP/cycle</td>
+        <td class="col-actions">${fmt(cycles)}</td>
+        <td class="col-materials">${multiplyMats(cycle.rawMats, cycles)}</td>
+      </tr>`;
+    }
+
+    if (allStepsMode && currentSkill === 'smithing') {
+      const cycle = computeSmithingCycle(r, recipes);
+      const cycles = Math.ceil(remaining / cycle.totalXP);
+      return `<tr>
+        <td class="col-name">${r.Name}</td>
+        <td class="col-lvl">${r.Level}</td>
+        <td class="col-xp">${fmt(cycle.totalXP)} XP/cycle</td>
+        <td class="col-actions">${fmt(cycles)}</td>
+        <td class="col-materials">${multiplyMats(cycle.rawMats, cycles)}</td>
+      </tr>`;
+    }
+
+    const actions = Math.ceil(remaining / r.Experience);
+    const totalMats = r.Materials
+      ? r.Materials.map(m => `${fmt(m.Amount * actions)}× ${m.Material}`).join(', ')
+      : (r.Input ? `${fmt(actions)}× ${r.Input}` : '—');
+
+    return `<tr>
+      <td class="col-name">${r.Name}</td>
+      <td class="col-lvl">${r.Level}</td>
+      <td class="col-xp">${fmt(r.Experience)} XP</td>
+      <td class="col-actions">${fmt(actions)}</td>
+      <td class="col-materials">${totalMats}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Event: Skill tabs ── */
+$skillTabs.addEventListener('click', async (e) => {
+  const tab = e.target.closest('.skill-tab');
+  if (!tab) return;
+  $skillTabs.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  currentSkill = tab.dataset.skill;
+  $skillIcon.src = SKILL_ICONS[currentSkill];
+  renderSubTabs(currentSkill);
+  await recalculate();
+  updateURL();
+});
+
+/* ── Event: Sub-category tabs ── */
+$subTabs.addEventListener('click', async (e) => {
+  const tab = e.target.closest('.sub-tab');
+  if (!tab || tab.disabled) return;
+  $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  currentSubCategory = tab.dataset.cat;
+  await recalculate();
+  updateURL();
+});
+
+/* ── Event: All Steps checkbox ── */
+$allStepsCheck.addEventListener('change', async () => {
+  allStepsMode = $allStepsCheck.checked;
+  updateSubTabStates();
+  await recalculate();
+  updateURL();
+});
+
+function updateSubTabStates() {
+  const tabs = $subTabs.querySelectorAll('.sub-tab');
+  if (allStepsMode && currentSkill === 'alchemy') {
+    // Lock to Bottle
+    tabs.forEach(t => {
+      const cat = t.dataset.cat;
+      if (cat === 'Bottle') {
+        t.classList.add('active');
+        t.disabled = false;
+        t.style.opacity = '1';
+      } else {
+        t.classList.remove('active');
+        t.disabled = true;
+        t.style.opacity = '0.35';
+        t.style.cursor = 'default';
+      }
+    });
+    currentSubCategory = 'Bottle';
+  } else if (allStepsMode && currentSkill === 'smithing') {
+    // Hide All and Bars, allow Armor/Weapons/Tools
+    tabs.forEach(t => {
+      const cat = t.dataset.cat;
+      if (cat === 'all' || cat === 'Bars') {
+        t.classList.remove('active');
+        t.disabled = true;
+        t.style.opacity = '0.35';
+        t.style.cursor = 'default';
+      } else {
+        t.disabled = false;
+        t.style.opacity = '1';
+        t.style.cursor = 'pointer';
+      }
+    });
+    // If currently on All or Bars, switch to first allowed
+    if (!currentSubCategory || currentSubCategory === 'all' || currentSubCategory === 'Bars') {
+      tabs.forEach(t => t.classList.remove('active'));
+      const first = $subTabs.querySelector('[data-cat="Armor"]');
+      if (first) { first.classList.add('active'); currentSubCategory = 'Armor'; }
+    }
+  } else {
+    // Reset all tabs
+    tabs.forEach(t => {
+      t.disabled = false;
+      t.style.opacity = '1';
+      t.style.cursor = 'pointer';
+    });
+    // Re-select All
+    tabs.forEach(t => t.classList.remove('active'));
+    $subTabs.querySelector('[data-cat="all"]')?.classList.add('active');
+    currentSubCategory = 'all';
+  }
+}
+
+/* ── Event: Level inputs ── */
+$currentLevel.addEventListener('input', () => { recalculate(false); updateURL(); });
+$targetLevel.addEventListener('input', () => { recalculate(false); updateURL(); });
+$currentLevel.addEventListener('change', () => { recalculate(true); updateURL(); });
+$targetLevel.addEventListener('change', () => { recalculate(true); updateURL(); });
+$currentLevel.addEventListener('focus', () => $currentLevel.select());
+$targetLevel.addEventListener('focus', () => $targetLevel.select());
+
+/* ── URL State Management ── */
+function updateURL() {
+  const params = new URLSearchParams();
+  params.set('skill', currentSkill);
+  if (currentSubCategory && currentSubCategory !== 'all') params.set('cat', currentSubCategory);
+  params.set('cur', $currentLevel.value);
+  params.set('tgt', $targetLevel.value);
+  if (allStepsMode) params.set('allSteps', '1');
+  const url = window.location.pathname + '?' + params.toString();
+  history.replaceState(null, '', url);
+}
+
+function shareConfig() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('share-btn');
+    btn.textContent = '\u2705 Copied!';
+    setTimeout(() => { btn.textContent = '\ud83d\udd17 Share'; }, 2000);
+  }).catch(() => {
+    prompt('Copy this URL:', url);
+  });
+}
+document.getElementById('share-btn').addEventListener('click', shareConfig);
+
+async function initFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const skill = params.get('skill');
+  const cat = params.get('cat');
+  const cur = params.get('cur');
+  const tgt = params.get('tgt');
+  const allSteps = params.get('allSteps');
+
+  if (skill && DATA_PATHS[skill]) {
+    currentSkill = skill;
+    $skillTabs.querySelectorAll('.skill-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.skill === skill);
+    });
+    $skillIcon.src = SKILL_ICONS[currentSkill];
+    renderSubTabs(currentSkill);
+  }
+
+  if (cur) $currentLevel.value = cur;
+  if (tgt) $targetLevel.value = tgt;
+
+  if (allSteps === '1' && (currentSkill === 'alchemy' || currentSkill === 'smithing')) {
+    allStepsMode = true;
+    $allStepsCheck.checked = true;
+    updateSubTabStates();
+  }
+
+  if (cat && !allStepsMode) {
+    const catTab = $subTabs.querySelector(`[data-cat="${cat}"]`);
+    if (catTab) {
+      $subTabs.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+      catTab.classList.add('active');
+      currentSubCategory = cat;
+    }
+  }
+
+  await recalculate();
+}
+
+/* ── Init ── */
+initFromURL();
+</script>
+
+</body>
+</html>
