@@ -1,6 +1,6 @@
 # ⚔️ Winds of Valen — Community Database & Tools
 
-A community-driven collection of game data, interactive tools, and formula documentation for [Winds of Valen](https://store.steampowered.com/app/Winds_of_Valen).
+A community-driven collection of game data, interactive tools, and formula documentation for [Winds of Valen](https://store.steampowered.com/app/4135880/Winds_of_Valen/).
 
 > **Live Site:** Hosted via GitHub Pages — open `index.html` to browse all tools.
 
@@ -105,22 +105,11 @@ All tools share a consistent dark-themed UI with a medieval fantasy aesthetic. S
 
 ---
 
-## 🤝 Contributing
-
-### Adding New Items
-1. Add item data to the appropriate JSON file in `data/entities/`
-2. Follow the existing schema (Name, Description, Icon, Type, Price, Stats)
-3. Place icon sprites (94×95 PNG) in `icons/items/` with matching `Icon` field name
-
-### Updating Formulas
-Formula documentation is in `formulas/` as both Markdown (source of truth) and HTML (interactive display).
-
-### Data Sourcing
-Item data is sourced directly from in-game screenshots. The `tempPics/` folder (gitignored) is used as a staging area for processing screenshots before extracting data into JSON files.
-
----
-
 ## 📋 Data Completeness
+
+This table outlines the completeness of the data in the database. Completion only accounts for items that are currently stored in the database, and does not account for items that may be missing from the database.
+
+For example if the mithril tier of weapons was completely missing from the database, the table would still show ✅ for weapons.
 
 | Category | Name | Description | Icon | Price | Stats |
 |----------|:----:|:-----------:|:----:|:-----:|:-----:|
