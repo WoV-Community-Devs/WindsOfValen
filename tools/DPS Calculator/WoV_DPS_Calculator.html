@@ -150,7 +150,8 @@ body{
 .page-tab.active{color:var(--accent);border-bottom-color:var(--accent);text-shadow:0 0 12px rgba(212,168,67,0.3);}
 
 /* ── Main Grid ── */
-.main-grid{max-width:1100px;margin:0 auto;padding:1rem;display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.main-grid{max-width:1400px;margin:0 auto;padding:1rem;display:grid;grid-template-columns:1fr auto;gap:0.75rem;}
+.right-column{display:flex;gap:0.75rem;min-width:0;}
 
 /* ── Panels ── */
 .panel{
@@ -316,9 +317,13 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 .ss-option.hidden{display:none;}
 .ss-empty{padding:0.5rem;color:var(--text-muted);font-size:0.75rem;text-align:center;}
 
+/* ── Monster Panel (skinny) ── */
+.monster-panel{width:200px;flex-shrink:0;}
+
 /* ── Results Panel ── */
 .results-panel{
-  grid-column:1/-1;background:var(--bg-header);border:1px solid var(--border);border-radius:var(--radius);
+  width:580px;flex-shrink:0;
+  background:var(--bg-header);border:1px solid var(--border);border-radius:var(--radius);
   overflow:hidden;backdrop-filter:blur(10px);box-shadow: var(--panel-shadow);
 }
 .results-panel .panel-header{
@@ -327,11 +332,14 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
   font-family:'Cinzel',serif;font-size:0.85rem;font-weight:900;letter-spacing:0.08em;
   text-shadow: 0 1px 2px rgba(255,255,255,0.1);
 }
-.results-table{width:100%;border-collapse:collapse;}
-.results-table th,.results-table td{padding:0.55rem 0.5rem;text-align:center;font-size:0.8rem;border-right:1px solid rgba(78,92,70,0.3);}
+.results-table{width:auto;border-collapse:collapse;}
+.results-table th,.results-table td{padding:0.45rem 0.5rem;text-align:left;font-size:0.8rem;border-bottom:1px solid rgba(78,92,70,0.2);border-right:1px solid rgba(78,92,70,0.3);}
 .results-table th:last-child,.results-table td:last-child{border-right:none;}
-.results-table thead th{background:rgba(18,24,20,0.85);color:var(--text-dim);font-family:'Cinzel',serif;font-weight:700;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);}
-.results-table tbody td{font-weight:800;font-size:1.1rem;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:var(--text);background:rgba(15,20,16,0.7);}
+.results-table th:first-child,.results-table td:first-child{text-align:left;}
+.results-table thead th{background:rgba(18,24,20,0.85);color:var(--text-dim);font-family:'Cinzel',serif;font-weight:700;font-size:0.66rem;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);}
+.results-table tbody td{font-weight:800;font-size:0.95rem;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:var(--text);background:rgba(15,20,16,0.7);}
+.results-table .stat-label-cell{font-family:'Cinzel',serif;font-weight:700;font-size:0.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;background:rgba(18,24,20,0.85)!important;}
+.results-table .best-col{background:rgba(212,168,67,0.08)!important;}
 .r-accuracy{color:var(--blue)!important;text-shadow:0 0 8px rgba(91,168,200,0.2);}
 .r-maxhit{color:var(--red)!important;text-shadow:0 0 8px rgba(201,80,58,0.2);}
 .r-dps{color:var(--green)!important;text-shadow:0 0 8px rgba(106,191,105,0.2);}
@@ -381,12 +389,12 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
   display:flex;align-items:center;gap:0.25rem;flex-wrap:wrap;flex:1;min-width:0;
 }
 .loadout-tab{
-  padding:0.3rem 0.6rem;border-radius:3px;cursor:pointer;
-  font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;
+  padding:0.45rem 0.75rem;border-radius:3px;cursor:pointer;
+  font-family:'Cinzel',serif;font-size:0.82rem;font-weight:700;
   background:var(--bg-slot);border:1px solid var(--border);
   color:var(--text-muted);transition:all 0.2s;
-  display:flex;align-items:center;gap:0.3rem;
-  letter-spacing:0.03em;
+  display:flex;align-items:center;justify-content:center;gap:0.3rem;
+  letter-spacing:0.03em;min-width:2rem;
 }
 .loadout-tab:hover{border-color:var(--text-muted);color:var(--text);}
 .loadout-tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.12);}
@@ -402,13 +410,13 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 }
 .loadout-add:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.1);}
 
-/* Results row highlighting */
-.results-table tr.active-row{background:rgba(212,168,67,0.08);}
-.results-table .loadout-label{font-family:'Cinzel',serif;color:var(--accent);font-weight:700;font-size:0.7rem;white-space:nowrap;letter-spacing:0.03em;}
+/* Results column highlighting */
+.results-table .loadout-header{font-family:'Cinzel',serif;color:var(--accent);font-weight:700;font-size:0.66rem;white-space:nowrap;letter-spacing:0.03em;}
 
-@media(max-width:700px){
+@media(max-width:900px){
   .main-grid{grid-template-columns:1fr;}
-  .results-panel{grid-column:auto;}
+  .right-column{flex-direction:column;}
+  .monster-panel{width:100%;}
   .equip-visual{grid-template-columns:repeat(3,70px);grid-template-rows:repeat(4,70px);}
   .eslot{width:70px;height:70px;}
 }
@@ -547,23 +555,30 @@ function switchPage(page){
 
   <!-- LEFT: Player Loadout -->
   <div class="panel">
-    <div class="panel-header"><span id="loadout-header-name" style="cursor:pointer" title="Double-click to rename">Loadout 1</span> <span id="rename-hint" style="font-size:0.6rem;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">(Double click to edit)</span> <span id="weapon-badge" class="badge badge-none" style="margin-left:auto">No Weapon</span></div>
+    <div class="panel-header" style="padding:0;overflow:hidden;">
+      <div class="loadout-tabs" id="loadout-tabs" style="margin:0;padding:0;border:none;gap:0;flex:1;">
+        <div class="loadout-tabs-inner" id="loadout-tabs-inner" style="gap:0;">
+          <div class="loadout-tab active" data-idx="0">1</div>
+          <button class="loadout-add" id="add-loadout" title="Copy current loadout">+</button>
+        </div>
+      </div>
+    </div>
     <div class="panel-body">
-      <!-- Loadout tabs -->
-      <div class="loadout-tabs" id="loadout-tabs">
-        <div class="loadout-tabs-inner" id="loadout-tabs-inner">
-          <div class="loadout-tab active" data-idx="0">Loadout 1</div>
-          <button class="loadout-add" id="add-loadout" title="Copy current loadout">+ New</button>
-        </div>
-        <div style="flex-shrink:0;display:flex;align-items:center;gap:0.4rem;">
-          <select id="preset-select" style="background:#1e2a26;border:1px solid var(--border);color:var(--text);padding:0.25rem 0.4rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">
-            <option value="" style="background:#1e2a26;color:var(--text);">— Preset —</option>
-            <option value="max-ranged" style="background:#1e2a26;color:var(--text);">Max Archery</option>
-            <option value="max-melee-pierce" style="background:#1e2a26;color:var(--text);">Max Melee (Pierce)</option>
-            <option value="max-melee-slash" style="background:#1e2a26;color:var(--text);">Max Melee (Slash)</option>
-          </select>
-          <button id="share-btn" title="Copy shareable URL" style="background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">🔗 Share</button>
-        </div>
+      <!-- Loadout name bar -->
+      <div class="loadout-name-bar" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);">
+        <span id="loadout-header-name" style="cursor:pointer;font-family:'Cinzel',serif;font-size:0.78rem;font-weight:700;color:var(--accent);letter-spacing:0.03em;" title="Double-click to rename">Loadout 1</span>
+        <button id="delete-loadout-btn" style="display:none;background:none;border:none;cursor:pointer;font-size:0.75rem;color:var(--text-muted);padding:0.15rem 0.3rem;border-radius:3px;transition:color 0.2s;" title="Delete this loadout" onmouseover="this.style.color='#ff6b6b'" onmouseout="this.style.color='var(--text-muted)'">🗑️</button>
+        <span id="weapon-badge" class="badge badge-none" style="margin-left:auto">No Weapon</span>
+      </div>
+      <!-- Preset & Share -->
+      <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.5rem;">
+        <select id="preset-select" style="background:#1e2a26;border:1px solid var(--border);color:var(--text);padding:0.25rem 0.4rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;flex:1;">
+          <option value="" style="background:#1e2a26;color:var(--text);">— Preset —</option>
+          <option value="max-ranged" style="background:#1e2a26;color:var(--text);">Max Archery</option>
+          <option value="max-melee-pierce" style="background:#1e2a26;color:var(--text);">Max Melee (Pierce)</option>
+          <option value="max-melee-slash" style="background:#1e2a26;color:var(--text);">Max Melee (Slash)</option>
+        </select>
+        <button id="share-btn" title="Copy shareable URL" style="background:var(--bg-input);border:1px solid var(--border);color:var(--accent);padding:0.25rem 0.5rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">🔗 Share</button>
       </div>
       <div style="display:flex;gap:0.5rem;">
         <div class="form-row" style="flex:1;">
@@ -576,33 +591,45 @@ function switchPage(page){
         </div>
       </div>
 
-      <hr class="section-divider" />
-
-      <div style="text-align:right;margin-bottom:0.4rem;">
+      <div style="text-align:left;margin-bottom:0.4rem;">
         <button id="clear-btn" style="background:var(--bg-slot);border:1px solid var(--border);color:var(--text-muted);padding:0.25rem 0.6rem;border-radius:3px;cursor:pointer;font-size:0.7rem;font-family:inherit;text-transform:uppercase;letter-spacing:0.04em;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">✕ Clear All</button>
       </div>
 
-      <!-- Visual Equipment Grid: 3 cols × 4 rows -->
-      <!-- Layout: shield  helmet  amulet -->
-      <!--          weapon  chest   gloves -->
-      <!--          (empty) legs    ring   -->
-      <!--          (empty) boots   (empty)-->
-      <div class="equip-visual" id="equip-visual">
-        <div class="eslot" data-slot="shield" id="vs-shield"><img class="slot-icon" id="icon-shield" /><span class="slot-label">Shield</span></div>
-        <div class="eslot" data-slot="helmet" id="vs-helmet"><img class="slot-icon" id="icon-helmet" /><span class="slot-label">Helmet</span></div>
-        <div class="eslot" data-slot="amulet" id="vs-amulet"><img class="slot-icon" id="icon-amulet" /><span class="slot-label">Amulet</span><div class="gem-indicator" id="gem-ind-amulet">G</div></div>
+      <!-- Equipment Grid + Stats side by side -->
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <!-- Visual Equipment Grid: 3 cols × 4 rows -->
+        <div class="equip-visual" id="equip-visual" style="flex-shrink:0;margin:0 auto;">
+          <div class="eslot" data-slot="shield" id="vs-shield"><img class="slot-icon" id="icon-shield" /><span class="slot-label">Shield</span></div>
+          <div class="eslot" data-slot="helmet" id="vs-helmet"><img class="slot-icon" id="icon-helmet" /><span class="slot-label">Helmet</span></div>
+          <div class="eslot" data-slot="amulet" id="vs-amulet"><img class="slot-icon" id="icon-amulet" /><span class="slot-label">Amulet</span><div class="gem-indicator" id="gem-ind-amulet">G</div></div>
 
-        <div class="eslot" data-slot="weapon" id="vs-weapon"><img class="slot-icon" id="icon-weapon" /><span class="slot-label">Weapon</span></div>
-        <div class="eslot" data-slot="chest" id="vs-chest"><img class="slot-icon" id="icon-chest" /><span class="slot-label">Chest</span></div>
-        <div class="eslot" data-slot="gloves" id="vs-gloves"><img class="slot-icon" id="icon-gloves" /><span class="slot-label">Gloves</span></div>
+          <div class="eslot" data-slot="weapon" id="vs-weapon"><img class="slot-icon" id="icon-weapon" /><span class="slot-label">Weapon</span></div>
+          <div class="eslot" data-slot="chest" id="vs-chest"><img class="slot-icon" id="icon-chest" /><span class="slot-label">Chest</span></div>
+          <div class="eslot" data-slot="gloves" id="vs-gloves"><img class="slot-icon" id="icon-gloves" /><span class="slot-label">Gloves</span></div>
 
-        <div class="eslot eslot-empty"></div>
-        <div class="eslot" data-slot="legs" id="vs-legs"><img class="slot-icon" id="icon-legs" /><span class="slot-label">Legs</span></div>
-        <div class="eslot" data-slot="ring" id="vs-ring"><img class="slot-icon" id="icon-ring" /><span class="slot-label">Ring</span><div class="gem-indicator" id="gem-ind-ring">G</div></div>
+          <div class="eslot eslot-empty"></div>
+          <div class="eslot" data-slot="legs" id="vs-legs"><img class="slot-icon" id="icon-legs" /><span class="slot-label">Legs</span></div>
+          <div class="eslot" data-slot="ring" id="vs-ring"><img class="slot-icon" id="icon-ring" /><span class="slot-label">Ring</span><div class="gem-indicator" id="gem-ind-ring">G</div></div>
 
-        <div class="eslot eslot-empty"></div>
-        <div class="eslot" data-slot="boots" id="vs-boots"><img class="slot-icon" id="icon-boots" /><span class="slot-label">Boots</span></div>
-        <div class="eslot" data-slot="arrows" id="vs-arrows"><img class="slot-icon" id="icon-arrows" /><span class="slot-label">Arrows</span></div>
+          <div class="eslot eslot-empty"></div>
+          <div class="eslot" data-slot="boots" id="vs-boots"><img class="slot-icon" id="icon-boots" /><span class="slot-label">Boots</span></div>
+          <div class="eslot" data-slot="arrows" id="vs-arrows"><img class="slot-icon" id="icon-arrows" /><span class="slot-label">Arrows</span></div>
+        </div>
+
+        <!-- Vertical divider -->
+        <div style="width:1px;align-self:stretch;background:var(--border);margin-left:auto;"></div>
+
+        <!-- Equipment Stats (beside gear grid) -->
+        <div style="width:120px;flex-shrink:0;">
+          <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.35rem;">Equipment Stats</div>
+          <div class="stat-grid" style="grid-template-columns:1fr;">
+            <div class="stat-row"><span class="s-label">Slash Acc</span><span class="s-val" id="agg-slash-acc">0</span></div>
+            <div class="stat-row"><span class="s-label">Pierce Acc</span><span class="s-val" id="agg-pierce-acc">0</span></div>
+            <div class="stat-row"><span class="s-label">Weapon Dmg</span><span class="s-val" id="agg-weapon-dmg">0</span></div>
+            <div class="stat-row"><span class="s-label">Atk Speed</span><span class="s-val" id="agg-atk-speed">0</span></div>
+            <div class="stat-row"><span class="s-label" id="power-label">Melee Power</span><span class="s-val" id="agg-melee-power">0</span></div>
+          </div>
+        </div>
       </div>
 
       <!-- Hidden native selects for data binding -->
@@ -614,63 +641,56 @@ function switchPage(page){
         <select id="slot-amulet"></select><select id="slot-arrows"></select>
         <select id="gem-ring"></select><select id="gem-amulet"></select>
       </div>
-
-      <hr class="section-divider" />
-
-      <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.35rem;">Equipment Stats</div>
-      <div class="stat-grid">
-        <div class="stat-row"><span class="s-label">Slash Acc</span><span class="s-val" id="agg-slash-acc">0</span></div>
-        <div class="stat-row"><span class="s-label">Pierce Acc</span><span class="s-val" id="agg-pierce-acc">0</span></div>
-        <div class="stat-row"><span class="s-label">Weapon Dmg</span><span class="s-val" id="agg-weapon-dmg">0</span></div>
-        <div class="stat-row"><span class="s-label">Atk Speed</span><span class="s-val" id="agg-atk-speed">0</span></div>
-        <div class="stat-row stat-full"><span class="s-label" id="power-label">Melee Power</span><span class="s-val" id="agg-melee-power">0</span></div>
-      </div>
     </div>
   </div>
 
-  <!-- RIGHT: Monster -->
-  <div class="panel">
-    <div class="panel-header">Target Monster</div>
-    <div class="panel-body">
-      <div style="margin-bottom:0.75rem">
-        <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.3rem;">Monster</div>
-        <select id="monster-select" style="width:100%"></select>
-      </div>
-      <div class="stat-grid" style="margin-top:0">
-        <div class="stat-row"><span class="s-label">Level</span><span class="s-val" id="m-level">—</span></div>
-        <div class="stat-row"><span class="s-label">Type</span><span class="s-val" id="m-type">—</span></div>
-        <div class="stat-row"><span class="s-label">Health</span><span class="s-val" id="m-health">—</span></div>
-        <div class="stat-row"><span class="s-label">Defence Lvl</span><span class="s-val" id="m-defence">—</span></div>
-        <div class="stat-row"><span class="s-label">Pierce Def</span><span class="s-val" id="m-pierce-def">—</span></div>
-        <div class="stat-row"><span class="s-label">Slash Def</span><span class="s-val" id="m-slash-def">—</span></div>
-      </div>
-    </div>
-  </div>
+  <!-- RIGHT COLUMN: Monster Info + Combat Results side by side -->
+  <div class="right-column">
 
-  <!-- BOTTOM: Results Comparison -->
-  <div class="results-panel">
-    <div class="panel-header">Combat Results</div>
-    <table class="results-table" id="results-table">
-      <thead><tr>
-        <th></th><th>Accuracy</th><th>Max Hit</th><th>Avg Hit</th><th>Min Hit</th>
-        <th>DPS</th><th>Atk Interval</th><th>Time to Kill</th><th>Kills / Hr</th>
-      </tr></thead>
-      <tbody id="results-tbody">
-        <tr class="active-row" data-loadout="0">
-          <td class="loadout-label">Loadout 1</td>
-          <td class="r-accuracy">—</td><td class="r-maxhit">—</td>
-          <td>—</td><td>—</td><td class="r-dps">—</td>
-          <td>—</td><td class="r-ttk">—</td><td>—</td>
-        </tr>
-      </tbody>
-    </table>
-    <div id="dmg-reduction-disclaimer" style="display:none;margin-top:0.5rem;padding:0.5rem 0.75rem;background:#3a2a10;border:1px solid #6b4f1d;border-radius:4px;font-size:0.72rem;color:#e8c56d;">
-      ⚠️ <strong>Damage reduction active.</strong> The selected enemy has Block or Deflect Power against your weapon's damage type. Damage is reduced by 75%. <em>This reduction value is assumed and has not been validated against source code.</em>
+    <!-- Monster Info (skinny) -->
+    <div class="panel monster-panel">
+      <div class="panel-header">Target Monster</div>
+      <div class="panel-body">
+        <div style="margin-bottom:0.75rem">
+          <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.3rem;">Monster</div>
+          <select id="monster-select" style="width:100%"></select>
+        </div>
+        <div class="stat-grid" style="margin-top:0;grid-template-columns:1fr;">
+          <div class="stat-row"><span class="s-label">Level</span><span class="s-val" id="m-level">—</span></div>
+          <div class="stat-row"><span class="s-label">Type</span><span class="s-val" id="m-type">—</span></div>
+          <div class="stat-row"><span class="s-label">Health</span><span class="s-val" id="m-health">—</span></div>
+          <div class="stat-row"><span class="s-label">Defence Lvl</span><span class="s-val" id="m-defence">—</span></div>
+          <div class="stat-row"><span class="s-label">Pierce Def</span><span class="s-val" id="m-pierce-def">—</span></div>
+          <div class="stat-row"><span class="s-label">Slash Def</span><span class="s-val" id="m-slash-def">—</span></div>
+        </div>
+      </div>
     </div>
-    <div id="gem-disclaimer" style="display:none;margin-top:0.5rem;padding:0.5rem 0.75rem;background:#3a2a10;border:1px solid #6b4f1d;border-radius:4px;font-size:0.72rem;color:#e8c56d;">
-      ⚠️ <strong>Gems equipped.</strong> Gem power calculations are based on assumed mechanics. See the <a href="#" onclick="switchPage('methodology');return false;" style="color:#e8c56d;text-decoration:underline;">Methodology</a> tab for details.
+
+    <!-- Combat Results (transposed: stats=rows, loadouts=columns) -->
+    <div class="results-panel">
+      <div class="panel-header">Combat Results</div>
+      <table class="results-table" id="results-table">
+        <thead id="results-thead"><tr>
+          <th></th><th class="loadout-header">Loadout 1</th>
+        </tr></thead>
+        <tbody id="results-tbody">
+          <tr><td class="stat-label-cell">Accuracy</td><td class="r-accuracy">—</td></tr>
+          <tr><td class="stat-label-cell">Max Hit</td><td class="r-maxhit">—</td></tr>
+          <tr><td class="stat-label-cell">Avg Hit</td><td>—</td></tr>
+          <tr><td class="stat-label-cell">Min Hit</td><td>—</td></tr>
+          <tr><td class="stat-label-cell">DPS</td><td class="r-dps">—</td></tr>
+          <tr><td class="stat-label-cell">Atk Interval</td><td>—</td></tr>
+          <tr><td class="stat-label-cell">Time to Kill</td><td class="r-ttk">—</td></tr>
+          <tr><td class="stat-label-cell">Kills / Hr</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div id="dmg-reduction-disclaimer" style="display:none;margin-top:0.5rem;padding:0.5rem 0.75rem;background:#3a2a10;border:1px solid #6b4f1d;border-radius:4px;font-size:0.72rem;color:#e8c56d;">
+        ⚠️ <strong>Damage reduction active.</strong> The selected enemy has Block or Deflect Power against your weapon's damage type. Damage is reduced by 75%. <em>This reduction value is assumed and has not been validated against source code.</em>
+      </div>
+
     </div>
-  </div>
+
+  </div><!-- /right-column -->
 
   <!-- CHART -->
   <div class="panel chart-panel">
@@ -810,20 +830,7 @@ function switchPage(page){
     </details>
 
 
-    <!-- Gems -->
-    <details open>
-      <summary>Gems</summary>
-      <div class="meth-body">
-        <p>Gems can be socketed in <strong>Ring</strong> and <strong>Amulet</strong> slots. Each gem adds a percentage bonus <strong>only to the Melee/Range Power of the item it is slotted into</strong>, not to total power across all gear.</p>
-        <p><code>itemPower = floor(baseItemPower × (1 + gemPct / 100))</code></p>
-        <p>Available gems:</p>
-        <ul>
-          <li><strong>Weak Power Gem</strong> — +20% power to slotted item</li>
-          <li><strong>Power Gem</strong> — +30% power to slotted item</li>
-          <li><strong>Strong Power Gem</strong> — +40% power to slotted item</li>
-        </ul>
-      </div>
-    </details>
+
 
     <!-- Two-Handed / Bows -->
     <details open>
@@ -1055,6 +1062,7 @@ function switchLoadout(idx){
 }
 
 function addLoadout(){
+  if(loadouts.length>=6)return;
   saveCurrentLoadout();
   const copy=JSON.parse(JSON.stringify(loadouts[activeLoadout]));
   copy.name="";
@@ -1083,46 +1091,46 @@ function renderTabs(){
     const tab=document.createElement("div");
     tab.className="loadout-tab"+(i===activeLoadout?" active":"");
     tab.dataset.idx=i;
-    const nameSpan=document.createElement("span");
-    nameSpan.className="tab-name";
-    nameSpan.textContent=getLoadoutName(i);
-    tab.appendChild(nameSpan);
-    if(loadouts.length>1){
-      const closeBtn=document.createElement("span");
-      closeBtn.className="tab-close";closeBtn.dataset.delidx=i;closeBtn.innerHTML="\u00d7";
-      tab.appendChild(closeBtn);
-    }
-    tab.addEventListener("click",e=>{
-      if(e.target.dataset.delidx!==undefined){removeLoadout(parseInt(e.target.dataset.delidx));return;}
-      switchLoadout(i);
-    });
-    tab.addEventListener("dblclick",e=>{
-      e.stopPropagation();
-      const span=tab.querySelector(".tab-name");
-      if(!span)return;
-      const input=document.createElement("input");
-      input.type="text";input.value=getLoadoutName(i);
-      input.style.cssText="width:80px;padding:0.1rem 0.3rem;font-size:0.72rem;font-weight:700;font-family:inherit;background:var(--bg-input);border:1px solid var(--accent);border-radius:3px;color:var(--text);outline:none;";
-      span.replaceWith(input);input.focus();input.select();
-      function commit(){const v=input.value.trim();loadouts[i].name=v;const ns=document.createElement("span");ns.className="tab-name";ns.textContent=getLoadoutName(i);input.replaceWith(ns);renderResultRows();recalcAll();}
-      input.addEventListener("blur",commit);
-      input.addEventListener("keydown",ev=>{if(ev.key==="Enter"){ev.preventDefault();input.blur();}if(ev.key==="Escape"){input.value=getLoadoutName(i);input.blur();}});
-    });
+    tab.textContent=(i+1);
+    tab.addEventListener("click",function(){switchLoadout(i);});
     container.insertBefore(tab,addBtn);
   });
+  // Show/hide delete button
+  var delBtn=$("delete-loadout-btn");
+  if(delBtn)delBtn.style.display=loadouts.length>1?"inline-block":"none";
+  // Hide + button at cap
+  var addBtn2=$("add-loadout");
+  if(addBtn2)addBtn2.style.display=loadouts.length>=6?"none":"";
 }
 
 function renderResultRows(){
-  const tbody=$("results-tbody");
+  // Rebuild thead with loadout columns
+  var thead=$("results-thead");
+  var headerRow="<th></th>";
+  loadouts.forEach(function(_,i){
+    headerRow+='<th class="loadout-header">'+getLoadoutName(i)+'</th>';
+  });
+  thead.innerHTML="<tr>"+headerRow+"</tr>";
+  // Rebuild tbody: 8 stat rows, each with N loadout cells
+  var tbody=$("results-tbody");
+  var statRows=[
+    {label:"Accuracy",cls:"r-accuracy"},
+    {label:"Max Hit",cls:"r-maxhit"},
+    {label:"Avg Hit",cls:""},
+    {label:"Min Hit",cls:""},
+    {label:"DPS",cls:"r-dps"},
+    {label:"Atk Interval",cls:""},
+    {label:"Time to Kill",cls:"r-ttk"},
+    {label:"Kills / Hr",cls:""}
+  ];
   tbody.innerHTML="";
-  loadouts.forEach((_,i)=>{
-    const tr=document.createElement("tr");
-    tr.dataset.loadout=i;
-    if(i===activeLoadout)tr.className="active-row";
-    tr.innerHTML='<td class="loadout-label">'+getLoadoutName(i)+'</td>'+
-      '<td class="r-accuracy">&mdash;</td><td class="r-maxhit">&mdash;</td>'+
-      '<td>&mdash;</td><td>&mdash;</td><td class="r-dps">&mdash;</td>'+
-      '<td>&mdash;</td><td class="r-ttk">&mdash;</td><td>&mdash;</td>';
+  statRows.forEach(function(sr){
+    var tr=document.createElement("tr");
+    var html='<td class="stat-label-cell">'+sr.label+'</td>';
+    loadouts.forEach(function(){
+      html+='<td class="'+(sr.cls||'')+'">\u2014</td>';
+    });
+    tr.innerHTML=html;
     tbody.appendChild(tr);
   });
 }
@@ -1236,40 +1244,66 @@ function recalcAll(){
   saveCurrentLoadout();
   // Update active loadout UI (badge, stats, etc.)
   recalcActiveUI();
-  // Calculate results for ALL loadouts
-  const tbody=$("results-tbody");
-  const rows=tbody.querySelectorAll("tr");
-  let anyReduced=false;
-  const dpsValues=[];
-  loadouts.forEach((state,i)=>{
-    const row=rows[i];if(!row)return;
-    row.className=i===activeLoadout?"active-row":"";
-    const cells=row.querySelectorAll("td");
-    const r=calcLoadoutResults(state);
-    if(!r){dpsValues.push(-1);for(let c=1;c<cells.length;c++)cells[c].textContent="\u2014";return;}
+  // Calculate results for ALL loadouts (transposed: stats=rows, loadouts=columns)
+  var tbody=$("results-tbody");
+  var statRows=tbody.querySelectorAll("tr"); // 8 rows (one per stat)
+  var thead=$("results-thead");
+  var headerCells=thead.querySelectorAll("th");
+  var anyReduced=false;
+  var dpsValues=[];
+  // Compute all results first
+  var allResults=[];
+  loadouts.forEach(function(state){
+    allResults.push(calcLoadoutResults(state));
+  });
+  // Fill each stat row's cells (cell 0=label, cell 1..N=loadout values)
+  var STAT_KEYS=["hc","mx","avg","min","dps","spa","stk","kph"];
+  var STAT_FMT=[
+    function(r){return (r.hc*100).toFixed(1)+"%";},
+    function(r){return r.mx;},
+    function(r){return r.avg;},
+    function(r){return r.min;},
+    function(r){return r.dps.toFixed(2);},
+    function(r){return r.spa.toFixed(2)+"s";},
+    function(r){return isFinite(r.stk)?r.stk.toFixed(1)+"s":"\u221e";},
+    function(r){return isFinite(r.kph)?r.kph.toFixed(1):"0";}
+  ];
+  for(var rowIdx=0;rowIdx<statRows.length;rowIdx++){
+    var cells=statRows[rowIdx].querySelectorAll("td");
+    for(var colIdx=0;colIdx<loadouts.length;colIdx++){
+      var cell=cells[colIdx+1]; // +1 to skip label cell
+      if(!cell)continue;
+      cell.classList.remove("best-col");
+      var r=allResults[colIdx];
+      if(!r){cell.textContent="\u2014";continue;}
+      cell.textContent=STAT_FMT[rowIdx](r);
+    }
+  }
+  // Track DPS and reduced status
+  allResults.forEach(function(r){
+    if(!r){dpsValues.push(-1);return;}
     if(r.reduced)anyReduced=true;
     dpsValues.push(r.dps);
-    cells[1].textContent=(r.hc*100).toFixed(1)+"%";
-    cells[2].textContent=r.mx;cells[3].textContent=r.avg;cells[4].textContent=r.min;
-    cells[5].textContent=r.dps.toFixed(2);
-    cells[6].textContent=r.spa.toFixed(2)+"s";
-    cells[7].textContent=isFinite(r.stk)?r.stk.toFixed(1)+"s":"\u221e";
-    cells[8].textContent=isFinite(r.kph)?r.kph.toFixed(1):"0";
   });
-  // Reset all result labels to match current loadout names
-  rows.forEach((row,i)=>{const cell=row.querySelector(".loadout-label");if(cell)cell.textContent=getLoadoutName(i);});
-  // Add star to best DPS loadout (only when comparing multiple)
+  // Update header names
+  for(var i=0;i<loadouts.length;i++){
+    if(headerCells[i+1])headerCells[i+1].textContent=getLoadoutName(i);
+  }
+  // Highlight best DPS column
   if(loadouts.length>1){
-    let bestIdx=-1,bestDps=-1;
-    dpsValues.forEach((d,i)=>{if(d>bestDps){bestDps=d;bestIdx=i;}});
+    var bestIdx=-1,bestDps=-1;
+    dpsValues.forEach(function(d,i){if(d>bestDps){bestDps=d;bestIdx=i;}});
     if(bestIdx>=0&&bestDps>0){
-      const bestRow=rows[bestIdx];
-      if(bestRow){const cell=bestRow.querySelector(".loadout-label");if(cell)cell.textContent="\u2B50 "+cell.textContent;}
+      // Add star to header
+      if(headerCells[bestIdx+1])headerCells[bestIdx+1].textContent="\u2B50 "+headerCells[bestIdx+1].textContent;
+      // Highlight column cells
+      for(var ri=0;ri<statRows.length;ri++){
+        var c=statRows[ri].querySelectorAll("td")[bestIdx+1];
+        if(c)c.classList.add("best-col");
+      }
     }
   }
   $("dmg-reduction-disclaimer").style.display=anyReduced?"block":"none";
-  const anyGems=loadouts.some(s=>(s.gems.ring||s.gems.amulet));
-  $("gem-disclaimer").style.display=anyGems?"block":"none";
   detectPreset();
   renderChart();
   // Live-sync URL hash so the URL is always shareable
@@ -1574,6 +1608,9 @@ function init(){
   // Add loadout button
   $("add-loadout").addEventListener("click",addLoadout);
 
+  // Delete loadout button
+  $("delete-loadout-btn").addEventListener("click",function(){if(loadouts.length>1)removeLoadout(activeLoadout);});
+
   // Preset loadouts
   $("preset-select").addEventListener("change",function(){applyPreset(this.value);});
 
@@ -1581,7 +1618,7 @@ function init(){
   $("share-btn").addEventListener("click",shareLoadout);
 
   // Loadout header rename on double-click (delegated so it survives DOM replacement)
-  $("loadout-header-name").closest(".panel-header").addEventListener("dblclick",function(e){
+  $("loadout-header-name").closest(".loadout-name-bar").addEventListener("dblclick",function(e){
     const span=document.getElementById("loadout-header-name");
     if(!span||!span.contains(e.target))return;
     e.stopPropagation();
