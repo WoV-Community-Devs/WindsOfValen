@@ -385,11 +385,14 @@
   },
   {
     "Name": "Goblin Bow",
+    "Description": "Wooden shortbow made by goblins, easy to fire quickly. Supports up to iron arrows.",
     "Icon": "goblin_bow",
     "Type": "BOW",
+    "Price": 100,
     "Requirements": [{ "Skill": "ARCHERY", "Value": 5 }],
     "Stats": [
-      { "Type": "ATTACK_SPEED", "Value": 2 },
+      { "Type": "ATTACK_RANGE", "Value": 750 },
+      { "Type": "ATTACK_SPEED", "Value": 1.5 },
       { "Type": "QUICK_DAMAGE", "Value": 20 }
     ]
   },

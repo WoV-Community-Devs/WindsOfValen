@@ -283,7 +283,7 @@ const STAT_LABELS = {
   QUICK_DAMAGE:'Quick Dmg', HEAVY_DAMAGE:'Heavy Dmg',
   PIECE_DEFENSE:'Pierce Def', SLASH_DEFENSE:'Slash Def',
   MELEE_POWER:'Melee Power', RANGE_POWER:'Range Power',
-  DEFLECT_POWER:'Deflect', BLOCK_POWER:'Block'
+  DEFLECT_POWER:'Deflect', BLOCK_POWER:'Block', WARD_POWER:'Ward'
 };
 function statLabel(s){ return STAT_LABELS[s] || s.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()); }
 
@@ -491,6 +491,7 @@ function renderEquipment(item) {
       ${desc}
       ${reqs || stats ? `<div class="card-stats">${reqs}${stats}</div>` : ''}
       ${smithing}
+      ${item.Price !== undefined ? `<div class="card-stat full" style="margin-top:0.4rem"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price.toLocaleString()}g</span></div>` : ''}
       ${item.Location ? `<div class="card-location">${item.Location}</div>` : ''}
     </div>`;
 }
@@ -554,7 +555,8 @@ function renderBar(item) {
         <div class="card-stat"><span class="stat-name">Smithing Lvl</span><span class="stat-val">${s.Level || '?'}</span></div>
         <div class="card-stat"><span class="stat-name">XP</span><span class="stat-val" style="color:var(--green)">${s.Experience || '?'}</span></div>
         ${s.Duration ? `<div class="card-stat"><span class="stat-name">Duration</span><span class="stat-val">${s.Duration}</span></div>` : ''}
-        ${s.SellCost ? `<div class="card-stat full"><span class="stat-name">Sell Price</span><span class="stat-val" style="color:var(--accent)">${s.SellCost}</span></div>` : ''}
+        ${s.SellCost ? `<div class="card-stat"><span class="stat-name">Sell Price</span><span class="stat-val" style="color:var(--accent)">${s.SellCost}</span></div>` : ''}
+        ${item.Price !== undefined ? `<div class="card-stat full"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price}g</span></div>` : ''}
       </div>
       ${matsHtml ? `<div class="card-section"><div class="card-section-title">Materials</div>${matsHtml}</div>` : ''}
     </div>`;
@@ -563,13 +565,16 @@ function renderBar(item) {
 // ── Ore renderer ──
 function renderOre(item) {
   const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
+  const desc = item.Description ? `<div class="card-desc">${item.Description}</div>` : '';
   return `
     <div class="card-head"><span class="card-name">${item.Name}</span></div>
     <div class="card-body">
       ${iconHtml}
+      ${desc}
       <div class="card-stats">
         <div class="card-stat"><span class="stat-name">Mining Lvl</span><span class="stat-val">${item.Level}</span></div>
         <div class="card-stat"><span class="stat-name">Experience</span><span class="stat-val" style="color:var(--green)">${item.Experience} XP</span></div>
+        ${item.Price !== undefined ? `<div class="card-stat full"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price}g</span></div>` : ''}
       </div>
       ${item.Location ? `<div class="card-location">${item.Location}</div>` : ''}
     </div>`;
@@ -578,13 +583,16 @@ function renderOre(item) {
 // ── Fish renderer ──
 function renderFish(item) {
   const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
+  const desc = item.Description ? `<div class="card-desc">${item.Description}</div>` : '';
   return `
     <div class="card-head"><span class="card-name">${item.Name}</span></div>
     <div class="card-body">
       ${iconHtml}
+      ${desc}
       <div class="card-stats">
         <div class="card-stat"><span class="stat-name">Fishing Lvl</span><span class="stat-val">${item.Level}</span></div>
         <div class="card-stat"><span class="stat-name">Experience</span><span class="stat-val" style="color:var(--green)">${item.Experience} XP</span></div>
+        ${item.Price !== undefined ? `<div class="card-stat full"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price}g</span></div>` : ''}
       </div>
       ${item.Location ? `<div class="card-location">${item.Location}</div>` : ''}
     </div>`;
