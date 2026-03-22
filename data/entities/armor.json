@@ -654,5 +654,32 @@
         "Value": 10
       }
     ]
+  },
+  {
+    "Name": "Mining Boots",
+    "Description": "These boots feel just right for mining.",
+    "Icon": "mining_boots",
+    "Type": "BOOTS",
+    "Price": 40,
+    "Requirements": [
+      {
+        "Skill": "MINING",
+        "Value": 5
+      }
+    ],
+    "Stats": [
+      {
+        "Type": "MINING_POWER",
+        "Value": 5
+      },
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 1
+      },
+      {
+        "Type": "PIECE_DEFENSE",
+        "Value": 1
+      }
+    ]
   }
 ]

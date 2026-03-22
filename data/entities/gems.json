@@ -32,21 +32,21 @@
   {
     "Name": "Weak Magic Power Gem",
     "Description": "Could be attached to jewellery. (Stats coming soon)",
-    "Icon": "weak_magic_power_gem",
+    "Icon": "weak_magic_gem",
     "Type": "WEAK_MAGIC_POWER_GEM",
     "Price": 100
   },
   {
     "Name": "Magic Power Gem",
     "Description": "Could be attached to jewellery. (Stats coming soon)",
-    "Icon": "magic_power_gem",
+    "Icon": "magic_gem",
     "Type": "MAGIC_POWER_GEM",
     "Price": 250
   },
   {
     "Name": "Fishing Power Gem",
     "Description": "Could be attached to jewellery.",
-    "Icon": "fishing_power_gem",
+    "Icon": "weak_fishing_gem",
     "Type": "FISHING_POWER_GEM",
     "ValueType": "FLAT",
     "StatType": "FISHING_POWER",

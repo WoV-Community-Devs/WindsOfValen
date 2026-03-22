@@ -66,5 +66,45 @@
         }
       ]
     }
+  },
+  {
+    "Name": "Crude Fishing Rod",
+    "Description": "A makeshift rod fashioned from a sturdy branch and a length of line.",
+    "Icon": "crude_fishing_rod",
+    "Type": "FISHING_ROD",
+    "Price": 10,
+    "Level": 1,
+    "FishingPower": 10,
+    "Requirements": [{ "Skill": "FISHING", "Value": 1 }]
+  },
+  {
+    "Name": "Sturdy Fishing Rod",
+    "Description": "Solid fishing rod made by a craftsman.",
+    "Icon": "sturdy_fishing_rod",
+    "Type": "FISHING_ROD",
+    "Price": 1000,
+    "Level": 20,
+    "FishingPower": 20,
+    "Requirements": [{ "Skill": "FISHING", "Value": 20 }]
+  },
+  {
+    "Name": "Smithing Hammer",
+    "Description": "Basic starter hammer, used to smith things at an anvil.",
+    "Icon": "smithing_hammer",
+    "Type": "SMITHING_HAMMER",
+    "Price": 8,
+    "Level": 1,
+    "SmithingPower": 5,
+    "Requirements": [{ "Skill": "SMITHING", "Value": 1 }]
+  },
+  {
+    "Name": "Dwarven Smithing Hammer",
+    "Description": "Dwarven Smithing hammer",
+    "Icon": "dwarven_smithing_hammer",
+    "Type": "SMITHING_HAMMER",
+    "Price": 1000,
+    "Level": 15,
+    "SmithingPower": 15,
+    "Requirements": [{ "Skill": "SMITHING", "Value": 15 }]
   }
 ]
