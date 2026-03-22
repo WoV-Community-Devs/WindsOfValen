@@ -126,11 +126,26 @@ The page uses a fixed background scene with animated particles layered below all
 ### Content z-index
 All content must sit above the background:
 ```css
-.site-header, .page-view, .methodology, #share-toast {
+.page-view, .methodology, .site-footer, #share-toast {
   position: relative;
   z-index: 2;
 }
 ```
+
+> **Note:** `.site-header` is excluded from this rule — it uses `position: sticky` (see Header section below).
+
+### Sticky Header
+The site header must be sticky on **all** pages so the "Back to Home Page" link is always accessible:
+```css
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(15,20,15,0.98), rgba(12,18,14,0.95));
+  /* ... other header styles ... */
+}
+```
+Do **not** include `.site-header` in any combined `position: relative` rules, as this will override the sticky behavior.
 
 ---
 
@@ -174,8 +189,8 @@ box-shadow: 0 0 10px rgba(212,168,67,0.12);
 
 ### Gradient Backgrounds
 ```css
-/* Site header */
-background: linear-gradient(180deg, rgba(15,20,15,0.95), rgba(12,18,14,0.92));
+/* Site header (higher opacity for sticky scroll) */
+background: linear-gradient(180deg, rgba(15,20,15,0.98), rgba(12,18,14,0.95));
 /* Panel headers */
 background: linear-gradient(180deg, rgba(20,28,22,0.9), rgba(15,22,18,0.85));
 /* Results panel header (golden) */
