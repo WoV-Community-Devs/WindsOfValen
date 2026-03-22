@@ -22,6 +22,7 @@
   {
     "Name": "Fishing Potion",
     "Description": "Boosts Fishing level by 5",
+    "Icon": "fishing_potion",
     "PotionMaking": {
       "Action": "Brew",
       "Level": 5,
@@ -61,6 +62,7 @@
   {
     "Name": "Mining Potion",
     "Description": "Boosts Mining level by 5",
+    "Icon": "mining_potion",
     "PotionMaking": {
       "Action": "Brew",
       "Level": 15,
@@ -99,6 +101,7 @@
   {
     "Name": "Attack Potion",
     "Description": "Boosts Attack level by 5",
+    "Icon": "attack_potion",
     "PotionMaking": {
       "Action": "Brew",
       "Level": 30,
@@ -138,6 +141,7 @@
   {
     "Name": "Strong Shield Potion",
     "Description": "Boosts shields for 360s",
+    "Icon": "strong_shield_potion",
     "PotionMaking": {
       "Action": "Brew",
       "Level": 50,
@@ -156,6 +160,7 @@
   },
   {
     "Name": "Weak Health Potion",
+    "Description": "Restores 30 Health",
     "Icon": "weak_health_potion",
     "PotionMaking": {
       "Action": "Bottle",
@@ -191,6 +196,8 @@
   },
   {
     "Name": "Fishing Potion",
+    "Description": "Boosts Fishing level by 5",
+    "Icon": "fishing_potion",
     "PotionMaking": {
       "Action": "Bottle",
       "Level": 5,
@@ -225,6 +232,7 @@
   },
   {
     "Name": "Shields Potion",
+    "Description": "Boosts shields for 120s",
     "Icon": "shield_potion",
     "PotionMaking": {
       "Action": "Bottle",
@@ -260,6 +268,8 @@
   },
   {
     "Name": "Mining Potion",
+    "Description": "Boosts Mining level by 5",
+    "Icon": "mining_potion",
     "PotionMaking": {
       "Action": "Bottle",
       "Level": 15,
@@ -294,6 +304,7 @@
   },
   {
     "Name": "Health Potion",
+    "Description": "Restores Health",
     "Icon": "health_potion",
     "PotionMaking": {
       "Action": "Bottle",
@@ -329,6 +340,8 @@
   },
   {
     "Name": "Attack Potion",
+    "Description": "Boosts Attack level by 5",
+    "Icon": "attack_potion",
     "PotionMaking": {
       "Action": "Bottle",
       "Level": 25,
@@ -363,6 +376,7 @@
   },
   {
     "Name": "Strong Health Potion",
+    "Description": "Restores 160 Health",
     "Icon": "strong_health_potion",
     "PotionMaking": {
       "Action": "Bottle",
