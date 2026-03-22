@@ -131,11 +131,11 @@ Item data is sourced directly from in-game screenshots. The `tempPics/` folder (
 | Gems | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Ammo | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Tools | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Ores | ✅ | ✅ | ✅ | ✅ | — |
-| Bars | ✅ | ✅ | ✅ | ✅ | — |
-| Fish | ✅ | ✅ | ✅ | ✅ | — |
-| Potions | ✅ | ✅ | ✅ | — | — |
-| Ingredients | ✅ | Partial | Partial | Partial | — |
+| Ores | ✅ | ✅ | ✅ | ✅ | N/A |
+| Bars | ✅ | ✅ | ✅ | ✅ | N/A |
+| Fish | ✅ | ✅ | ✅ | ✅ | N/A |
+| Potions | ✅ | ✅ | ✅ | — | N/A |
+| Ingredients | ✅ | Partial | Partial | Partial | N/A |
 
 ---
 
