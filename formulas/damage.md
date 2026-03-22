@@ -27,7 +27,7 @@ maxHit = floor(BASE_DAMAGE + (effectiveAttackLevel × EFFECTIVE_LEVEL_DAMAGE_MUL
 ```
 
 **Where:**
-- `attackLevel` — `ATTACK` level (melee) or `RANGED` level (bows), 1–99
+- `attackLevel` — `ATTACK` level (melee) or `ARCHERY` level (bows), 1–99
 - `weaponDamage` — Sum of `QUICK_DAMAGE` + `HEAVY_DAMAGE` from the weapon
 - `ATTACK_SPEED` — Speed stat on the weapon (1.0–5.0)
 - `power` — Total `MELEE_POWER` or `RANGE_POWER` from all equipped gear (each item's power is individually boosted by its socketed gem, if any)
@@ -60,5 +60,5 @@ itemPower = floor(baseItemPower × (1 + Value / 100))
 
 - **Slash weapons** — Use `SLASH_ACCURACY` vs enemy `SLASH_DEFENSE`
 - **Pierce weapons** (including bows) — Use `PIECE_ACCURACY` vs enemy `PIECE_DEFENSE`
-- **Bows** (`BOW`) — Use `RANGED` level instead of `ATTACK` level for both accuracy and damage
+- **Bows** (`BOW`) — Use `ARCHERY` level instead of `ATTACK` level for both accuracy and damage
 - **Two-handed weapons** (`WEAPON_2H`, `BOW`) — Disable the `SHIELD` slot

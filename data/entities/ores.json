@@ -1,43 +1,57 @@
 [
   {
     "Name": "Copper Ore",
+    "Description": "Could be smelted into something useful",
     "Icon": "copper_ore",
+    "Price": 2,
     "Level": 1,
     "Experience": 15,
     "Location": "North of town, near Skeleton Miners (6 Copper Nodes)"
   },
   {
     "Name": "Tin Ore",
+    "Description": "Could be smelted into something useful",
     "Icon": "tin_ore",
+    "Price": 2,
     "Level": 1,
     "Experience": 15,
     "Location": "North of town, near Skeleton Miners (8 Tin Nodes)"
   },
   {
     "Name": "Iron Ore",
+    "Description": "Could be smelted into something useful",
     "Icon": "iron_ore",
+    "Price": 4,
     "Level": 10,
     "Experience": 30,
     "Location": "South of town before the forest (14 Nodes) / North-west cave (7 Nodes)"
   },
   {
     "Name": "Coal Ore",
+    "Description": "Could be smelted into something useful",
     "Icon": "coal_ore",
+    "Price": 8,
     "Level": 20,
     "Experience": 80,
     "Location": "South of town before the forest (2 Nodes) / North-west cave (10 Nodes)"
   },
   {
     "Name": "Mithril Ore",
+    "Description": "Could be smelted into something useful",
     "Icon": "mithril_ore",
+    "Price": 12,
     "Level": 30,
     "Experience": 150,
     "Location": "North-west cave (3 Nodes) / Deep forest Elf region (7 Nodes)"
   },
   {
     "Name": "Gold Ore",
+    "Description": "Could be smelted into something useful",
+    "Icon": "gold_ore",
+    "Price": 80,
     "Level": 40,
-    "Experience": 350
+    "Experience": 350,
+    "Location": "North-west cave (7 Nodes)"
   },
   {
     "Name": "Gold Dust",

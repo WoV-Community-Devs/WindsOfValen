@@ -557,7 +557,7 @@ function switchPage(page){
         <div style="flex-shrink:0;display:flex;align-items:center;gap:0.4rem;">
           <select id="preset-select" style="background:#1e2a26;border:1px solid var(--border);color:var(--text);padding:0.25rem 0.4rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;">
             <option value="" style="background:#1e2a26;color:var(--text);">— Preset —</option>
-            <option value="max-ranged" style="background:#1e2a26;color:var(--text);">Max Ranged</option>
+            <option value="max-ranged" style="background:#1e2a26;color:var(--text);">Max Archery</option>
             <option value="max-melee-pierce" style="background:#1e2a26;color:var(--text);">Max Melee (Pierce)</option>
             <option value="max-melee-slash" style="background:#1e2a26;color:var(--text);">Max Melee (Slash)</option>
           </select>
@@ -570,7 +570,7 @@ function switchPage(page){
           <input type="number" id="attack-level" min="1" max="99" value="1" />
         </div>
         <div class="form-row" style="flex:1;">
-          <label>Ranged Lvl</label>
+          <label>Archery Lvl</label>
           <input type="number" id="ranged-level" min="1" max="99" value="1" />
         </div>
       </div>
@@ -687,7 +687,7 @@ function switchPage(page){
         </select>
         <label>X Axis</label>
         <select id="chart-x">
-          <option value="level" selected>Attack / Ranged Level</option>
+          <option value="level" selected>Attack / Archery Level</option>
           <option value="acc">Accuracy</option>
           <option value="wDmg">Weapon Damage</option>
           <option value="mp">Melee / Range Power</option>
@@ -720,7 +720,7 @@ function switchPage(page){
         <p>These are the values the calculator uses from your loadout:</p>
         <ul>
           <li><strong>Attack Level</strong> (1–99) — Your attack skill level. Used for both accuracy and damage rolls.</li>
-          <li><strong>Ranged Level</strong> (1–99) — Used instead of Attack Level when a bow is equipped.</li>
+          <li><strong>Archery Level</strong> (1–99) — Used instead of Attack Level when a bow is equipped.</li>
           <li><strong>Equipped Accuracy</strong> — Total Slash or Pierce accuracy from all gear. Affects accuracy only.</li>
           <li><strong>Weapon Damage</strong> — Sum of Quick Damage + Heavy Damage from the weapon tooltip. Affects damage only.</li>
           <li><strong>Attack Speed</strong> — Speed value on the weapon tooltip (1.0–5.0). Affects both damage and time per attack.</li>
@@ -764,7 +764,7 @@ function switchPage(page){
         <p>Hit chance is always between 0 and 1 (exclusive) — never exactly 0% or 100%.</p>
 
         <h3>Weapon Type Matters</h3>
-        <p><strong>Slash weapons</strong> use Slash Accuracy vs enemy Slash Defence. <strong>Pierce weapons</strong> (including bows) use Pierce Accuracy vs enemy Pierce Defence. Ranged weapons also substitute Ranged Level for Attack Level.</p>
+        <p><strong>Slash weapons</strong> use Slash Accuracy vs enemy Slash Defence. <strong>Pierce weapons</strong> (including bows) use Pierce Accuracy vs enemy Pierce Defence. Archery weapons also substitute Archery Level for Attack Level.</p>
       </div>
     </details>
 
@@ -829,7 +829,7 @@ function switchPage(page){
       <summary>Two-Handed Weapons &amp; Bows</summary>
       <div class="meth-body">
         <p><strong>Two-handed weapons</strong> (greatswords, axes, bows) disable the shield slot.</p>
-        <p><strong>Bows</strong> additionally require arrows to be equipped and use <strong>Ranged Level</strong> instead of Attack Level for both accuracy and damage calculations. Bows use Pierce Accuracy (from arrows and other gear).</p>
+        <p><strong>Bows</strong> additionally require arrows to be equipped and use <strong>Archery Level</strong> instead of Attack Level for both accuracy and damage calculations. Bows use Pierce Accuracy (from arrows and other gear).</p>
       </div>
     </details>
 
@@ -838,7 +838,7 @@ function switchPage(page){
       <summary>What Affects What</summary>
       <div class="meth-body">
         <ul>
-          <li><strong>Attack / Ranged Level</strong> → Accuracy (hit chance) + Damage (max hit)</li>
+          <li><strong>Attack / Archery Level</strong> → Accuracy (hit chance) + Damage (max hit)</li>
           <li><strong>Equipped Accuracy</strong> → Accuracy only</li>
           <li><strong>Weapon Damage</strong> → Damage only</li>
           <li><strong>Attack Speed</strong> → Damage (flat bonus) + Time per attack</li>
@@ -895,7 +895,7 @@ const ItemsData = [
   // Wards
   {Name:"Novice Ward",Type:ItemType.SHIELD,Stats:[{Type:StatType.WARD_POWER,Value:35}]},
   {Name:"Apprentice Ward",Type:ItemType.SHIELD,Stats:[{Type:StatType.WARD_POWER,Value:50}]},
-  {Name:"Adept Ward",Type:ItemType.SHIELD,Stats:[{Type:StatType.DEFLECT_POWER,Value:70}]},
+  {Name:"Adept Ward",Type:ItemType.SHIELD,Stats:[{Type:StatType.WARD_POWER,Value:70}]},
   {Name:"Skeleton Helmet",Type:ItemType.HELMET,Stats:[{Type:StatType.PIECE_DEFENSE,Value:7},{Type:StatType.SLASH_DEFENSE,Value:5}]},
   {Name:"Bronze Helmet",Type:ItemType.HELMET,Stats:[{Type:StatType.PIECE_DEFENSE,Value:6},{Type:StatType.SLASH_DEFENSE,Value:6}]},
   {Name:"Iron Helmet",Type:ItemType.HELMET,Stats:[{Type:StatType.PIECE_DEFENSE,Value:10},{Type:StatType.SLASH_DEFENSE,Value:10}]},
@@ -909,8 +909,8 @@ const ItemsData = [
   {Name:"Iron Platelegs",Type:ItemType.LEGS,Stats:[{Type:StatType.PIECE_DEFENSE,Value:13},{Type:StatType.SLASH_DEFENSE,Value:10}]},
   {Name:"Steel Platelegs",Type:ItemType.LEGS,Stats:[{Type:StatType.PIECE_DEFENSE,Value:21},{Type:StatType.SLASH_DEFENSE,Value:16}]},
   {Name:"Mithril Platelegs",Type:ItemType.LEGS,Stats:[{Type:StatType.PIECE_DEFENSE,Value:30},{Type:StatType.SLASH_DEFENSE,Value:27}]},
-  {Name:"Berserker Gloves",Type:ItemType.GLOVES,Stats:[{Type:StatType.MELEE_POWER,Value:10},{Type:StatType.SLASH_DEFENSE,Value:5},{Type:StatType.PIECE_DEFENSE,Value:5}]},
-  {Name:"Berserker Boots",Type:ItemType.BOOTS,Stats:[{Type:StatType.MELEE_POWER,Value:20},{Type:StatType.PIECE_DEFENSE,Value:7},{Type:StatType.SLASH_DEFENSE,Value:7}]},
+  {Name:"Berserker Gloves",Type:ItemType.GLOVES,Stats:[{Type:StatType.MELEE_POWER,Value:5},{Type:StatType.SLASH_DEFENSE,Value:5},{Type:StatType.PIECE_DEFENSE,Value:5}]},
+  {Name:"Berserker Boots",Type:ItemType.BOOTS,Stats:[{Type:StatType.MELEE_POWER,Value:8},{Type:StatType.PIECE_DEFENSE,Value:7},{Type:StatType.SLASH_DEFENSE,Value:7}]},
   {Name:"Copper Ring",Type:ItemType.RING,Stats:[{Type:StatType.MELEE_POWER,Value:6},{Type:StatType.RANGE_POWER,Value:5}]},
   {Name:"Gold Ring",Type:ItemType.RING,Stats:[{Type:StatType.MELEE_POWER,Value:8},{Type:StatType.RANGE_POWER,Value:7}]},
   {Name:"Titanium Ring",Type:ItemType.RING,Stats:[{Type:StatType.MELEE_POWER,Value:11},{Type:StatType.RANGE_POWER,Value:9}]},
@@ -920,11 +920,11 @@ const ItemsData = [
   {Name:"Titanium Amulet",Type:ItemType.AMULET,Stats:[{Type:StatType.MELEE_POWER,Value:17},{Type:StatType.RANGE_POWER,Value:17}]},
   {Name:"Elven Amulet",Type:ItemType.AMULET,Stats:[{Type:StatType.MELEE_POWER,Value:25},{Type:StatType.RANGE_POWER,Value:25}]},
   // Bows
-  {Name:"Crude Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:2},{Type:StatType.QUICK_DAMAGE,Value:5}]},
-  {Name:"Wood Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:2},{Type:StatType.HEAVY_DAMAGE,Value:15}]},
+  {Name:"Crude Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:1.5},{Type:StatType.QUICK_DAMAGE,Value:5}]},
+  {Name:"Wood Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:2.5},{Type:StatType.HEAVY_DAMAGE,Value:15}]},
   {Name:"Goblin Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:2},{Type:StatType.QUICK_DAMAGE,Value:20}]},
-  {Name:"Birch Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:2},{Type:StatType.HEAVY_DAMAGE,Value:30}]},
-  {Name:"Willow Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:2},{Type:StatType.HEAVY_DAMAGE,Value:45}]},
+  {Name:"Birch Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:2.5},{Type:StatType.HEAVY_DAMAGE,Value:30}]},
+  {Name:"Willow Bow",Type:ItemType.BOW,Stats:[{Type:StatType.ATTACK_SPEED,Value:2.5},{Type:StatType.HEAVY_DAMAGE,Value:45}]},
   // Arrows
   {Name:"Wooden Arrow",Type:ItemType.ARROWS,Stats:[{Type:StatType.PIECE_ACCURACY,Value:10}]},
   {Name:"Bronze Arrow",Type:ItemType.ARROWS,Stats:[{Type:StatType.PIECE_ACCURACY,Value:20}]},
@@ -1213,7 +1213,7 @@ function recalcActiveUI(){
 
   const pwrLabel=$("power-label");
   if(!wpn){el.badge.textContent="No Weapon";el.badge.className="badge badge-none";pwrLabel.textContent="Melee Power";}
-  else if(isBow){el.badge.textContent="Ranged";el.badge.className="badge badge-pierce";pwrLabel.textContent="Range Power";}
+  else if(isBow){el.badge.textContent="Archery";el.badge.className="badge badge-pierce";pwrLabel.textContent="Range Power";}
   else{const st=wStyle(wpn);el.badge.textContent=st==="slash"?"Slash":"Pierce";el.badge.className="badge badge-"+st;pwrLabel.textContent="Melee Power";}
 
   el.sAcc.textContent=sA;el.pAcc.textContent=pA;el.wDmg.textContent=wD;
@@ -1303,7 +1303,7 @@ function renderChart(){
 
   // X range
   let xMin,xMax,xLabel;
-  if(xKey==='level'){xMin=1;xMax=99;xLabel='Attack / Ranged Level';}
+  if(xKey==='level'){xMin=1;xMax=99;xLabel='Attack / Archery Level';}
   else if(xKey==='acc'){xMin=0;xMax=200;xLabel='Accuracy';}
   else if(xKey==='wDmg'){xMin=0;xMax=200;xLabel='Weapon Damage';}
   else{xMin=0;xMax=200;xLabel='Melee / Range Power';}

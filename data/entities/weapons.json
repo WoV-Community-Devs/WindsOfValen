@@ -4,6 +4,7 @@
     "Description": "Made of copper, very weak.",
     "Icon": "copper_sword",
     "Type": "WEAPON_1H",
+    "Price": 0,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -34,6 +35,7 @@
     "Description": "Basic sword made from Bronze.",
     "Icon": "bronze_sword",
     "Type": "WEAPON_1H",
+    "Price": 60,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -73,9 +75,10 @@
   },
   {
     "Name": "Iron Sword",
-    "Description": "Sturdy sword made from Iron.",
+    "Description": "Sturdy sword made from iron.",
     "Icon": "iron_sword",
     "Type": "WEAPON_1H",
+    "Price": 150,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -115,9 +118,10 @@
   },
   {
     "Name": "Steel Sword",
-    "Description": "Sturdy sword made from Steel.",
+    "Description": "Strong sword made from steel.",
     "Icon": "steel_sword",
     "Type": "WEAPON_1H",
+    "Price": 300,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -160,6 +164,7 @@
     "Description": "Mystical sword made from mythril.",
     "Icon": "mithril_sword",
     "Type": "WEAPON_1H",
+    "Price": 1500,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -199,9 +204,10 @@
   },
   {
     "Name": "Skeleton Rapier",
-    "Description": "A rapier used by once proud pioneer.",
+    "Description": "A rapier used by once proud pioneer",
     "Icon": "skeleton_rapier",
     "Type": "WEAPON_1H",
+    "Price": 3000,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -232,6 +238,7 @@
     "Description": "A make shift goblin axe.",
     "Icon": "goblin_axe",
     "Type": "WEAPON_2H",
+    "Price": 1000,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -259,9 +266,10 @@
   },
   {
     "Name": "Bandit Spear",
-    "Description": "A powerful spear.",
+    "Description": "A powerful spear",
     "Icon": "bandit_spear",
     "Type": "WEAPON_2H",
+    "Price": 600,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -289,9 +297,10 @@
   },
   {
     "Name": "Skeleton Greatsword",
-    "Description": "A dark and powerful greatsword.",
+    "Description": "A dark and powerful greatsword",
     "Icon": "skeleton_greatsword",
     "Type": "WEAPON_2H",
+    "Price": 2500,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -322,6 +331,7 @@
     "Description": "A powerful elven greatsword.",
     "Icon": "elven_greatsword",
     "Type": "WEAPON_2H",
+    "Price": 10000,
     "Requirements": [
       {
         "Skill": "ATTACK",
@@ -349,107 +359,64 @@
   },
   {
     "Name": "Crude Bow",
+    "Description": "Makeshift bow, it still works. Supports up to wooden arrows.",
+    "Icon": "crude_bow",
     "Type": "BOW",
-    "Requirements": [
-      {
-        "Skill": "RANGED",
-        "Value": 1
-      }
-    ],
+    "Requirements": [{ "Skill": "ARCHERY", "Value": 1 }],
+    "Price": 5,
     "Stats": [
-      {
-        "Type": "ATTACK_SPEED",
-        "Value": 2
-      },
-      {
-        "Type": "QUICK_DAMAGE",
-        "Value": 5
-      }
-    ],
-    "Icon": "crude_bow"
+      { "Type": "ATTACK_RANGE", "Value": 750 },
+      { "Type": "ATTACK_SPEED", "Value": 1.5 },
+      { "Type": "QUICK_DAMAGE", "Value": 5 }
+    ]
   },
   {
     "Name": "Wood Bow",
+    "Description": "Basic wooden longbow, its got good range. Supports up to bronze arrows.",
+    "Icon": "wood_bow",
     "Type": "BOW",
-    "Requirements": [
-      {
-        "Skill": "RANGED",
-        "Value": 1
-      }
-    ],
+    "Requirements": [{ "Skill": "ARCHERY", "Value": 1 }],
+    "Price": 80,
     "Stats": [
-      {
-        "Type": "ATTACK_SPEED",
-        "Value": 2
-      },
-      {
-        "Type": "HEAVY_DAMAGE",
-        "Value": 15
-      }
-    ],
-    "Icon": "wood_bow"
+      { "Type": "ATTACK_RANGE", "Value": 1200 },
+      { "Type": "ATTACK_SPEED", "Value": 2.5 },
+      { "Type": "HEAVY_DAMAGE", "Value": 15 }
+    ]
   },
   {
     "Name": "Goblin Bow",
+    "Icon": "goblin_bow",
     "Type": "BOW",
-    "Requirements": [
-      {
-        "Skill": "RANGED",
-        "Value": 5
-      }
-    ],
+    "Requirements": [{ "Skill": "ARCHERY", "Value": 5 }],
     "Stats": [
-      {
-        "Type": "ATTACK_SPEED",
-        "Value": 2
-      },
-      {
-        "Type": "QUICK_DAMAGE",
-        "Value": 20
-      }
-    ],
-    "Icon": "goblin_bow"
+      { "Type": "ATTACK_SPEED", "Value": 2 },
+      { "Type": "QUICK_DAMAGE", "Value": 20 }
+    ]
   },
   {
     "Name": "Birch Bow",
+    "Description": "Improved wooden longbow, its got good range. Supports up to iron arrows.",
+    "Icon": "birch_bow",
     "Type": "BOW",
-    "Requirements": [
-      {
-        "Skill": "RANGED",
-        "Value": 10
-      }
-    ],
+    "Requirements": [{ "Skill": "ARCHERY", "Value": 10 }],
+    "Price": 250,
     "Stats": [
-      {
-        "Type": "ATTACK_SPEED",
-        "Value": 2
-      },
-      {
-        "Type": "HEAVY_DAMAGE",
-        "Value": 30
-      }
-    ],
-    "Icon": "birch_bow"
+      { "Type": "ATTACK_RANGE", "Value": 1200 },
+      { "Type": "ATTACK_SPEED", "Value": 2.5 },
+      { "Type": "HEAVY_DAMAGE", "Value": 30 }
+    ]
   },
   {
     "Name": "Willow Bow",
+    "Description": "Decent wooden longbow, its got good range. Supports up to steel arrows.",
+    "Icon": "willow_bow",
     "Type": "BOW",
-    "Requirements": [
-      {
-        "Skill": "RANGED",
-        "Value": 20
-      }
-    ],
+    "Requirements": [{ "Skill": "ARCHERY", "Value": 20 }],
+    "Price": 1000,
     "Stats": [
-      {
-        "Type": "ATTACK_SPEED",
-        "Value": 2
-      },
-      {
-        "Type": "HEAVY_DAMAGE",
-        "Value": 45
-      }
-    ],
-    "Icon": "willow_bow"
+      { "Type": "ATTACK_RANGE", "Value": 1200 },
+      { "Type": "ATTACK_SPEED", "Value": 2.5 },
+      { "Type": "HEAVY_DAMAGE", "Value": 45 }
+    ]
   }
 ]

@@ -5,7 +5,11 @@
     "Icon": "copper_ring",
     "Type": "RING",
     "Requirements": [],
-    "Stats": [{ "Type": "MELEE_POWER", "Value": 6 }]
+    "Price": 20,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 6 },
+      { "Type": "RANGE_POWER", "Value": 5 }
+    ]
   },
   {
     "Name": "Gold Ring",
@@ -13,23 +17,35 @@
     "Icon": "gold_ring",
     "Type": "RING",
     "Requirements": [],
-    "Stats": [{ "Type": "MELEE_POWER", "Value": 8 }]
+    "Price": 100,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 8 },
+      { "Type": "RANGE_POWER", "Value": 7 }
+    ]
   },
   {
     "Name": "Titanium Ring",
-    "Description": "A fancy ring made of titanium.",
+    "Description": "A fancy ring made of titanium",
     "Icon": "titanium_ring",
     "Type": "RING",
     "Requirements": [],
-    "Stats": [{ "Type": "MELEE_POWER", "Value": 11 }]
+    "Price": 500,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 11 },
+      { "Type": "RANGE_POWER", "Value": 9 }
+    ]
   },
   {
     "Name": "Elven Ring",
-    "Description": "A mystical ring made of elven material.",
+    "Description": "A mystical ring made of elven material",
     "Icon": "elven_ring",
     "Type": "RING",
     "Requirements": [],
-    "Stats": [{ "Type": "MELEE_POWER", "Value": 16 }]
+    "Price": 2000,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 16 },
+      { "Type": "RANGE_POWER", "Value": 13 }
+    ]
   },
   {
     "Name": "Copper Amulet",
@@ -37,7 +53,11 @@
     "Icon": "copper_amulet",
     "Type": "AMULET",
     "Requirements": [],
-    "Stats": [{ "Type": "MELEE_POWER", "Value": 10 }]
+    "Price": 250,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 10 },
+      { "Type": "RANGE_POWER", "Value": 10 }
+    ]
   },
   {
     "Name": "Gold Amulet",
@@ -45,7 +65,11 @@
     "Icon": "gold_amulet",
     "Type": "AMULET",
     "Requirements": [],
-    "Stats": [{ "Type": "MELEE_POWER", "Value": 13 }]
+    "Price": 800,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 13 },
+      { "Type": "RANGE_POWER", "Value": 13 }
+    ]
   },
   {
     "Name": "Titanium Amulet",
@@ -53,14 +77,22 @@
     "Icon": "titanium_amulet",
     "Type": "AMULET",
     "Requirements": [],
-    "Stats": [{ "Type": "MELEE_POWER", "Value": 17 }]
+    "Price": 3000,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 17 },
+      { "Type": "RANGE_POWER", "Value": 17 }
+    ]
   },
   {
     "Name": "Elven Amulet",
-    "Description": "A mystical amulet made of elven material.",
+    "Description": "A elven amulet with a spot for a gem",
     "Icon": "elven_amulet",
     "Type": "AMULET",
     "Requirements": [],
-    "Stats": [{ "Type": "MELEE_POWER", "Value": 25 }]
+    "Price": 10000,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 25 },
+      { "Type": "RANGE_POWER", "Value": 25 }
+    ]
   }
 ]

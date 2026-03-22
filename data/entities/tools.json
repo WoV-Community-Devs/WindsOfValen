@@ -42,6 +42,7 @@
   {
     "Name": "Mining Gloves",
     "Icon": "mining_gloves",
+    "Price": 200,
     "Smithing": {
       "Level": 21,
       "Experience": 165,

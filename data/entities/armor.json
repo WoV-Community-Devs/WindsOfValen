@@ -1,8 +1,14 @@
 [
   {
     "Name": "Leather Hood",
+    "Description": "Basic hood made from leather.",
     "Type": "HELMET",
-    "Requirements": [],
+    "Requirements": [
+      {
+        "Skill": "EVASION",
+        "Value": 1
+      }
+    ],
     "Stats": [
       {
         "Type": "PIECE_DEFENSE",
@@ -11,8 +17,25 @@
       {
         "Type": "SLASH_DEFENSE",
         "Value": 3
+      },
+      {
+        "Type": "FIRE_DEFENSE",
+        "Value": 3
+      },
+      {
+        "Type": "LIGHTNING_DEFENSE",
+        "Value": 3
+      },
+      {
+        "Type": "ICE_DEFENSE",
+        "Value": 3
+      },
+      {
+        "Type": "AGILITY",
+        "Value": 5
       }
     ],
+    "Price": 50,
     "Icon": "leather_hood"
   },
   {
@@ -20,6 +43,7 @@
     "Description": "Spoooky",
     "Icon": "skeleton_helmet",
     "Type": "HELMET",
+    "Price": 60,
     "Requirements": [],
     "Stats": [
       {
@@ -37,6 +61,7 @@
     "Description": "A basic helmet made from bronze.",
     "Icon": "bronze_helmet",
     "Type": "HELMET",
+    "Price": 50,
     "Requirements": [],
     "Stats": [
       {
@@ -66,6 +91,7 @@
     "Description": "Sturdy helmet made from iron.",
     "Icon": "iron_helmet",
     "Type": "HELMET",
+    "Price": 150,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -100,6 +126,7 @@
     "Description": "Strong helmet made from steel.",
     "Icon": "steel_helmet",
     "Type": "HELMET",
+    "Price": 300,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -131,9 +158,10 @@
   },
   {
     "Name": "Mithril Helmet",
-    "Description": "Elegant helmet made from mithril.",
+    "Description": "Elegant helmet made from Mithril.",
     "Icon": "mithril_helmet",
     "Type": "HELMET",
+    "Price": 1000,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -165,8 +193,14 @@
   },
   {
     "Name": "Leather Armour",
+    "Description": "Basic armour made from leather.",
     "Type": "CHEST",
-    "Requirements": [],
+    "Requirements": [
+      {
+        "Skill": "EVASION",
+        "Value": 1
+      }
+    ],
     "Stats": [
       {
         "Type": "PIECE_DEFENSE",
@@ -175,8 +209,25 @@
       {
         "Type": "SLASH_DEFENSE",
         "Value": 3
+      },
+      {
+        "Type": "FIRE_DEFENSE",
+        "Value": 4
+      },
+      {
+        "Type": "LIGHTNING_DEFENSE",
+        "Value": 3
+      },
+      {
+        "Type": "ICE_DEFENSE",
+        "Value": 2
+      },
+      {
+        "Type": "AGILITY",
+        "Value": 5
       }
     ],
+    "Price": 100,
     "Icon": "leather_armor"
   },
   {
@@ -184,6 +235,7 @@
     "Description": "A basic platebody made from bronze.",
     "Icon": "bronze_platebody",
     "Type": "CHEST",
+    "Price": 100,
     "Requirements": [],
     "Stats": [
       {
@@ -213,6 +265,7 @@
     "Description": "Sturdy platebody made from iron.",
     "Icon": "iron_platebody",
     "Type": "CHEST",
+    "Price": 250,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -247,6 +300,7 @@
     "Description": "Strong platebody made from steel.",
     "Icon": "steel_platebody",
     "Type": "CHEST",
+    "Price": 500,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -281,6 +335,7 @@
     "Description": "Elegant platebody made from mithril.",
     "Icon": "mithril_platebody",
     "Type": "CHEST",
+    "Price": 2500,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -312,8 +367,14 @@
   },
   {
     "Name": "Leather Legs",
+    "Description": "Basic leg armour made from leather.",
     "Type": "LEGS",
-    "Requirements": [],
+    "Requirements": [
+      {
+        "Skill": "EVASION",
+        "Value": 1
+      }
+    ],
     "Stats": [
       {
         "Type": "PIECE_DEFENSE",
@@ -322,15 +383,33 @@
       {
         "Type": "SLASH_DEFENSE",
         "Value": 3
+      },
+      {
+        "Type": "FIRE_DEFENSE",
+        "Value": 4
+      },
+      {
+        "Type": "LIGHTNING_DEFENSE",
+        "Value": 3
+      },
+      {
+        "Type": "ICE_DEFENSE",
+        "Value": 2
+      },
+      {
+        "Type": "AGILITY",
+        "Value": 5
       }
     ],
+    "Price": 70,
     "Icon": "leather_legs"
   },
   {
     "Name": "Bronze Platelegs",
-    "Description": "A basic platelegs made from bronze.",
+    "Description": "Basic platelegs made from bronze.",
     "Icon": "bronze_platelegs",
     "Type": "LEGS",
+    "Price": 70,
     "Requirements": [],
     "Stats": [
       {
@@ -360,6 +439,7 @@
     "Description": "Sturdy platelegs made from iron.",
     "Icon": "iron_platelegs",
     "Type": "LEGS",
+    "Price": 200,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -394,6 +474,7 @@
     "Description": "Strong platelegs made from steel.",
     "Icon": "steel_platelegs",
     "Type": "LEGS",
+    "Price": 400,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -425,9 +506,10 @@
   },
   {
     "Name": "Mithril Platelegs",
-    "Description": "Elegant platelegs made from mithril.",
+    "Description": "Elegeant platelegs made from mithril.",
     "Icon": "mithril_platelegs",
     "Type": "LEGS",
+    "Price": 2000,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -462,6 +544,7 @@
     "Description": "A menacing pair of gloves.",
     "Icon": "berserker_gloves",
     "Type": "GLOVES",
+    "Price": 300,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -471,7 +554,7 @@
     "Stats": [
       {
         "Type": "MELEE_POWER",
-        "Value": 10
+        "Value": 5
       },
       {
         "Type": "SLASH_DEFENSE",
@@ -485,18 +568,41 @@
   },
   {
     "Name": "Leather Boots",
+    "Description": "Basic boots made from leather.",
     "Type": "BOOTS",
-    "Requirements": [],
+    "Requirements": [
+      {
+        "Skill": "EVASION",
+        "Value": 1
+      }
+    ],
     "Stats": [
+      {
+        "Type": "SLASH_DEFENSE",
+        "Value": 2
+      },
       {
         "Type": "PIECE_DEFENSE",
         "Value": 2
       },
       {
-        "Type": "SLASH_DEFENSE",
+        "Type": "FIRE_DEFENSE",
         "Value": 2
+      },
+      {
+        "Type": "LIGHTNING_DEFENSE",
+        "Value": 2
+      },
+      {
+        "Type": "ICE_DEFENSE",
+        "Value": 1
+      },
+      {
+        "Type": "AGILITY",
+        "Value": 5
       }
     ],
+    "Price": 40,
     "Icon": "leather_boots"
   },
   {
@@ -504,6 +610,7 @@
     "Description": "A menacing pair of boots.",
     "Icon": "berserker_boots",
     "Type": "BOOTS",
+    "Price": 700,
     "Requirements": [
       {
         "Skill": "DEFENSE",
@@ -513,7 +620,7 @@
     "Stats": [
       {
         "Type": "MELEE_POWER",
-        "Value": 20
+        "Value": 8
       },
       {
         "Type": "PIECE_DEFENSE",

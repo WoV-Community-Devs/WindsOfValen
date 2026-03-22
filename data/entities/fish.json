@@ -1,8 +1,11 @@
 [
   {
     "Name": "Minnow",
+    "Description": "A good source of fish bait.",
+    "Icon": "minnow",
     "Level": 1,
     "Experience": 8,
+    "Price": 1,
     "PotionMaking": {
       "Action": "Cut",
       "Level": 1,
@@ -12,8 +15,11 @@
   },
   {
     "Name": "Common Trout",
+    "Description": "A good source of fish flesh.",
+    "Icon": "common_trout",
     "Level": 5,
     "Experience": 75,
+    "Price": 4,
     "PotionMaking": {
       "Action": "Cut",
       "Level": 5,
@@ -23,8 +29,11 @@
   },
   {
     "Name": "Perch",
+    "Description": "A good source of fish scales.",
+    "Icon": "perch",
     "Level": 10,
     "Experience": 225,
+    "Price": 35,
     "PotionMaking": {
       "Action": "Cut",
       "Level": 10,
@@ -34,8 +43,11 @@
   },
   {
     "Name": "Bass",
+    "Description": "A good source of fish flesh.",
+    "Icon": "bass",
     "Level": 20,
     "Experience": 200,
+    "Price": 15,
     "PotionMaking": {
       "Action": "Cut",
       "Level": 20,
@@ -45,8 +57,11 @@
   },
   {
     "Name": "Blue Gill",
+    "Description": "A good source of fish bait.",
+    "Icon": "blue_gill",
     "Level": 30,
     "Experience": 75,
+    "Price": 10,
     "PotionMaking": {
       "Action": "Cut",
       "Level": 30,
@@ -55,9 +70,20 @@
     }
   },
   {
+    "Name": "Rare Blue Gill",
+    "Description": "Extra oily blue gill.",
+    "Icon": "rare_blue_gill",
+    "Type": "Resource (Untradeable)",
+    "Level": 30,
+    "Price": 6400
+  },
+  {
     "Name": "Elder Trout",
+    "Description": "A good source of fish flesh.",
+    "Icon": "elder_trout",
     "Level": 40,
     "Experience": 500,
+    "Price": 100,
     "PotionMaking": {
       "Action": "Cut",
       "Level": 40,

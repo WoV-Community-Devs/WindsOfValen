@@ -2,6 +2,7 @@
   {
     "Name": "Bronze Bar",
     "Icon": "bronze_bar",
+    "Price": 6,
     "Smithing": {
       "Level": 1,
       "Experience": 15,
@@ -22,6 +23,7 @@
   {
     "Name": "Iron Bar",
     "Icon": "iron_bar",
+    "Price": 20,
     "Smithing": {
       "Level": 10,
       "Experience": 30,
@@ -38,6 +40,7 @@
   {
     "Name": "Steel Bar",
     "Icon": "steel_bar",
+    "Price": 40,
     "Smithing": {
       "Level": 20,
       "Experience": 55,
@@ -58,6 +61,7 @@
   {
     "Name": "Mithril Bar",
     "Icon": "mithril_bar",
+    "Price": 200,
     "Smithing": {
       "Level": 30,
       "Experience": 155,
