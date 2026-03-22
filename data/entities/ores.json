@@ -55,6 +55,9 @@
   },
   {
     "Name": "Gold Dust",
+    "Description": "Could be smelted into something useful",
+    "Icon": "gold_dust",
+    "Price": 80,
     "Level": 40,
     "Experience": 350
   }

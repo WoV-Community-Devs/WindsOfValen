@@ -31,22 +31,27 @@
   },
   {
     "Name": "Steel Pickaxe",
+    "Description": "Strong pickaxe made from steel.",
     "Icon": "steel_pickaxe",
     "Type": "PICKAXE",
+    "Price": 960,
     "Level": 20,
     "MiningPower": 25,
     "Cost": "960g from Mining Stall"
   },
   {
     "Name": "Dwarven Pickaxe",
+    "Description": "Powerful Pickaxe made by dwarfs.",
     "Icon": "dwarven_pickaxe",
     "Type": "PICKAXE",
+    "Price": 2000,
     "Level": 30,
-    "MiningPower": 40,
+    "MiningPower": 50,
     "Cost": "Mercenary Boss Drop"
   },
   {
     "Name": "Mining Gloves",
+    "Description": "These feel just right for mining.",
     "Icon": "mining_gloves",
     "Price": 200,
     "Smithing": {

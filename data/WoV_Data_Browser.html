@@ -283,7 +283,8 @@ const STAT_LABELS = {
   QUICK_DAMAGE:'Quick Dmg', HEAVY_DAMAGE:'Heavy Dmg',
   PIECE_DEFENSE:'Pierce Def', SLASH_DEFENSE:'Slash Def',
   MELEE_POWER:'Melee Power', RANGE_POWER:'Range Power',
-  DEFLECT_POWER:'Deflect', BLOCK_POWER:'Block', WARD_POWER:'Ward'
+  DEFLECT_POWER:'Deflect', BLOCK_POWER:'Block', WARD_POWER:'Ward',
+  SMITHING_POWER:'Smithing Power', POTION_MAKING_POWER:'Potion Making Power', FISHING_POWER:'Fishing Power'
 };
 function statLabel(s){ return STAT_LABELS[s] || s.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()); }
 
@@ -601,27 +602,41 @@ function renderFish(item) {
 // ── Gem renderer ──
 function renderGem(item) {
   const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
+  const desc = item.Description ? `<div class="card-desc">${item.Description}</div>` : '';
+  let statsHtml = '';
+  if (item.Value && item.StatType) {
+    const prefix = item.ValueType === 'PERCENTAGE' ? '+' : '+';
+    const suffix = item.ValueType === 'PERCENTAGE' ? '%' : '';
+    statsHtml = `
+        <div class="card-stat"><span class="stat-name">Stat Boost</span><span class="stat-val" style="color:var(--green)">${prefix}${item.Value}${suffix}</span></div>
+        <div class="card-stat"><span class="stat-name">Affects</span><span class="stat-val">${statLabel(item.StatType)}</span></div>`;
+  }
   return `
     <div class="card-head"><span class="card-name">${item.Name}</span><span class="card-badge badge-type">Gem</span></div>
     <div class="card-body">
       ${iconHtml}
+      ${desc}
       <div class="card-stats">
-        <div class="card-stat"><span class="stat-name">Stat Boost</span><span class="stat-val" style="color:var(--green)">+${item.Value}%</span></div>
-        <div class="card-stat"><span class="stat-name">Affects</span><span class="stat-val">${statLabel(item.StatType)}</span></div>
-        <div class="card-stat full"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price}g</span></div>
+        ${statsHtml}
+        ${item.Price !== undefined ? `<div class="card-stat full"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price.toLocaleString()}g</span></div>` : ''}
       </div>
     </div>`;
 }
 
 // ── Ingredient renderer ──
 function renderIngredient(item) {
+  const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
+  const desc = item.Description ? `<div class="card-desc">${item.Description}</div>` : '';
+  const priceHtml = item.Price !== undefined ? `<div class="card-stat full"><span class="stat-name">Price</span><span class="stat-val" style="color:var(--accent)">${item.Price}g</span></div>` : '';
   const pm = item.PotionMaking;
   if (!pm) {
     return `
     <div class="card-head"><span class="card-name">${item.Name}</span><span class="card-badge badge-type">Material</span></div>
     <div class="card-body">
+      ${iconHtml}
+      ${desc}
       <div class="card-stats">
-        <div class="card-stat full"><span class="stat-name">Intermediate ingredient</span><span class="stat-val">—</span></div>
+        ${priceHtml || `<div class="card-stat full"><span class="stat-name">Intermediate ingredient</span><span class="stat-val">—</span></div>`}
       </div>
     </div>`;
   }
@@ -629,10 +644,13 @@ function renderIngredient(item) {
   return `
     <div class="card-head"><span class="card-name">${item.Name}</span>${badge}</div>
     <div class="card-body">
+      ${iconHtml}
+      ${desc}
       <div class="card-stats">
         <div class="card-stat"><span class="stat-name">Potion Lvl</span><span class="stat-val">${pm.Level}</span></div>
         <div class="card-stat"><span class="stat-name">XP</span><span class="stat-val" style="color:var(--green)">${pm.Experience}</span></div>
         <div class="card-stat full"><span class="stat-name">Output</span><span class="stat-val">${pm.Output}</span></div>
+        ${priceHtml}
       </div>
     </div>`;
 }
@@ -640,6 +658,7 @@ function renderIngredient(item) {
 // ── Potion renderer ──
 function renderPotion(item) {
   const iconHtml = item.Icon ? `<div class="card-icon-wrap"><img class="card-icon" src="../icons/items/${item.Icon}.png" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
+  const desc = item.Description ? `<div class="card-desc">${item.Description}</div>` : '';
   const pm = item.PotionMaking;
   if (!pm) return `<div class="card-head"><span class="card-name">${item.Name}</span></div><div class="card-body">${iconHtml}</div>`;
   const badge = `<span class="card-badge badge-type">${pm.Action}</span>`;
@@ -667,6 +686,7 @@ function renderPotion(item) {
     <div class="card-head"><span class="card-name">${item.Name}</span>${badge}</div>
     <div class="card-body">
       ${iconHtml}
+      ${desc}
       <div class="card-stats">
         <div class="card-stat"><span class="stat-name">Potion Lvl</span><span class="stat-val">${pm.Level}</span></div>
         ${pm.Experience !== null ? `<div class="card-stat"><span class="stat-name">XP</span><span class="stat-val" style="color:var(--green)">${pm.Experience}</span></div>` : ''}

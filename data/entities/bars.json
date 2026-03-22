@@ -1,6 +1,7 @@
 [
   {
     "Name": "Bronze Bar",
+    "Description": "Could be smithed into something useful at an anvil",
     "Icon": "bronze_bar",
     "Price": 6,
     "Smithing": {
@@ -22,6 +23,7 @@
   },
   {
     "Name": "Iron Bar",
+    "Description": "Could be smithed into something useful at an anvil",
     "Icon": "iron_bar",
     "Price": 20,
     "Smithing": {
@@ -39,6 +41,7 @@
   },
   {
     "Name": "Steel Bar",
+    "Description": "Could be smithed into something useful at an anvil",
     "Icon": "steel_bar",
     "Price": 40,
     "Smithing": {
@@ -60,6 +63,7 @@
   },
   {
     "Name": "Mithril Bar",
+    "Description": "Could be smithed into something useful at an anvil",
     "Icon": "mithril_bar",
     "Price": 200,
     "Smithing": {
@@ -81,6 +85,7 @@
   },
   {
     "Name": "Gold Bar",
+    "Description": "Could be smithed into something useful at an anvil",
     "Icon": "gold_bar",
     "Smithing": {
       "Level": 40,
@@ -95,6 +100,7 @@
   },
   {
     "Name": "Gold Bar",
+    "Description": "Could be smithed into something useful at an anvil",
     "Icon": "gold_bar",
     "Smithing": {
       "Level": 40,
