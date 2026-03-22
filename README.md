@@ -2,7 +2,7 @@
 
 A community-driven collection of game data, interactive tools, and formula documentation for [Winds of Valen](https://store.steampowered.com/app/4135880/Winds_of_Valen/).
 
-> **Live Site:** Hosted via GitHub Pages — open [here](https://wov-community-devs.github.io/WindsOfValen/) to browse all tools.
+> **Live Site:** [wov-community-devs.github.io/WindsOfValen](https://wov-community-devs.github.io/WindsOfValen/)
 
 ---
 
