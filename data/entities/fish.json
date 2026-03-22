@@ -90,5 +90,12 @@
       "Experience": 70,
       "Output": "Essence Gland, Hearty Fish Flesh"
     }
+  },
+  {
+    "Name": "Worm Bait",
+    "Description": "Wriggly, good for fishing",
+    "Icon": "worm_bait",
+    "Type": "Resource",
+    "Price": 1
   }
 ]

@@ -631,5 +631,28 @@
         "Value": 7
       }
     ]
+  },
+  {
+    "Name": "Artisan Gloves",
+    "Description": "Looks handy for crafting.",
+    "Icon": "artisan_gloves",
+    "Type": "GLOVES",
+    "Price": 2000,
+    "Requirements": [
+      {
+        "Skill": "SMITHING",
+        "Value": 20
+      }
+    ],
+    "Stats": [
+      {
+        "Type": "SMITHING_POWER",
+        "Value": 10
+      },
+      {
+        "Type": "POTION_MAKING_POWER",
+        "Value": 10
+      }
+    ]
   }
 ]

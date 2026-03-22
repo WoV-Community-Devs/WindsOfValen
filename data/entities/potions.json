@@ -1,6 +1,7 @@
 [
   {
     "Name": "Weak Health Potion",
+    "Description": "Restores 30 Health",
     "Icon": "weak_health_potion",
     "PotionMaking": {
       "Action": "Brew",
@@ -20,6 +21,7 @@
   },
   {
     "Name": "Fishing Potion",
+    "Description": "Boosts Fishing level by 5",
     "PotionMaking": {
       "Action": "Brew",
       "Level": 5,
@@ -38,6 +40,7 @@
   },
   {
     "Name": "Shields Potion",
+    "Description": "Boosts shields for 120s",
     "Icon": "shield_potion",
     "PotionMaking": {
       "Action": "Brew",
@@ -57,6 +60,7 @@
   },
   {
     "Name": "Mining Potion",
+    "Description": "Boosts Mining level by 5",
     "PotionMaking": {
       "Action": "Brew",
       "Level": 15,
@@ -94,6 +98,7 @@
   },
   {
     "Name": "Attack Potion",
+    "Description": "Boosts Attack level by 5",
     "PotionMaking": {
       "Action": "Brew",
       "Level": 30,
@@ -112,6 +117,7 @@
   },
   {
     "Name": "Strong Health Potion",
+    "Description": "Restores 160 Health",
     "Icon": "strong_health_potion",
     "PotionMaking": {
       "Action": "Brew",
@@ -131,6 +137,7 @@
   },
   {
     "Name": "Strong Shield Potion",
+    "Description": "Boosts shields for 360s",
     "PotionMaking": {
       "Action": "Brew",
       "Level": 50,

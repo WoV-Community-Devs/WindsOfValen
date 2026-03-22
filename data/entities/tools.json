@@ -1,24 +1,30 @@
 [
   {
     "Name": "Copper Pickaxe",
+    "Description": "Basic starter pickaxe.",
     "Icon": "copper_pickaxe",
     "Type": "PICKAXE",
+    "Price": 0,
     "Level": 1,
     "MiningPower": 1,
     "Cost": "Starter Pickaxe"
   },
   {
     "Name": "Bronze Pickaxe",
+    "Description": "A basic pickaxe made from bronze.",
     "Icon": "bronze_pickaxe",
     "Type": "PICKAXE",
+    "Price": 40,
     "Level": 1,
     "MiningPower": 4,
     "Cost": "40g from Mining Stall"
   },
   {
     "Name": "Iron Pickaxe",
+    "Description": "Sturdy pickaxe made from iron.",
     "Icon": "iron_pickaxe",
     "Type": "PICKAXE",
+    "Price": 240,
     "Level": 10,
     "MiningPower": 12,
     "Cost": "240g from Mining Stall"

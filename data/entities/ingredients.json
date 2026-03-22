@@ -28,6 +28,9 @@
   },
   {
     "Name": "Small Fang",
+    "Description": "Could use grinding up.",
+    "Icon": "small_fang",
+    "Price": 25,
     "PotionMaking": {
       "Action": "Crush",
       "Level": 20,
@@ -96,10 +99,16 @@
     "Name": "Crushed Fish Scales"
   },
   {
-    "Name": "Essence"
+    "Name": "Essence",
+    "Description": "A pure source of magic",
+    "Icon": "essence",
+    "Price": 1
   },
   {
-    "Name": "Fang Dust"
+    "Name": "Fang Dust",
+    "Description": "Looks ready for a potion.",
+    "Icon": "fang_dust",
+    "Price": 15
   },
   {
     "Name": "Fine Fish Scales"
@@ -120,13 +129,19 @@
     "Name": "Hearty Extract"
   },
   {
-    "Name": "Large Vial"
+    "Name": "Large Vial",
+    "Description": "Good for containing potions. Holds 100ml.",
+    "Icon": "large_vial",
+    "Price": 10
   },
   {
     "Name": "Mining Potion Brew"
   },
   {
-    "Name": "Root Paste"
+    "Name": "Root Paste",
+    "Description": "Looks ready for a potion.",
+    "Icon": "root_paste",
+    "Price": 25
   },
   {
     "Name": "Scrap Fish Flesh"
@@ -142,5 +157,11 @@
   },
   {
     "Name": "Weak Health Potion Brew"
+  },
+  {
+    "Name": "Gilded Vial",
+    "Description": "Good for containing potions. Holds 150ml.",
+    "Icon": "gilded_vial",
+    "Price": 50
   }
 ]
