@@ -2259,12 +2259,13 @@
       detectPreset();
       renderChart();
       // Live-sync URL hash so the URL is always shareable
-      var newHash = encodeLoadout();
-      if (newHash) {
-        history.replaceState(null, '', '#' + newHash);
-      } else {
-        history.replaceState(null, '', location.pathname + location.search);
-      }
+      encodeBinaryHash().then(function(h) {
+        if (h) {
+          history.replaceState(null, '', '#' + h);
+        } else {
+          history.replaceState(null, '', location.pathname + location.search);
+        }
+      });
     }
 
     // ── Chart Rendering ──
@@ -2660,11 +2661,11 @@
         });
       });
 
-      // Load from URL hash if present
-      loadFromHash();
-      renderResultRows();
-
-      recalcAll();
+      // Load from URL hash if present, then recalc
+      loadFromHash().then(function() {
+        renderResultRows();
+        recalcAll();
+      });
     }
 
     function buildSlotPicker(slotEl, slotName) {
@@ -2875,90 +2876,217 @@
     function getItem(slot) { const n = slots[slot].value; return n ? ItemsData.find(i => i.Name === n) || null : null; }
     function getMon() { return Enemies.find(m => m.Name === el.mSel.value) || null; }
 
-    // ── Shareable URL ──
+    // ── Shareable URL (binary packed) ──
     const SLOT_KEYS = { weapon: 'w', shield: 's', helmet: 'h', chest: 'c', legs: 'l', gloves: 'g', boots: 'b', ring: 'r', amulet: 'a', arrows: 'ar' };
-
-    // Compact format: al,rl,m,ir~name|w.s.h.c.l.g.b.r.a.ar.gr.ga~name|...
-    // SLOT_ORDER must match decode order
     var SLOT_ORDER = ['weapon','shield','helmet','chest','legs','gloves','boots','ring','amulet','arrows'];
+    var BINARY_VERSION = 1; // bump when format changes
+    var E = 255; // empty sentinel
 
-    function encodeLoadout() {
+    // ── Base64url helpers ──
+    function bytesToBase64url(bytes) {
+      var s = ''; for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+      return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+    function base64urlToBytes(b64url) {
+      var b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      var bin = atob(b64);
+      var bytes = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes;
+    }
+
+    // ── Deflate helpers (for multi-loadout payloads) ──
+    async function deflateBytes(input) {
+      var cs = new CompressionStream('deflate-raw');
+      var w = cs.writable.getWriter(); w.write(input); w.close();
+      var r = cs.readable.getReader(); var chunks = [];
+      while (true) { var x = await r.read(); if (x.done) break; chunks.push(x.value); }
+      var len = 0; chunks.forEach(function(c) { len += c.length; });
+      var out = new Uint8Array(len); var off = 0;
+      chunks.forEach(function(c) { out.set(c, off); off += c.length; });
+      return out;
+    }
+    async function inflateBytes(input) {
+      var ds = new DecompressionStream('deflate-raw');
+      var w = ds.writable.getWriter(); w.write(input); w.close();
+      var r = ds.readable.getReader(); var chunks = [];
+      while (true) { var x = await r.read(); if (x.done) break; chunks.push(x.value); }
+      var len = 0; chunks.forEach(function(c) { len += c.length; });
+      var out = new Uint8Array(len); var off = 0;
+      chunks.forEach(function(c) { out.set(c, off); off += c.length; });
+      return out;
+    }
+
+    // ── Binary encode ──
+    // Format: [version|flags] [aLv] [rLv] [monIdx] per-loadout: [nameLen] [name...] [10 slot bytes] [2 gem bytes]
+    function buildBinaryPayload() {
       saveCurrentLoadout();
       var al = parseInt(el.aLv.value, 10) || 1;
       var rl = parseInt(el.rLv.value, 10) || 1;
-      var mi = Enemies.findIndex(function (e) { return e.Name === el.mSel.value; });
+      var mi = Enemies.findIndex(function(e) { return e.Name === el.mSel.value; });
       var ir = $('ignore-respawn').checked ? 1 : 0;
-      var parts = [al + ',' + rl + ',' + mi + ',' + ir];
-      loadouts.forEach(function (lo) {
-        var slotVals = SLOT_ORDER.map(function (s) {
-          var name = lo.slots[s];
-          if (!name) return '-';
-          var idx = ItemsData.findIndex(function (it) { return it.Name === name; });
-          return idx >= 0 ? idx : '-';
-        });
-        var grIdx = GemsData.findIndex(function (g) { return g.Name === (lo.gems.ring || ''); });
-        var gaIdx = GemsData.findIndex(function (g) { return g.Name === (lo.gems.amulet || ''); });
-        slotVals.push(grIdx >= 0 ? grIdx : '-');
-        slotVals.push(gaIdx >= 0 ? gaIdx : '-');
-        var name = encodeURIComponent(lo.name || '');
-        parts.push(name + '|' + slotVals.join('.'));
+      var nLo = loadouts.length;
+      // Header: version(4bits)|flags(4bits), aLv, rLv, monIdx
+      // flags: bit0=ignoreRespawn, bits1-3=loadoutCount-1 (0-7)
+      var flagByte = (BINARY_VERSION << 4) | (ir & 1) | (((nLo - 1) & 7) << 1);
+      // Calculate total size
+      var totalSize = 4; // header
+      var nameBytes = [];
+      loadouts.forEach(function(lo) {
+        var name = lo.name || '';
+        var enc = new TextEncoder().encode(name);
+        nameBytes.push(enc);
+        totalSize += 1 + enc.length + 12; // nameLen + name + 10 slots + 2 gems
       });
-      return parts.join('~');
+      var buf = new Uint8Array(totalSize);
+      buf[0] = flagByte;
+      buf[1] = al;
+      buf[2] = rl;
+      buf[3] = mi >= 0 ? mi : E;
+      var pos = 4;
+      loadouts.forEach(function(lo, li) {
+        var enc = nameBytes[li];
+        buf[pos++] = enc.length;
+        for (var j = 0; j < enc.length; j++) buf[pos++] = enc[j];
+        SLOT_ORDER.forEach(function(s) {
+          var name = lo.slots[s] || '';
+          if (!name) { buf[pos++] = E; return; }
+          var idx = ItemsData.findIndex(function(it) { return it.Name === name; });
+          buf[pos++] = idx >= 0 ? idx : E;
+        });
+        var grIdx = GemsData.findIndex(function(g) { return g.Name === (lo.gems.ring || ''); });
+        var gaIdx = GemsData.findIndex(function(g) { return g.Name === (lo.gems.amulet || ''); });
+        buf[pos++] = grIdx >= 0 ? grIdx : E;
+        buf[pos++] = gaIdx >= 0 ? gaIdx : E;
+      });
+      return buf;
     }
 
-    function loadFromHash() {
+    // ── Binary decode ──
+    function parseBinaryPayload(buf) {
+      if (buf.length < 5) return null;
+      var flagByte = buf[0];
+      var version = (flagByte >> 4) & 0xF;
+      if (version !== BINARY_VERSION) return null;
+      var ir = flagByte & 1;
+      var nLo = ((flagByte >> 1) & 7) + 1;
+      var al = buf[1];
+      var rl = buf[2];
+      var mi = buf[3] === E ? -1 : buf[3];
+      var pos = 4;
+      var parsedLoadouts = [];
+      for (var i = 0; i < nLo && pos < buf.length; i++) {
+        var nameLen = buf[pos++];
+        var nameArr = buf.slice(pos, pos + nameLen); pos += nameLen;
+        var name = new TextDecoder().decode(nameArr);
+        var lo = { name: name, slots: {}, gems: { ring: '', amulet: '' } };
+        SLOT_ORDER.forEach(function(s) {
+          var v = pos < buf.length ? buf[pos++] : E;
+          lo.slots[s] = (v !== E && ItemsData[v]) ? ItemsData[v].Name : '';
+        });
+        var gr = pos < buf.length ? buf[pos++] : E;
+        var ga = pos < buf.length ? buf[pos++] : E;
+        if (gr !== E && GemsData[gr]) lo.gems.ring = GemsData[gr].Name;
+        if (ga !== E && GemsData[ga]) lo.gems.amulet = GemsData[ga].Name;
+        parsedLoadouts.push(lo);
+      }
+      return { al: al, rl: rl, mi: mi, ir: ir, loadouts: parsedLoadouts };
+    }
+
+    // ── Encode to URL hash (binary → optionally deflate → base64url) ──
+    async function encodeBinaryHash() {
+      var raw = buildBinaryPayload();
+      // Only deflate if payload is large enough to benefit (multi-loadout)
+      if (raw.length > 32) {
+        var deflated = await deflateBytes(raw);
+        if (deflated.length < raw.length) {
+          // Prefix with 'z' to signal deflated
+          return 'z' + bytesToBase64url(deflated);
+        }
+      }
+      return bytesToBase64url(raw);
+    }
+
+    // Apply parsed data to the UI
+    function applyLoadFromData(data) {
+      el.aLv.value = data.al;
+      el.rLv.value = data.rl;
+      if (data.mi >= 0 && Enemies[data.mi]) {
+        el.mSel.value = Enemies[data.mi].Name;
+        var ssWrap = el.mSel.closest('.ss-wrap');
+        if (ssWrap) {
+          var txt = ssWrap.querySelector('.ss-text');
+          var opt = el.mSel.options[el.mSel.selectedIndex];
+          if (txt && opt) txt.textContent = opt.textContent;
+          ssWrap.querySelectorAll('.ss-option').forEach(function(d) { d.classList.toggle('selected', d.dataset.value === el.mSel.value); });
+        }
+      }
+      $('ignore-respawn').checked = !!data.ir;
+      if (data.loadouts.length > 0) {
+        loadouts = data.loadouts;
+        activeLoadout = 0;
+        restoreState(loadouts[0]);
+      }
+      renderTabs();
+    }
+
+    function refreshVisualsAfterLoad() {
+      SLOT_IDS.forEach(function(s) { updateSlotVisual(s); });
+      document.querySelectorAll(".eslot[data-slot]").forEach(function(slotEl) {
+        var sn = slotEl.dataset.slot; var picker = slotEl.querySelector(".slot-picker-list");
+        if (picker) updatePickerSelected(picker, slots[sn]);
+        var gs = slotEl.querySelector(".gem-section");
+        if (gs) { var gemSel = sn === "ring" ? el.gR : el.gA; updateGemPickerSelected(gs, gemSel); }
+      });
+      saveCurrentLoadout();
+    }
+
+    async function loadFromHash() {
       var hash = location.hash.replace(/^#/, '');
       if (!hash) return;
 
-      // Detect format: compact uses ~, legacy uses &
-      if (hash.indexOf('~') >= 0) {
-        // Compact format
-        var parts = hash.split('~');
-        var globals = parts[0].split(',');
-        var al = parseInt(globals[0], 10) || 1;
-        var rl = parseInt(globals[1], 10) || 1;
-        var mi = parseInt(globals[2], 10);
-        var ir = parseInt(globals[3], 10) || 0;
-        el.aLv.value = al;
-        el.rLv.value = rl;
-        if (mi >= 0 && Enemies[mi]) {
-          el.mSel.value = Enemies[mi].Name;
-          var ssWrap = el.mSel.closest('.ss-wrap');
-          if (ssWrap) {
-            var txt = ssWrap.querySelector('.ss-text');
-            var opt = el.mSel.options[el.mSel.selectedIndex];
-            if (txt && opt) txt.textContent = opt.textContent;
-            ssWrap.querySelectorAll('.ss-option').forEach(function (d) { d.classList.toggle('selected', d.dataset.value === el.mSel.value); });
+      // 1. Try binary format (with optional 'z' deflate prefix)
+      try {
+        var bytes;
+        if (hash.charAt(0) === 'z') {
+          bytes = await inflateBytes(base64urlToBytes(hash.substring(1)));
+        } else {
+          bytes = base64urlToBytes(hash);
+        }
+        var data = parseBinaryPayload(bytes);
+        if (data && data.loadouts.length > 0) {
+          applyLoadFromData(data);
+          refreshVisualsAfterLoad();
+          return;
+        }
+      } catch (e) { /* not binary format */ }
+
+      // 2. Fallback: deflate-compressed text format
+      try {
+        var deflatedBytes = base64urlToBytes(hash);
+        var inflated = await inflateBytes(deflatedBytes);
+        var str = new TextDecoder().decode(inflated);
+        if (str.indexOf('~') >= 0) {
+          var data = parseCompactText(str);
+          if (data && data.loadouts.length > 0) {
+            applyLoadFromData(data);
+            refreshVisualsAfterLoad();
+            return;
           }
         }
-        $('ignore-respawn').checked = !!ir;
-        // Restore loadouts
-        var newLoadouts = [];
-        for (var i = 1; i < parts.length; i++) {
-          var seg = parts[i].split('|');
-          var name = decodeURIComponent(seg[0] || '');
-          var vals = (seg[1] || '').split('.');
-          var lo = { name: name, slots: {}, gems: { ring: '', amulet: '' } };
-          SLOT_ORDER.forEach(function (s, si) {
-            var v = parseInt(vals[si], 10);
-            lo.slots[s] = (!isNaN(v) && ItemsData[v]) ? ItemsData[v].Name : '';
-          });
-          var grV = parseInt(vals[10], 10);
-          var gaV = parseInt(vals[11], 10);
-          if (!isNaN(grV) && GemsData[grV]) lo.gems.ring = GemsData[grV].Name;
-          if (!isNaN(gaV) && GemsData[gaV]) lo.gems.amulet = GemsData[gaV].Name;
-          newLoadouts.push(lo);
+      } catch (e) { /* not deflated text */ }
+
+      // 3. Fallback: compact ~ text format (uncompressed)
+      if (hash.indexOf('~') >= 0) {
+        var data = parseCompactText(decodeURIComponent(hash));
+        if (data && data.loadouts.length > 0) {
+          applyLoadFromData(data);
         }
-        if (newLoadouts.length > 0) {
-          loadouts = newLoadouts;
-          activeLoadout = 0;
-          restoreState(loadouts[0]);
-        }
-        renderTabs();
       } else {
-        // Legacy key=value format
+        // 4. Legacy key=value format
         var p = {};
-        hash.split('&').forEach(function (kv) { var x = kv.split('='); if (x[0] && x[1] !== undefined) p[x[0]] = parseInt(x[1], 10); });
+        hash.split('&').forEach(function(kv) { var x = kv.split('='); if (x[0] && x[1] !== undefined) p[x[0]] = parseInt(x[1], 10); });
         for (var slot in SLOT_KEYS) {
           var key = SLOT_KEYS[slot];
           if (p[key] !== undefined && ItemsData[p[key]]) slots[slot].value = ItemsData[p[key]].Name;
@@ -2974,29 +3102,50 @@
             var txt = ssWrap.querySelector('.ss-text');
             var opt = el.mSel.options[el.mSel.selectedIndex];
             if (txt && opt) txt.textContent = opt.textContent;
-            ssWrap.querySelectorAll('.ss-option').forEach(function (d) { d.classList.toggle('selected', d.dataset.value === el.mSel.value); });
+            ssWrap.querySelectorAll('.ss-option').forEach(function(d) { d.classList.toggle('selected', d.dataset.value === el.mSel.value); });
           }
         }
         $('ignore-respawn').checked = !!p.ir;
       }
-      SLOT_IDS.forEach(function (s) { updateSlotVisual(s); });
-      document.querySelectorAll(".eslot[data-slot]").forEach(function (slotEl) {
-        var sn = slotEl.dataset.slot; var picker = slotEl.querySelector(".slot-picker-list");
-        if (picker) updatePickerSelected(picker, slots[sn]);
-        var gs = slotEl.querySelector(".gem-section");
-        if (gs) { var gemSel = sn === "ring" ? el.gR : el.gA; updateGemPickerSelected(gs, gemSel); }
-      });
-      saveCurrentLoadout();
+      refreshVisualsAfterLoad();
     }
 
-    function shareLoadout() {
-      const hash = encodeLoadout();
-      const url = location.href.replace(/#.*/, '') + '#' + hash;
-      navigator.clipboard.writeText(url).then(() => {
-        const btn = $('share-btn');
+    // Legacy text parser (for backward compat with ~ format)
+    function parseCompactText(str) {
+      var parts = str.split('~');
+      if (parts.length < 2) return null;
+      var globals = parts[0].split(',');
+      var al = parseInt(globals[0], 10) || 1;
+      var rl = parseInt(globals[1], 10) || 1;
+      var mi = parseInt(globals[2], 10);
+      var ir = parseInt(globals[3], 10) || 0;
+      var newLoadouts = [];
+      for (var i = 1; i < parts.length; i++) {
+        var seg = parts[i].split('|');
+        var name = seg[0] || '';
+        var vals = (seg[1] || '').split('.');
+        var lo = { name: name, slots: {}, gems: { ring: '', amulet: '' } };
+        SLOT_ORDER.forEach(function(s, si) {
+          var v = parseInt(vals[si], 10);
+          lo.slots[s] = (!isNaN(v) && ItemsData[v]) ? ItemsData[v].Name : '';
+        });
+        var grV = parseInt(vals[10], 10);
+        var gaV = parseInt(vals[11], 10);
+        if (!isNaN(grV) && GemsData[grV]) lo.gems.ring = GemsData[grV].Name;
+        if (!isNaN(gaV) && GemsData[gaV]) lo.gems.amulet = GemsData[gaV].Name;
+        newLoadouts.push(lo);
+      }
+      return { al: al, rl: rl, mi: mi, ir: ir, loadouts: newLoadouts };
+    }
+
+    async function shareLoadout() {
+      var hash = await encodeBinaryHash();
+      var url = location.href.replace(/#.*/, '') + '#' + hash;
+      navigator.clipboard.writeText(url).then(function() {
+        var btn = $('share-btn');
         btn.textContent = '✅ Copied!';
-        setTimeout(() => { btn.textContent = '🔗 Share'; }, 2000);
-      }).catch(() => {
+        setTimeout(function() { btn.textContent = '🔗 Share'; }, 2000);
+      }).catch(function() {
         prompt('Copy this URL:', url);
       });
     }
