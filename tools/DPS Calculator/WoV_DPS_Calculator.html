@@ -614,6 +614,9 @@
     .pick-opt.hidden {
       display: none;
     }
+    .pick-opt[data-tier-hidden] {
+      display: none !important;
+    }
 
     .pick-opt img {
       width: 24px;
@@ -1815,6 +1818,16 @@
     };
     const SLOT_IDS = Object.keys(SLOT_TYPES);
 
+    // Arrow tier order (lowest → highest) and bow → max tier (exclusive index)
+    const ARROW_TIERS = ["Wooden Arrow", "Bronze Arrow", "Iron Arrow", "Steel Arrow"];
+    const BOW_MAX_ARROW = {
+      "Crude Bow": 1,   // Wooden only
+      "Wood Bow": 2,    // up to Bronze
+      "Goblin Bow": 3,  // up to Iron
+      "Birch Bow": 3,   // up to Iron
+      "Willow Bow": 4   // all arrows
+    };
+
     const ItemsData = [
       { Name: "Copper Sword", Type: ItemType.WEAPON_1H, Stats: [{ Type: StatType.ATTACK_SPEED, Value: 2 }, { Type: StatType.SLASH_ACCURACY, Value: 8 }, { Type: StatType.QUICK_DAMAGE, Value: 10 }] },
       { Name: "Bronze Sword", Type: ItemType.WEAPON_1H, Stats: [{ Type: StatType.ATTACK_SPEED, Value: 2 }, { Type: StatType.SLASH_ACCURACY, Value: 15 }, { Type: StatType.QUICK_DAMAGE, Value: 15 }] },
@@ -2137,6 +2150,38 @@
       }
       if (isBow) { arrowsEl.style.borderColor = "var(--accent)"; }
       else { arrowsEl.style.borderColor = ""; }
+
+      // Arrow tier filtering based on equipped bow
+      var maxArrowTier = isBow ? (BOW_MAX_ARROW[wpn.Name] || ARROW_TIERS.length) : ARROW_TIERS.length;
+      // Filter arrow picker options via data attribute (not .hidden which search controls)
+      var arrowSlotEl = document.querySelector('.eslot[data-slot="arrows"]');
+      if (arrowSlotEl) {
+        var pickerList = arrowSlotEl.querySelector('.slot-picker-list');
+        if (pickerList) {
+          pickerList.querySelectorAll('.pick-opt[data-value]').forEach(function(opt) {
+            var tier = ARROW_TIERS.indexOf(opt.dataset.value);
+            if (tier >= 0 && tier >= maxArrowTier) {
+              opt.dataset.tierHidden = '1';
+              opt.classList.add('hidden');
+            } else {
+              delete opt.dataset.tierHidden;
+              opt.classList.remove('hidden');
+            }
+          });
+        }
+      }
+      // Clear invalid arrows
+      if (isBow && slots.arrows.value) {
+        var currentTier = ARROW_TIERS.indexOf(slots.arrows.value);
+        if (currentTier >= maxArrowTier) {
+          slots.arrows.value = '';
+          updateSlotVisual('arrows');
+          if (arrowSlotEl) {
+            var pl = arrowSlotEl.querySelector('.slot-picker-list');
+            if (pl) updatePickerSelected(pl, slots.arrows);
+          }
+        }
+      }
 
       let sA = 0, pA = 0, wD = 0, aS = 0, mp = 0;
       const pwrStat = isBow ? StatType.RANGE_POWER : StatType.MELEE_POWER;
@@ -2771,9 +2816,14 @@
         const q = search.value.toLowerCase();
         let vis = false;
         list.querySelectorAll(".pick-opt:not(.none-opt)").forEach(o => {
-          const m = o.textContent.toLowerCase().includes(q);
-          o.classList.toggle("hidden", !m);
-          if (m) vis = true;
+          // Respect tier-based hiding: always hide if tier-blocked
+          if (o.dataset.tierHidden) {
+            o.classList.add("hidden");
+          } else {
+            const m = o.textContent.toLowerCase().includes(q);
+            o.classList.toggle("hidden", !m);
+            if (m) vis = true;
+          }
         });
         const noneEl = list.querySelector(".none-opt");
         if (noneEl) noneEl.classList.toggle("hidden", q.length > 0);
