@@ -1750,7 +1750,11 @@
         <summary>XP Per Hour</summary>
         <div class="meth-body">
           <h3>Combat XP Multiplier</h3>
-          <p><code>CombatMult = 1 + (monsterLevel × 0.01)</code></p>
+          <p>The combat XP multiplier scales with monster level as a piecewise function:</p>
+          <ul>
+            <li><code>Level ≤ 100: CombatMult = 1 + (monsterLevel × 0.01)</code></li>
+            <li><code>Level > 100: CombatMult = 2 + ((monsterLevel − 100) × 0.005)</code></li>
+          </ul>
           <h3>Base XP Per Kill</h3>
           <p><code>BaseXP = monsterHP × CombatMult</code></p>
           <h3>XP Distribution</h3>
@@ -2125,7 +2129,7 @@
       var ignoreRespawn = $("ignore-respawn").checked;
       const kph = calcKPH(stk, mon.IsBoss, ignoreRespawn);
       // XP calculations
-      const combatMult = 1 + (mon.Level * 0.01);
+      const combatMult = mon.Level <= 100 ? 1 + (mon.Level * 0.01) : 2 + ((mon.Level - 100) * 0.005);
       const baseXpKill = mon.Health * combatMult;
       const atkXpKill = baseXpKill * 3 / 4;
       const hpXpKill = baseXpKill / 4;
@@ -2575,7 +2579,7 @@
       const ignoreRespawn = $("ignore-respawn").checked;
       const kph = calcKPH(stk, mon.IsBoss, ignoreRespawn);
       // XP calculations
-      const combatMult = 1 + (mon.Level * 0.01);
+      const combatMult = mon.Level <= 100 ? 1 + (mon.Level * 0.01) : 2 + ((mon.Level - 100) * 0.005);
       const baseXpKill = mon.Health * combatMult;
       const atkXpKill = baseXpKill * 3 / 4;
       const hpXpKill = baseXpKill / 4;
