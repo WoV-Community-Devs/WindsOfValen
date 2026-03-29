@@ -421,5 +421,18 @@
       { "Type": "ATTACK_SPEED", "Value": 2.5 },
       { "Type": "HEAVY_DAMAGE", "Value": 45 }
     ]
+  },
+  {
+    "Name": "Exotic Bow",
+    "Description": "Exotic shortbow from other lands, easy to fire quickly. Supports up to steel arrows.",
+    "Icon": "exotic_bow",
+    "Type": "BOW",
+    "Requirements": [{ "Skill": "ARCHERY", "Value": 15 }],
+    "Price": 600,
+    "Stats": [
+      { "Type": "ATTACK_RANGE", "Value": 750 },
+      { "Type": "ATTACK_SPEED", "Value": 1.5 },
+      { "Type": "QUICK_DAMAGE", "Value": 30 }
+    ]
   }
 ]

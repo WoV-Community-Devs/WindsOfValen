@@ -1,5 +1,17 @@
 [
   {
+    "Name": "Cow Ring",
+    "Description": "A ring from a cow, somehow it fits.",
+    "Icon": "cow_ring",
+    "Type": "RING",
+    "Requirements": [],
+    "Price": 30,
+    "Stats": [
+      { "Type": "MELEE_POWER", "Value": 4 },
+      { "Type": "RANGE_POWER", "Value": 7 }
+    ]
+  },
+  {
     "Name": "Copper Ring",
     "Description": "A simple ring made of copper.",
     "Icon": "copper_ring",

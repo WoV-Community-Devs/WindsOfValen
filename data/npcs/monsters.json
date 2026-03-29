@@ -21,8 +21,15 @@
     "SlashDefense": 0,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Copper Ring", "Chance": 17.0 }],
-    "PreferredShields": ["Evasion"],
+    "Loot": [
+      {
+        "Item": "Copper Ring",
+        "Chance": 17.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion"
+    ],
     "Location": "Town outskirts and nearby fields"
   },
   {
@@ -48,10 +55,18 @@
     "BlockPower": 25,
     "DeflectPower": 0,
     "Loot": [
-      { "Item": "Skeleton Helmet", "Chance": 7.7 },
-      { "Item": "Skeleton Shield", "Chance": 7.7 }
+      {
+        "Item": "Skeleton Helmet",
+        "Chance": 7.7
+      },
+      {
+        "Item": "Skeleton Shield",
+        "Chance": 7.7
+      }
     ],
-    "PreferredShields": ["Evasion"],
+    "PreferredShields": [
+      "Evasion"
+    ],
     "Location": "Graveyard and ruins near town"
   },
   {
@@ -76,9 +91,74 @@
     "SlashDefense": 15,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Goblin Axe", "Chance": 33.0 }],
-    "PreferredShields": ["Evasion", "Defense"],
+    "Loot": [
+      {
+        "Item": "Goblin Axe",
+        "Chance": 33.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion",
+      "Defense"
+    ],
     "Location": "Goblin camp near town outskirts"
+  },
+  {
+    "Name": "Pirate",
+    "Image": "Pirate",
+    "Description": "Shiver me timbers.",
+    "Level": 10,
+    "IsBoss": false,
+    "Attack": 10,
+    "Defense": 10,
+    "Evasion": 1,
+    "Warding": 1,
+    "Health": 120,
+    "QuickDamage": 35,
+    "HeavyDamage": 0,
+    "MysticalDamage": 0,
+    "AttackSpeed": 2,
+    "PierceAccuracy": 0,
+    "SlashAccuracy": 10,
+    "AttackRange": 100,
+    "PierceDefense": 0,
+    "SlashDefense": 20,
+    "BlockPower": 0,
+    "DeflectPower": 0,
+    "PreferredShields": [
+      "Evasion"
+    ],
+    "Location": "Pirate area"
+  },
+  {
+    "Name": "Pirate Captain",
+    "Image": "Pirate",
+    "Description": "Shiver me timbers.",
+    "Level": 25,
+    "IsBoss": true,
+    "Attack": 15,
+    "Defense": 10,
+    "Evasion": 15,
+    "Warding": 1,
+    "Health": 500,
+    "QuickDamage": 65,
+    "HeavyDamage": 80,
+    "MysticalDamage": 80,
+    "AttackSpeed": 3,
+    "PierceAccuracy": 45,
+    "SlashAccuracy": 0,
+    "AttackRange": 220,
+    "PierceDefense": 25,
+    "SlashDefense": 50,
+    "BlockPower": 0,
+    "DeflectPower": 0,
+    "Loot": [],
+    "PreferredShields": [
+      "Evasion",
+      "Defense",
+      "Ward"
+    ],
+    "Location": "Pirate area"
   },
   {
     "Name": "Bandit",
@@ -102,8 +182,15 @@
     "SlashDefense": 20,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Gold Ring", "Chance": 7.1 }],
-    "PreferredShields": ["Evasion"],
+    "Loot": [
+      {
+        "Item": "Gold Ring",
+        "Chance": 7.1
+      }
+    ],
+    "PreferredShields": [
+      "Evasion"
+    ],
     "Location": "Forest paths south of town"
   },
   {
@@ -128,8 +215,15 @@
     "SlashDefense": 50,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Mining Boots", "Chance": 8.3 }],
-    "PreferredShields": ["Evasion"],
+    "Loot": [
+      {
+        "Item": "Mining Boots",
+        "Chance": 8.3
+      }
+    ],
+    "PreferredShields": [
+      "Evasion"
+    ],
     "Location": "Old mine shafts north of town"
   },
   {
@@ -154,8 +248,15 @@
     "SlashDefense": 70,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Berserker Gloves", "Chance": 5.0 }],
-    "PreferredShields": ["Evasion"],
+    "Loot": [
+      {
+        "Item": "Berserker Gloves",
+        "Chance": 5.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion"
+    ],
     "Location": "Goblin village in the eastern forest"
   },
   {
@@ -180,8 +281,17 @@
     "SlashDefense": 25,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Bandit Spear", "Chance": 12.0 }],
-    "PreferredShields": ["Evasion", "Defense", "Ward"],
+    "Loot": [
+      {
+        "Item": "Bandit Spear",
+        "Chance": 12.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion",
+      "Defense",
+      "Ward"
+    ],
     "Location": "Bandit Camp deep in the southern forest"
   },
   {
@@ -207,10 +317,18 @@
     "BlockPower": 0,
     "DeflectPower": 0,
     "Loot": [
-      { "Item": "Titanium Ring", "Chance": 2.2 },
-      { "Item": "Skeleton Greatsword", "Chance": 2.2 }
+      {
+        "Item": "Titanium Ring",
+        "Chance": 2.2
+      },
+      {
+        "Item": "Skeleton Greatsword",
+        "Chance": 2.2
+      }
     ],
-    "PreferredShields": ["Defense"],
+    "PreferredShields": [
+      "Defense"
+    ],
     "Location": "Deep caves north-west of town"
   },
   {
@@ -235,8 +353,15 @@
     "SlashDefense": 25,
     "BlockPower": 0,
     "DeflectPower": 25,
-    "Loot": [{ "Item": "Parry Shield", "Chance": 2.0 }],
-    "PreferredShields": ["Evasion"],
+    "Loot": [
+      {
+        "Item": "Parry Shield",
+        "Chance": 2.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion"
+    ],
     "Location": "Forest roads and hidden paths"
   },
   {
@@ -261,8 +386,15 @@
     "SlashDefense": 25,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Berserker Boots", "Chance": 2.0 }],
-    "PreferredShields": ["Evasion"],
+    "Loot": [
+      {
+        "Item": "Berserker Boots",
+        "Chance": 2.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion"
+    ],
     "Location": "Mercenary Fort deep in the forest"
   },
   {
@@ -287,7 +419,12 @@
     "SlashDefense": 50,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Elven Ring", "Chance": 1.0 }],
+    "Loot": [
+      {
+        "Item": "Elven Ring",
+        "Chance": 1.0
+      }
+    ],
     "PreferredShields": [],
     "Location": "Deep forest elf region"
   },
@@ -313,8 +450,15 @@
     "SlashDefense": 10,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Artisan Gloves", "Chance": 2.0 }],
-    "PreferredShields": ["Ward"],
+    "Loot": [
+      {
+        "Item": "Artisan Gloves",
+        "Chance": 2.0
+      }
+    ],
+    "PreferredShields": [
+      "Ward"
+    ],
     "Location": "In the elf forest."
   },
   {
@@ -339,8 +483,17 @@
     "SlashDefense": 45,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Dwarven Smithing Hammer", "Chance": 15.0 }],
-    "PreferredShields": ["Evasion", "Defense", "Ward"],
+    "Loot": [
+      {
+        "Item": "Dwarven Smithing Hammer",
+        "Chance": 15.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion",
+      "Defense",
+      "Ward"
+    ],
     "Location": "Goblin village in the eastern forest"
   },
   {
@@ -365,8 +518,17 @@
     "SlashDefense": 50,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Dwarven Pickaxe", "Chance": 5.3 }],
-    "PreferredShields": ["Evasion", "Defense", "Ward"],
+    "Loot": [
+      {
+        "Item": "Dwarven Pickaxe",
+        "Chance": 5.3
+      }
+    ],
+    "PreferredShields": [
+      "Evasion",
+      "Defense",
+      "Ward"
+    ],
     "Location": "Mercenary Fort deep in the forest"
   },
   {
@@ -391,15 +553,24 @@
     "SlashDefense": 40,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Skeleton Rapier", "Chance": 2.0 }],
-    "PreferredShields": ["Evasion", "Defense", "Ward"],
+    "Loot": [
+      {
+        "Item": "Skeleton Rapier",
+        "Chance": 2.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion",
+      "Defense",
+      "Ward"
+    ],
     "Location": "Deep in the caves"
   },
   {
     "Name": "Elf Warden",
     "Image": "ElfWarden",
     "Description": "A skilled warrior guarding the old gate hidden deep within the forest.",
-    "Level": 121,
+    "Level": 120,
     "IsBoss": true,
     "Attack": 35,
     "Defense": 35,
@@ -417,8 +588,17 @@
     "SlashDefense": 80,
     "BlockPower": 0,
     "DeflectPower": 0,
-    "Loot": [{ "Item": "Elven Greatsword", "Chance": 1.0 }],
-    "PreferredShields": ["Evasion", "Defense", "Ward"],
+    "Loot": [
+      {
+        "Item": "Elven Greatsword",
+        "Chance": 1.0
+      }
+    ],
+    "PreferredShields": [
+      "Evasion",
+      "Defense",
+      "Ward"
+    ],
     "Location": "Ancient gate in the deepest forest"
   }
 ]

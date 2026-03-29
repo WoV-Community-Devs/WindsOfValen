@@ -735,6 +735,11 @@ function renderSubTabs(skill) {
     allStepsMode = false;
     $allStepsCheck.checked = false;
   }
+
+  // Re-apply all-steps tab states if still active after switching
+  if (allStepsMode) {
+    updateSubTabStates();
+  }
 }
 
 /* ── Recalculate and render ── */

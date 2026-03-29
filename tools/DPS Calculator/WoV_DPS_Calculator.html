@@ -1405,7 +1405,8 @@
             <select id="preset-select"
               style="background:#1e2a26;border:1px solid var(--border);color:var(--text);padding:0.25rem 0.4rem;border-radius:3px;font-size:0.7rem;font-family:inherit;cursor:pointer;flex:1;">
               <option value="" style="background:#1e2a26;color:var(--text);">— Preset —</option>
-              <option value="max-ranged" style="background:#1e2a26;color:var(--text);">Max Archery</option>
+              <option value="max-ranged-heavy" style="background:#1e2a26;color:var(--text);">Max Archery (Heavy)</option>
+              <option value="max-ranged-quick" style="background:#1e2a26;color:var(--text);">Max Archery (Quick)</option>
               <option value="max-melee-pierce" style="background:#1e2a26;color:var(--text);">Max Melee (Pierce)</option>
               <option value="max-melee-slash" style="background:#1e2a26;color:var(--text);">Max Melee (Slash)</option>
             </select>
@@ -1584,6 +1585,11 @@
               ⚠️ <strong>Damage reduction active.</strong> The selected enemy has Block or Deflect Power against your
               weapon's damage type. Damage is reduced by 75%. <em>This reduction value is assumed and has not been
                 validated against source code.</em>
+            </div>
+            <div id="agility-disclaimer"
+              style="display:none;margin-top:0.5rem;padding:0.5rem 0.75rem;background:#1a2a3a;border:1px solid #2d5a8a;border-radius:4px;font-size:0.72rem;color:#7ab8e8;">
+              ⚠️ <strong>Agility modifier active.</strong> Attack speed is being reduced by 0.25% per Agility point.
+              <em>This value is currently assumed and has not been confirmed in the game's source code.</em>
             </div>
 
           </div>
@@ -1790,8 +1796,26 @@
             <li><strong>Weapon Damage</strong> → Damage only</li>
             <li><strong>Attack Speed</strong> → Damage (flat bonus) + Time per attack</li>
             <li><strong>Melee / Range Power</strong> → Damage (flat bonus)</li>
+            <li><strong>Agility</strong> → Attack Speed reduction (0.25% per point) ⚠️<em>assumed</em></li>
             <li><strong>Enemy Defence</strong> → Accuracy only (no damage reduction on monsters)</li>
           </ul>
+        </div>
+      </details>
+
+      <!-- Agility -->
+      <details open>
+        <summary>Agility & Attack Speed</summary>
+        <div class="meth-body">
+          <p>Some armor pieces provide <strong>Agility</strong>, which reduces attack speed (making attacks faster).</p>
+          <h3>Formula</h3>
+          <p><code>effectiveAttackSpeed = baseAttackSpeed × (1 − totalAgility × 0.0025)</code></p>
+          <p>Each point of Agility reduces attack speed by <strong>0.25%</strong>. For example, the full Pirate armor set provides 40 Agility, reducing attack speed by 10%.</p>
+          <h3>Example</h3>
+          <ul>
+            <li>Exotic Bow base speed: <code>1.5s</code></li>
+            <li>Full Pirate set (40 Agility): <code>1.5 × (1 − 40 × 0.0025) = 1.5 × 0.90 = 1.35s</code></li>
+          </ul>
+          <p>⚠️ <em><strong>Disclaimer:</strong> The exact impact of Agility on attack speed has not been confirmed in the game's source code. The 0.25% per point reduction is an assumed value and may not reflect the actual mechanic.</em></p>
         </div>
       </details>
 
@@ -1808,6 +1832,7 @@
       QUICK_DAMAGE: "QUICK_DAMAGE", HEAVY_DAMAGE: "HEAVY_DAMAGE", MELEE_POWER: "MELEE_POWER", RANGE_POWER: "RANGE_POWER",
       PIECE_DEFENSE: "PIECE_DEFENSE", SLASH_DEFENSE: "SLASH_DEFENSE", BLOCK_POWER: "BLOCK_POWER", DEFLECT_POWER: "DEFLECT_POWER",
       WARD_POWER: "WARD_POWER",
+      AGILITY: "AGILITY",
     };
     const ItemType = {
       WEAPON_1H: "WEAPON_1H", WEAPON_2H: "WEAPON_2H", BOW: "BOW", SHIELD: "SHIELD", HELMET: "HELMET",
@@ -1829,7 +1854,8 @@
       "Wood Bow": 2,    // up to Bronze
       "Goblin Bow": 3,  // up to Iron
       "Birch Bow": 3,   // up to Iron
-      "Willow Bow": 4   // all arrows
+      "Willow Bow": 4,  // all arrows
+      "Exotic Bow": 4   // all arrows (supports up to steel)
     };
 
     const ItemsData = [
@@ -1868,6 +1894,7 @@
       { Name: "Mithril Platelegs", Type: ItemType.LEGS, Stats: [{ Type: StatType.PIECE_DEFENSE, Value: 30 }, { Type: StatType.SLASH_DEFENSE, Value: 27 }] },
       { Name: "Berserker Gloves", Type: ItemType.GLOVES, Stats: [{ Type: StatType.MELEE_POWER, Value: 5 }, { Type: StatType.SLASH_DEFENSE, Value: 5 }, { Type: StatType.PIECE_DEFENSE, Value: 5 }] },
       { Name: "Berserker Boots", Type: ItemType.BOOTS, Stats: [{ Type: StatType.MELEE_POWER, Value: 8 }, { Type: StatType.PIECE_DEFENSE, Value: 7 }, { Type: StatType.SLASH_DEFENSE, Value: 7 }] },
+      { Name: "Cow Ring", Type: ItemType.RING, Stats: [{ Type: StatType.MELEE_POWER, Value: 4 }, { Type: StatType.RANGE_POWER, Value: 7 }] },
       { Name: "Copper Ring", Type: ItemType.RING, Stats: [{ Type: StatType.MELEE_POWER, Value: 6 }, { Type: StatType.RANGE_POWER, Value: 5 }] },
       { Name: "Gold Ring", Type: ItemType.RING, Stats: [{ Type: StatType.MELEE_POWER, Value: 8 }, { Type: StatType.RANGE_POWER, Value: 7 }] },
       { Name: "Titanium Ring", Type: ItemType.RING, Stats: [{ Type: StatType.MELEE_POWER, Value: 11 }, { Type: StatType.RANGE_POWER, Value: 9 }] },
@@ -1882,6 +1909,7 @@
       { Name: "Goblin Bow", Type: ItemType.BOW, Stats: [{ Type: StatType.ATTACK_SPEED, Value: 1.5 }, { Type: StatType.QUICK_DAMAGE, Value: 20 }] },
       { Name: "Birch Bow", Type: ItemType.BOW, Stats: [{ Type: StatType.ATTACK_SPEED, Value: 2.5 }, { Type: StatType.HEAVY_DAMAGE, Value: 30 }] },
       { Name: "Willow Bow", Type: ItemType.BOW, Stats: [{ Type: StatType.ATTACK_SPEED, Value: 2.5 }, { Type: StatType.HEAVY_DAMAGE, Value: 45 }] },
+      { Name: "Exotic Bow", Type: ItemType.BOW, Stats: [{ Type: StatType.ATTACK_SPEED, Value: 1.5 }, { Type: StatType.QUICK_DAMAGE, Value: 30 }] },
       // Arrows
       { Name: "Wooden Arrow", Type: ItemType.ARROWS, Stats: [{ Type: StatType.PIECE_ACCURACY, Value: 10 }] },
       { Name: "Bronze Arrow", Type: ItemType.ARROWS, Stats: [{ Type: StatType.PIECE_ACCURACY, Value: 20 }] },
@@ -1892,6 +1920,11 @@
       { Name: "Leather Armour", Type: ItemType.CHEST, Stats: [{ Type: StatType.PIECE_DEFENSE, Value: 4 }, { Type: StatType.SLASH_DEFENSE, Value: 3 }] },
       { Name: "Leather Legs", Type: ItemType.LEGS, Stats: [{ Type: StatType.PIECE_DEFENSE, Value: 4 }, { Type: StatType.SLASH_DEFENSE, Value: 3 }] },
       { Name: "Leather Boots", Type: ItemType.BOOTS, Stats: [{ Type: StatType.PIECE_DEFENSE, Value: 2 }, { Type: StatType.SLASH_DEFENSE, Value: 2 }] },
+      // Pirate Armor
+      { Name: "Pirate Hat", Type: ItemType.HELMET, Stats: [{ Type: StatType.PIECE_DEFENSE, Value: 6 }, { Type: StatType.SLASH_DEFENSE, Value: 6 }, { Type: StatType.RANGE_POWER, Value: 10 }, { Type: StatType.AGILITY, Value: 10 }] },
+      { Name: "Pirate Armour", Type: ItemType.CHEST, Stats: [{ Type: StatType.PIECE_DEFENSE, Value: 6 }, { Type: StatType.SLASH_DEFENSE, Value: 7 }, { Type: StatType.AGILITY, Value: 10 }] },
+      { Name: "Pirate Legs", Type: ItemType.LEGS, Stats: [{ Type: StatType.PIECE_DEFENSE, Value: 5 }, { Type: StatType.SLASH_DEFENSE, Value: 6 }, { Type: StatType.AGILITY, Value: 10 }] },
+      { Name: "Pirate Boots", Type: ItemType.BOOTS, Stats: [{ Type: StatType.PIECE_DEFENSE, Value: 3 }, { Type: StatType.SLASH_DEFENSE, Value: 5 }, { Type: StatType.AGILITY, Value: 10 }] },
     ];
 
     const GemsData = [
@@ -1904,6 +1937,8 @@
       { Name: "Goblin", Level: 1, IsBoss: false, Defense: 1, Health: 25, PierceDefense: 0, SlashDefense: 0, BlockPower: 0, DeflectPower: 0 },
       { Name: "Skeleton", Level: 6, IsBoss: false, Defense: 6, Health: 50, PierceDefense: 5, SlashDefense: 0, BlockPower: 25, DeflectPower: 0 },
       { Name: "Goblin Berserker", Level: 9, IsBoss: true, Defense: 6, Health: 200, PierceDefense: 20, SlashDefense: 15, BlockPower: 0, DeflectPower: 0 },
+      { Name: "Pirate", Level: 10, IsBoss: false, Defense: 10, Health: 120, PierceDefense: 0, SlashDefense: 20, BlockPower: 0, DeflectPower: 0 },
+      { Name: "Pirate Captain", Level: 15, IsBoss: true, Defense: 10, Health: 500, PierceDefense: 25, SlashDefense: 50, BlockPower: 0, DeflectPower: 0 },
       { Name: "Bandit", Level: 10, IsBoss: false, Defense: 10, Health: 75, PierceDefense: 50, SlashDefense: 20, BlockPower: 0, DeflectPower: 0 },
       { Name: "Skeleton Miner", Level: 13, IsBoss: false, Defense: 13, Health: 80, PierceDefense: 10, SlashDefense: 50, BlockPower: 0, DeflectPower: 0 },
       { Name: "Goblin Villager", Level: 14, IsBoss: false, Defense: 13, Health: 125, PierceDefense: 30, SlashDefense: 70, BlockPower: 0, DeflectPower: 0 },
@@ -1916,7 +1951,7 @@
       { Name: "Goblin Chieftain", Level: 41, IsBoss: true, Defense: 18, Health: 1000, PierceDefense: 15, SlashDefense: 45, BlockPower: 0, DeflectPower: 0 },
       { Name: "Bandit Mercenary Boss", Level: 75, IsBoss: true, Defense: 27, Health: 2000, PierceDefense: 30, SlashDefense: 50, BlockPower: 0, DeflectPower: 0 },
       { Name: "Skeleton Pioneer", Level: 89, IsBoss: true, Defense: 28, Health: 2500, PierceDefense: 70, SlashDefense: 40, BlockPower: 0, DeflectPower: 0 },
-      { Name: "Elf Warden", Level: 121, IsBoss: true, Defense: 35, Health: 3500, PierceDefense: 20, SlashDefense: 80, BlockPower: 0, DeflectPower: 0 },
+      { Name: "Elf Warden", Level: 120, IsBoss: true, Defense: 35, Health: 3500, PierceDefense: 20, SlashDefense: 80, BlockPower: 0, DeflectPower: 0 },
     ];
 
     // Placeholder SVG icons per slot (used when no item selected)
@@ -1951,7 +1986,9 @@
 
     // Icon URLs from Miraheze wiki
     const ICON_BASE = "https://static.miraheze.org/windsofvalenwiki/";
-    function itemIconUrl(name) { return "https://windsofvalen.miraheze.org/wiki/Special:FilePath/" + encodeURIComponent(name.replace(/ /g, "_")) + ".png"; }
+    const LOCAL_ICON_BASE = "../../icons/items/";
+    function itemIconUrl(name) { return LOCAL_ICON_BASE + name.toLowerCase().replace(/ /g, "_") + ".png"; }
+    function itemIconFallback(img) { img.onerror = null; img.src = "https://windsofvalen.miraheze.org/wiki/Special:FilePath/" + encodeURIComponent(img.alt.replace(/ /g, "_")) + ".png"; }
 
     const $ = id => document.getElementById(id);
     function getStat(item, type) { const s = item.Stats.find(x => x.Type === type); return s ? s.Value : 0; }
@@ -2106,6 +2143,10 @@
           aS = getStat(it, StatType.ATTACK_SPEED);
         }
       });
+      // Agility reduces attack speed by 0.25% per point
+      let totalAgility = 0;
+      SLOT_IDS.forEach(slot => { const n = state.slots[slot]; if (!n) return; const it = ItemsData.find(i => i.Name === n); if (it) totalAgility += getStat(it, StatType.AGILITY); });
+      if (totalAgility > 0 && aS > 0) aS = aS * (1 - totalAgility * 0.0025);
       if (!state.slots.ring) state.gems.ring = "";
       if (!state.slots.amulet) state.gems.amulet = "";
 
@@ -2205,6 +2246,10 @@
           aS = getStat(it, StatType.ATTACK_SPEED);
         }
       });
+      // Agility reduces attack speed by 0.25% per point
+      let totalAgility = 0;
+      SLOT_IDS.forEach(slot => { const it = getItem(slot); if (it) totalAgility += getStat(it, StatType.AGILITY); });
+      if (totalAgility > 0 && aS > 0) aS = aS * (1 - totalAgility * 0.0025);
       if (!getItem("ring")) { el.gR.value = ""; }
       if (!getItem("amulet")) { el.gA.value = ""; }
 
@@ -2214,7 +2259,7 @@
       else { const st = wStyle(wpn); el.badge.textContent = st === "slash" ? "Slash" : "Pierce"; el.badge.className = "badge badge-" + st; pwrLabel.textContent = "Melee Power"; }
 
       el.sAcc.textContent = sA; el.pAcc.textContent = pA; el.wDmg.textContent = wD;
-      el.aSpd.textContent = aS; el.mp.textContent = mp;
+      el.aSpd.textContent = Math.round(aS * 100) / 100; el.mp.textContent = mp;
       SLOT_IDS.forEach(s => updateSlotVisual(s));
 
       const mon = getMon();
@@ -2305,6 +2350,18 @@
         }
       }
       $("dmg-reduction-disclaimer").style.display = anyReduced ? "block" : "none";
+      // Show agility disclaimer if any loadout has agility equipped
+      var anyAgility = false;
+      loadouts.forEach(function(state) {
+        var ag = 0;
+        SLOT_IDS.forEach(function(slot) {
+          var n = state.slots[slot]; if (!n) return;
+          var it = ItemsData.find(function(i) { return i.Name === n; }); if (!it) return;
+          ag += getStat(it, StatType.AGILITY);
+        });
+        if (ag > 0) anyAgility = true;
+      });
+      $("agility-disclaimer").style.display = anyAgility ? "block" : "none";
       detectPreset();
       renderChart();
       // Live-sync URL hash so the URL is always shareable
@@ -2360,7 +2417,8 @@
         'Copper Sword': 1, 'Bronze Sword': 1, 'Iron Sword': 10, 'Steel Sword': 20,
         'Mithril Sword': 30, 'Skeleton Rapier': 30, 'Goblin Axe': 5, 'Bandit Spear': 15,
         'Skeleton Greatsword': 25, 'Elven Greatsword': 35,
-        'Crude Bow': 1, 'Wood Bow': 1, 'Goblin Bow': 5, 'Birch Bow': 10, 'Willow Bow': 20
+        'Crude Bow': 1, 'Wood Bow': 1, 'Goblin Bow': 5, 'Birch Bow': 10, 'Willow Bow': 20,
+        'Exotic Bow': 15
       };
       const series = [];
       loadouts.forEach((state, li) => {
@@ -2556,6 +2614,10 @@
           aS = getStat(it, StatType.ATTACK_SPEED);
         }
       });
+      // Agility reduces attack speed by 0.25% per point
+      let totalAgility = 0;
+      SLOT_IDS.forEach(slot => { const n = state.slots[slot]; if (!n) return; const it = ItemsData.find(i => i.Name === n); if (it) totalAgility += getStat(it, StatType.AGILITY); });
+      if (totalAgility > 0 && aS > 0) aS = aS * (1 - totalAgility * 0.0025);
 
       if (aS === 0) return null;
 
@@ -2759,8 +2821,9 @@
         opt.dataset.value = item.Name;
         const img = document.createElement("img");
         img.src = itemIconUrl(item.Name);
+        img.alt = item.Name;
         img.loading = "lazy";
-        img.onerror = function () { this.style.display = "none"; };
+        img.onerror = function () { itemIconFallback(this); };
         opt.appendChild(img);
         const txt = document.createElement("span");
         txt.textContent = item.Name;
@@ -2907,7 +2970,17 @@
       if (item) {
         slotEl.classList.add("has-item");
         iconEl.src = itemIconUrl(item.Name);
-        iconEl.onerror = function () { this.src = SLOT_PLACEHOLDERS[slotName] || ""; };
+        iconEl.alt = item.Name;
+        iconEl.onerror = function () {
+          // Try wiki URL, then fall back to placeholder
+          if (!this.dataset.triedWiki) {
+            this.dataset.triedWiki = "1";
+            this.src = "https://windsofvalen.miraheze.org/wiki/Special:FilePath/" + encodeURIComponent(item.Name.replace(/ /g, "_")) + ".png";
+          } else {
+            this.onerror = null;
+            this.src = SLOT_PLACEHOLDERS[slotName] || "";
+          }
+        };
       } else {
         slotEl.classList.remove("has-item");
         iconEl.src = SLOT_PLACEHOLDERS[slotName] || "";
@@ -3216,7 +3289,8 @@
 
     // ── Presets ──
     const PRESETS = {
-      "max-ranged": { weapon: "Willow Bow", shield: "", helmet: "Leather Hood", chest: "Leather Armour", legs: "Leather Legs", gloves: "", boots: "Leather Boots", ring: "Elven Ring", amulet: "Elven Amulet", arrows: "Steel Arrow", gems: { ring: "", amulet: "" } },
+      "max-ranged-heavy": { weapon: "Willow Bow", shield: "", helmet: "Pirate Hat", chest: "Pirate Armour", legs: "Pirate Legs", gloves: "", boots: "Pirate Boots", ring: "Elven Ring", amulet: "Elven Amulet", arrows: "Steel Arrow", gems: { ring: "", amulet: "" } },
+      "max-ranged-quick": { weapon: "Exotic Bow", shield: "", helmet: "Pirate Hat", chest: "Pirate Armour", legs: "Pirate Legs", gloves: "", boots: "Pirate Boots", ring: "Elven Ring", amulet: "Elven Amulet", arrows: "Steel Arrow", gems: { ring: "", amulet: "" } },
       "max-melee-pierce": { weapon: "Skeleton Rapier", shield: "", helmet: "Mithril Helmet", chest: "Mithril Platebody", legs: "Mithril Platelegs", gloves: "Berserker Gloves", boots: "Berserker Boots", ring: "Elven Ring", amulet: "Elven Amulet", arrows: "", gems: { ring: "Strong Power Gem", amulet: "Strong Power Gem" } },
       "max-melee-slash": { weapon: "Elven Greatsword", shield: "", helmet: "Mithril Helmet", chest: "Mithril Platebody", legs: "Mithril Platelegs", gloves: "Berserker Gloves", boots: "Berserker Boots", ring: "Elven Ring", amulet: "Elven Amulet", arrows: "", gems: { ring: "Strong Power Gem", amulet: "Strong Power Gem" } },
     };

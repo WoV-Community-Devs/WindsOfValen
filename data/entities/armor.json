@@ -681,5 +681,70 @@
         "Value": 1
       }
     ]
+  },
+  {
+    "Name": "Pirate Hat",
+    "Description": "I'm the captain now.",
+    "Icon": "pirate_hat",
+    "Type": "HELMET",
+    "Price": 300,
+    "Requirements": [{ "Skill": "EVASION", "Value": 10 }],
+    "Stats": [
+      { "Type": "PIECE_DEFENSE", "Value": 6 },
+      { "Type": "SLASH_DEFENSE", "Value": 6 },
+      { "Type": "FIRE_DEFENSE", "Value": 6 },
+      { "Type": "LIGHTNING_DEFENSE", "Value": 6 },
+      { "Type": "ICE_DEFENSE", "Value": 6 },
+      { "Type": "AGILITY", "Value": 10 },
+      { "Type": "RANGED_POWER", "Value": 10 }
+    ]
+  },
+  {
+    "Name": "Pirate Armour",
+    "Description": "Tattered Pirate Outfit.",
+    "Icon": "pirate_armour",
+    "Type": "CHEST",
+    "Price": 250,
+    "Requirements": [{ "Skill": "EVASION", "Value": 10 }],
+    "Stats": [
+      { "Type": "PIECE_DEFENSE", "Value": 6 },
+      { "Type": "SLASH_DEFENSE", "Value": 7 },
+      { "Type": "FIRE_DEFENSE", "Value": 7 },
+      { "Type": "LIGHTNING_DEFENSE", "Value": 7 },
+      { "Type": "ICE_DEFENSE", "Value": 7 },
+      { "Type": "AGILITY", "Value": 10 }
+    ]
+  },
+  {
+    "Name": "Pirate Legs",
+    "Description": "Tattered Pirate Outfit.",
+    "Icon": "pirate_legs",
+    "Type": "LEGS",
+    "Price": 200,
+    "Requirements": [{ "Skill": "EVASION", "Value": 10 }],
+    "Stats": [
+      { "Type": "PIECE_DEFENSE", "Value": 5 },
+      { "Type": "SLASH_DEFENSE", "Value": 6 },
+      { "Type": "FIRE_DEFENSE", "Value": 6 },
+      { "Type": "LIGHTNING_DEFENSE", "Value": 6 },
+      { "Type": "ICE_DEFENSE", "Value": 6 },
+      { "Type": "AGILITY", "Value": 10 }
+    ]
+  },
+  {
+    "Name": "Pirate Boots",
+    "Description": "Tattered Pirate Boots, I can see my toe.",
+    "Icon": "pirate_boots",
+    "Type": "BOOTS",
+    "Price": 100,
+    "Requirements": [{ "Skill": "EVASION", "Value": 10 }],
+    "Stats": [
+      { "Type": "SLASH_DEFENSE", "Value": 5 },
+      { "Type": "PIECE_DEFENSE", "Value": 3 },
+      { "Type": "FIRE_DEFENSE", "Value": 2 },
+      { "Type": "LIGHTNING_DEFENSE", "Value": 4 },
+      { "Type": "ICE_DEFENSE", "Value": 2 },
+      { "Type": "AGILITY", "Value": 10 }
+    ]
   }
 ]
