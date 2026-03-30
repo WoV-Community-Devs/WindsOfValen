@@ -743,7 +743,13 @@ function renderSubTabs(skill) {
 }
 
 /* ── Recalculate and render ── */
+let recalcGeneration = 0;
 async function recalculate(validate) {
+  const thisGen = ++recalcGeneration;
+  const skill = currentSkill;
+  const subCat = currentSubCategory;
+  const isAllSteps = allStepsMode;
+
   const curLvl = Math.max(1, Math.min(99, parseInt($currentLevel.value) || 1));
   let tgtLvl = parseInt($targetLevel.value) || curLvl + 1;
 
@@ -759,33 +765,37 @@ async function recalculate(validate) {
   const tgtXp = xpForLevel(tgtLvl);
   const remaining = tgtXp - curXp;
 
+  const recipes = await loadSkillData(skill);
+  if (thisGen !== recalcGeneration) return; // superseded by a newer call
+
+  // Update XP summary only after confirming this is the latest call
   $currentXp.textContent = fmt(curXp);
   $targetXp.textContent = fmt(tgtXp);
   $xpRemaining.textContent = fmt(Math.max(0, remaining));
 
-  const recipes = await loadSkillData(currentSkill);
-
   // Filter by current level and sub-category
-  let filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null);
+  let filtered = recipes.filter(r => r.Level <= curLvl && r.Experience != null);
 
-  if (allStepsMode && currentSkill === 'alchemy') {
+  if (isAllSteps && skill === 'alchemy') {
     // All Steps: show only Bottle recipes, deduplicated
     filtered = recipes.filter(r => r.Level <= curLvl && r.Category === 'Bottle');
     filtered = deduplicateBottles(filtered);
-  } else if (allStepsMode && currentSkill === 'smithing') {
+  } else if (isAllSteps && skill === 'smithing') {
     // All Steps: show non-Bar recipes, filtered by selected sub-category
-    filtered = recipes.filter(r => r.Level <= curLvl && r.Experience !== null && r.Category !== 'Bars');
-    if (currentSubCategory && currentSubCategory !== 'all') {
-      filtered = filtered.filter(r => r.Category === currentSubCategory);
+    filtered = recipes.filter(r => r.Level <= curLvl && r.Experience != null && r.Category !== 'Bars');
+    if (subCat && subCat !== 'all') {
+      filtered = filtered.filter(r => r.Category === subCat);
     }
-  } else if (currentSubCategory && currentSubCategory !== 'all') {
-    filtered = filtered.filter(r => r.Category === currentSubCategory);
-    if (currentSubCategory === 'Bottle') filtered = deduplicateBottles(filtered);
+  } else if (subCat && subCat !== 'all') {
+    filtered = filtered.filter(r => r.Category === subCat);
+    if (subCat === 'Bottle') filtered = deduplicateBottles(filtered);
   }
 
-  // Always deduplicate bottles when viewing all alchemy recipes
-  if (currentSkill === 'alchemy' && !allStepsMode) {
-    filtered = deduplicateBottles(filtered);
+  // Always deduplicate bottles when viewing all alchemy recipes (only on Bottle-category)
+  if (skill === 'alchemy' && !isAllSteps) {
+    const nonBottle = filtered.filter(r => r.Category !== 'Bottle');
+    const bottles = deduplicateBottles(filtered.filter(r => r.Category === 'Bottle'));
+    filtered = nonBottle.concat(bottles);
   }
 
   // Sort by level descending (highest level first)
@@ -797,7 +807,7 @@ async function recalculate(validate) {
   }
 
   $tbody.innerHTML = filtered.map(r => {
-    if (allStepsMode && currentSkill === 'alchemy') {
+    if (isAllSteps && skill === 'alchemy') {
       // Compute full cycle
       const cycle = computeFullCycle(r, recipes);
       if (!cycle) {
@@ -819,7 +829,7 @@ async function recalculate(validate) {
       </tr>`;
     }
 
-    if (allStepsMode && currentSkill === 'smithing') {
+    if (isAllSteps && skill === 'smithing') {
       const cycle = computeSmithingCycle(r, recipes);
       const cycles = Math.ceil(remaining / cycle.totalXP);
       return `<tr>
@@ -971,7 +981,8 @@ async function initFromURL() {
   const tgt = params.get('tgt');
   const allSteps = params.get('allSteps');
 
-  if (skill && DATA_PATHS[skill]) {
+  const VALID_SKILLS = ['mining', 'smithing', 'fishing', 'alchemy'];
+  if (skill && VALID_SKILLS.includes(skill)) {
     currentSkill = skill;
     $skillTabs.querySelectorAll('.skill-tab').forEach(t => {
       t.classList.toggle('active', t.dataset.skill === skill);

@@ -1586,11 +1586,7 @@
               weapon's damage type. Damage is reduced by 75%. <em>This reduction value is assumed and has not been
                 validated against source code.</em>
             </div>
-            <div id="agility-disclaimer"
-              style="display:none;margin-top:0.5rem;padding:0.5rem 0.75rem;background:#1a2a3a;border:1px solid #2d5a8a;border-radius:4px;font-size:0.72rem;color:#7ab8e8;">
-              ⚠️ <strong>Agility modifier active.</strong> Attack speed is being reduced by 0.25% per Agility point.
-              <em>This value is currently assumed and has not been confirmed in the game's source code.</em>
-            </div>
+
 
           </div>
 
@@ -1796,28 +1792,12 @@
             <li><strong>Weapon Damage</strong> → Damage only</li>
             <li><strong>Attack Speed</strong> → Damage (flat bonus) + Time per attack</li>
             <li><strong>Melee / Range Power</strong> → Damage (flat bonus)</li>
-            <li><strong>Agility</strong> → Attack Speed reduction (0.25% per point) ⚠️<em>assumed</em></li>
             <li><strong>Enemy Defence</strong> → Accuracy only (no damage reduction on monsters)</li>
           </ul>
         </div>
       </details>
 
-      <!-- Agility -->
-      <details open>
-        <summary>Agility & Attack Speed</summary>
-        <div class="meth-body">
-          <p>Some armor pieces provide <strong>Agility</strong>, which reduces attack speed (making attacks faster).</p>
-          <h3>Formula</h3>
-          <p><code>effectiveAttackSpeed = baseAttackSpeed × (1 − totalAgility × 0.0025)</code></p>
-          <p>Each point of Agility reduces attack speed by <strong>0.25%</strong>. For example, the full Pirate armor set provides 40 Agility, reducing attack speed by 10%.</p>
-          <h3>Example</h3>
-          <ul>
-            <li>Exotic Bow base speed: <code>1.5s</code></li>
-            <li>Full Pirate set (40 Agility): <code>1.5 × (1 − 40 × 0.0025) = 1.5 × 0.90 = 1.35s</code></li>
-          </ul>
-          <p>⚠️ <em><strong>Disclaimer:</strong> The exact impact of Agility on attack speed has not been confirmed in the game's source code. The 0.25% per point reduction is an assumed value and may not reflect the actual mechanic.</em></p>
-        </div>
-      </details>
+
 
     </div>
   </div>
@@ -2143,10 +2123,7 @@
           aS = getStat(it, StatType.ATTACK_SPEED);
         }
       });
-      // Agility reduces attack speed by 0.25% per point
-      let totalAgility = 0;
-      SLOT_IDS.forEach(slot => { const n = state.slots[slot]; if (!n) return; const it = ItemsData.find(i => i.Name === n); if (it) totalAgility += getStat(it, StatType.AGILITY); });
-      if (totalAgility > 0 && aS > 0) aS = aS * (1 - totalAgility * 0.0025);
+
       if (!state.slots.ring) state.gems.ring = "";
       if (!state.slots.amulet) state.gems.amulet = "";
 
@@ -2246,10 +2223,7 @@
           aS = getStat(it, StatType.ATTACK_SPEED);
         }
       });
-      // Agility reduces attack speed by 0.25% per point
-      let totalAgility = 0;
-      SLOT_IDS.forEach(slot => { const it = getItem(slot); if (it) totalAgility += getStat(it, StatType.AGILITY); });
-      if (totalAgility > 0 && aS > 0) aS = aS * (1 - totalAgility * 0.0025);
+
       if (!getItem("ring")) { el.gR.value = ""; }
       if (!getItem("amulet")) { el.gA.value = ""; }
 
@@ -2350,18 +2324,7 @@
         }
       }
       $("dmg-reduction-disclaimer").style.display = anyReduced ? "block" : "none";
-      // Show agility disclaimer if any loadout has agility equipped
-      var anyAgility = false;
-      loadouts.forEach(function(state) {
-        var ag = 0;
-        SLOT_IDS.forEach(function(slot) {
-          var n = state.slots[slot]; if (!n) return;
-          var it = ItemsData.find(function(i) { return i.Name === n; }); if (!it) return;
-          ag += getStat(it, StatType.AGILITY);
-        });
-        if (ag > 0) anyAgility = true;
-      });
-      $("agility-disclaimer").style.display = anyAgility ? "block" : "none";
+
       detectPreset();
       renderChart();
       // Live-sync URL hash so the URL is always shareable
